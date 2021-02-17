@@ -5,14 +5,13 @@ from zipfile import ZipFile
 
 from config import URL, Paths
 
-PATH_PREFIX_LENGTH = 4
 
-JC_DIST = "AlgTest_dist.zip"
-JC_DIR = "AlgTest_dist"
-JC_FILES = [Paths.JCALGTEST,
-            Paths.JCALGTEST_305,
-            Paths.JCALGTEST_304,
-            Paths.JCALGTEST_222]
+def errmsg(tool_name, action, e):
+    print("Oops!\n"
+          "\tSomething went wrong while", action, tool_name + ":\n",
+          str(e),
+          "\tPlease try again or check the manual set-up section in README.md")
+    return False
 
 
 def download_file(tool_name, tool_url, tool_path):
@@ -22,64 +21,86 @@ def download_file(tool_name, tool_url, tool_path):
             copyfileobj(remote, file)
         print("Done.")
         return True
-    except:
-        print("Oops!\n"
-              "\tSomething went wrong while downloading " + tool_name + ".\n"
-              "\tPlease try again or check the set-up section in README.md")
+    except Exception as e:
+        return errmsg(tool_name, "downloading", e)
+
+
+def download_and_extract(tool_name, tool_url, file_translations):
+
+    archive = tool_name + "_dist.zip"
+    directory = tool_name + "_extracted"
+
+    if not download_file(tool_name, tool_url, archive):
         return False
 
-def setup_jcalgtest():
-    
-    if not download_file("JCAlgTest", URL.JCALGTEST, JC_DIST):
-        return False
-    
-    print("Extracting JCAlgTest... ", end="")
+    print("Extracting " + tool_name + "... ", end="")
     try:
-        with ZipFile(JC_DIST, "r") as zipped:
-            zipped.extractall(JC_DIR)
+        with ZipFile(archive, "r") as zipped:
+            zipped.extractall(directory)
         print("Done.")
-    except:
-        print("Oops!\n"
-              "\tSomething went wrong while extracting JCAlgTest.\n"
-              "\tPlease try again or check the set-up section in README.md")
+    except Exception as e:
+        errmsg(tool_name, "extracting", e)
         try:
-            remove(JC_DIST)
-        except:
-            print(JC_DIST,
-                  " could not be removed, please remove it manually.")
+            remove(archive)
+        except Exception as e:
+            print(archive,
+                  " could not be removed, please remove it manually.", e)
         return False
 
     retval = True
-    
-    print("Finishing JCAlgTest set-up...", end="")
+
+    print("Finishing " + tool_name + " set-up...", end="")
     try:
-        for file in JC_FILES:
-            replace(JC_DIR + "/" + file[PATH_PREFIX_LENGTH:], file)
+        for (original, destination) in file_translations:
+            replace(directory + "/" + original, destination)
         print("Done.")
-    except:
-        print("Oops!\n"
-              "\tSomething went wrong while moving JCAlgTest files.\n"              "\tPlease try again or check the set-up section in README.md")
-        retval = False
-    
-    print("Cleaning up after JCAlgTest set-up...", end="")
-    try:
-        remove(JC_DIST)
-        rmtree(JC_DIR)
-        print("Done.")
-    except:
-        print("Oops!\n"
-              "\tSomething went wrong while cleaning JCAlgTest files.\n"
-              "\tRemove", JC_DIST, "and", JC_DIR, "manually.")
+    except Exception as e:
+        errmsg(tool_name + " files", "moving", e)
         retval = False
 
-    return retval 
-    
-    
+    print("Cleaning up after " + tool_name + " set-up...", end="")
+    try:
+        remove(archive)
+        rmtree(directory)
+        print("Done.")
+    except Exception as e:
+        errmsg(tool_name + " set-up", "cleaning after", e)
+        print("\tRemove", archive, "and", directory, "directory manually.")
+        retval = False
+
+    return retval
+
+
+def setup_jcalgtest():
+
+    jc_files = [Paths.JCALGTEST,
+                Paths.JCALGTEST_305,
+                Paths.JCALGTEST_304,
+                Paths.JCALGTEST_222]
+
+    jc_translations = [(dest.split("/")[-1], dest) for dest in jc_files]
+
+    download_and_extract("JCAlgTest", URL.JCALGTEST, jc_translations)
+
+
 if __name__ == "__main__":
 
+    retval = True
+
     print("Setting up GlobalPlatformPro:")
-    download_file("GlobalPlatformPro", URL.GPPRO, Paths.GPPRO)
+    retval = retval and \
+        download_file("GlobalPlatformPro", URL.GPPRO, Paths.GPPRO)
 
-    print("\nSetting up JCAlgTest:")
-    setup_jcalgtest()
+    print()
 
+    print("Setting up JCAlgTest:")
+    retval = retval and \
+        setup_jcalgtest()
+
+    print()
+    if not retval:
+        print("Issues occured during set-up.",
+              "Check the manual set-up section in README.md for assistance.")
+        exit(1)
+    print("Set-up completed without issues.")
+    exit(0)

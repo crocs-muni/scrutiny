@@ -1,5 +1,5 @@
+import argparse
 import subprocess
-from sys import argv
 
 GP_PRO = "java -jar bin/gp.jar"
 
@@ -52,25 +52,57 @@ def run_jcalgtest(card_name):
     rc = process.returncode
     
 
-def print_help():
-    print("script.py [Card Name]")
-    
-
 if __name__ == "__main__":
-    argc = len(argv)
 
-    if argc < 2:
-        print_help()
-        exit(1)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("card_name",
+                        help="the name of the card to be used")
+    parser.add_argument("-a", "--atr",
+                        help="check card's ART",
+                        action="store_true")
+    parser.add_argument("-i", "--info",
+                        help="check card's basic information",
+                        action="store_true")
+    parser.add_argument("-l", "--list-applets", dest="list",
+                        help="list card's installed applets",
+                        action="store_true")
+    parser.add_argument("-e", "--essentials",
+                        help="perform essential checks: "
+                        "ATR, basic information and list installed applets "
+                        "(same as -acl)",
+                        action="store_true")
+    parser.add_argument("-s", "--support",
+                        help="check supported JCAPI methods",
+                        nargs="?", const=None, metavar="file_in")
+    parser.add_argument("-p", "--performance",
+                        help="test performance (SLOW)",
+                        nargs="?", const=None, metavar="file_in")
+    parser.add_argument("-v", "--variable-performance",
+                        help="test variable data-langth performance "
+                        "(VERY SLOW)",
+                        nargs="?", const=None, metavar="file_in")
+    parser.add_argument("-j", "--jcalgtest",
+                        help="run JCAlgTest in interactive mode",
+                        nargs="?", const=None, metavar="file_in")
 
-    card_name = argv[1]
+    args = parser.parse_args()
+    if args.essentials:
+        args.atr = True
+        args.info = True
+        args.list = True
 
+    card_name = args.card_name
+    
     prepare_results(card_name)
 
-    run_gp_info(card_name)
-    run_gp_list(card_name)
+    if args.info:
+        run_gp_info(card_name)
 
-    run_jcalgtest(card_name)
+    if args.list:
+        run_gp_list(card_name)
+
+    if args.jcalgtest:
+        run_jcalgtest(card_name)
 
     #cleanup(card_name)
     

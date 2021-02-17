@@ -1,6 +1,8 @@
 import argparse
 import subprocess
 
+from modules.gppro import GPPro
+
 GP_PRO = "java -jar bin/gp.jar"
 
 JCALGTEST = "java -jar bin/AlgTestJClient.jar"
@@ -11,7 +13,8 @@ ALGTEST_304 = "AlgTest_v1.8.0_jc304.cap"
 ALGTEST_222 = "AlgTest_v1.8.0_jc222.cap"
 
 def prepare_results(card_name):
-    cmd_line = "mkdir " + card_name
+    #TODO: use python function
+    cmd_line = "mkdir results\\" + card_name
     process = subprocess.Popen(cmd_line, shell=True)
     out = process.communicate()[0]
     rc = process.returncode
@@ -94,16 +97,18 @@ if __name__ == "__main__":
     card_name = args.card_name
     
     prepare_results(card_name)
+    
+    gppro = GPPro(card_name)
 
     if args.info:
-        run_gp_info(card_name)
+        gppro.run_info()
 
     if args.list:
         run_gp_list(card_name)
 
     if args.jcalgtest:
         run_jcalgtest(card_name)
-
+    
     #cleanup(card_name)
     
     exit(0)

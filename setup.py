@@ -3,7 +3,7 @@ from shutil import copyfileobj, rmtree
 from urllib.request import urlopen
 from zipfile import ZipFile
 
-from config import URL, Paths
+from modules.config import URL, Paths
 
 
 def errmsg(tool_name, action, e):
@@ -80,7 +80,7 @@ def setup_jcalgtest():
 
     jc_translations = [(dest.split("/")[-1], dest) for dest in jc_files]
 
-    download_and_extract("JCAlgTest", URL.JCALGTEST, jc_translations)
+    return download_and_extract("JCAlgTest", URL.JCALGTEST, jc_translations)
 
 
 if __name__ == "__main__":

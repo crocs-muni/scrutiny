@@ -1,8 +1,8 @@
 # JCPeg
 An automated toolkit to identify and verify the type of Java Card smart cards.
 
-## Dependencies
-Python and Java Runtime Environment.
+## How does it work?
+TODO
 
 ## Set-up
 ### 1. Download the repository:
@@ -15,3 +15,6 @@ Python and Java Runtime Environment.
 
 ## Manual set-up
 TODO
+
+## Dependencies
+Python and Java Runtime Environment.

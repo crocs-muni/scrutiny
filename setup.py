@@ -3,7 +3,7 @@ from shutil import copyfileobj, rmtree
 from urllib.request import urlopen
 from zipfile import ZipFile
 
-from modules.config import URL, Paths
+from jcpeg.config import URL, Paths
 
 
 def errmsg(tool_name, action, e):

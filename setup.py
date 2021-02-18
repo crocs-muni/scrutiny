@@ -1,5 +1,7 @@
 from os import replace, remove
 from shutil import copyfileobj, rmtree
+import subprocess
+import sys
 from urllib.request import urlopen
 from zipfile import ZipFile
 
@@ -71,6 +73,19 @@ def download_and_extract(tool_name, tool_url, file_translations):
     return retval
 
 
+def pip_install(package):
+    try:
+        print("Installing package", package, "with pip...")
+        subprocess.check_call([sys.executable,
+                               "-m", "pip", "install",
+                               package])
+        print("Done.")
+        return True
+    except Exception as e:
+        errmsg(package, "installing", e)
+        return False
+    
+
 def setup_jcalgtest():
 
     jc_files = [Paths.JCALGTEST,
@@ -96,6 +111,11 @@ if __name__ == "__main__":
     print("Setting up JCAlgTest:")
     retval = retval and \
         setup_jcalgtest()
+
+    print()
+
+    print("Setting up jsonpickle:")
+    retval = retval and pip_install("jsonpickle")
 
     print()
     if not retval:

@@ -16,12 +16,13 @@ Peg that unknown white smart card that has been lying in your drawer!
 ### 4. Profit?
 
 ## Detailed usage
+TODO
 
 ## Manual set-up
 TODO
 
 ## Dependencies
-Python 3 and Java Runtime Environment.
+Python 3 with PIP, Java Runtime Environment.
 
 ## Limitations
 JCPeg is limited by the tools it depends on. Selection from multiple connected cards is not supported. Please, have at most one card connected to the PC when using JCPeg.

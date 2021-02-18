@@ -12,7 +12,7 @@ Peg that unknown white smart card that has been lying in your drawer!
 ### 2. Run the set-up script:
 `$ python setup.py`
 ### 3. Connect your card and run JCPeg:
-`$ python jcpeg.py -e Mysterious_Card_From_Mail`
+`$ python pegcard.py -e Mysterious_Card_From_Mail`
 ### 4. Profit?
 
 ## Detailed usage

@@ -6,7 +6,7 @@ def isfile(path):
     return os.path.isfile(path)
 
 def isdir(path):
-    os.path.isdir(path)
+    return os.path.isdir(path)
 
 def errmsg(tool_name, action, e):
     print("Oops!\n"
@@ -19,7 +19,8 @@ def execute_cmd(cmd_line):
     try:
         process = subprocess.Popen(cmd_line, shell=True)
         out = process.communicate()[0]
+        return process.returncode
     except Exception as e:
-        return errmsg("executing", "'" + cmd_line + "'", e)
-    rc = process.returncode
-    return rc
+        errmsg("'" + cmd_line + "'", "executing", e)
+        return 1
+    

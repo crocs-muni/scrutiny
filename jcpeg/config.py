@@ -14,3 +14,4 @@ class Paths():
     JCALGTEST_305 = "cap/AlgTest_v1.8.0_jc305.cap"
     JCALGTEST_304 = "cap/AlgTest_v1.8.0_jc304.cap"
     JCALGTEST_222 = "cap/AlgTest_v1.8.0_jc222.cap"
+    JCALGTEST_CAPS = [JCALGTEST_305, JCALGTEST_304, JCALGTEST_222]

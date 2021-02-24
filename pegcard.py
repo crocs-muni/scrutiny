@@ -1,8 +1,11 @@
 import argparse
+import os
 import subprocess
 
 from jcpeg.card import Card
 from jcpeg.gppro import GPPro
+from jcpeg.jcalgtest import JCAlgTest
+from jcpeg.utils import isdir, errmsg
 
 GP_PRO = "java -jar bin/gp.jar"
 
@@ -14,17 +17,16 @@ ALGTEST_304 = "AlgTest_v1.8.0_jc304.cap"
 ALGTEST_222 = "AlgTest_v1.8.0_jc222.cap"
 
 def prepare_results(card_name):
-    #TODO: use python function
-    cmd_line = "mkdir results\\" + card_name
-    process = subprocess.Popen(cmd_line, shell=True)
-    out = process.communicate()[0]
-    rc = process.returncode
-
-def run_gp_list(card_name):
-    cmd_line = GP_PRO + " -list > " + card_name + "/gp_list.txt"
-    process = subprocess.Popen(cmd_line, shell=True)
-    out = process.communicate()[0]
-    rc = process.returncode
+    dirname = "results/" + card_name
+    if isdir(dirname):
+       print(dirname, "already exists, skipping the creation.")
+       return True
+    try:
+        print("Creating", dirname + ".")
+        os.mkdir(dirname)
+        return True
+    except Exception as e:
+        return errmsg(dirname, "creating", e)
 
 def install_jcalgtest():
     for applet in [ALGTEST_305, ALGTEST_304, ALGTEST_222]:
@@ -83,26 +85,23 @@ if __name__ == "__main__":
         args.info = True
         args.list = True
 
-    card_name = args.card_name
+    card_name = args.card_name.replace(" ", "_")
     
     prepare_results(card_name)
     
     gppro = GPPro(card_name)
+    jcalgtest = JCAlgTest(card_name)
 
     card = Card(card_name)
 
-    """if args.info:
-        gppro.run_info()
-
-    if args.list:
-        run_gp_list(card_name)
-
-    if args.jcalgtest:
-        run_jcalgtest(card_name)"""
+    #if args.info:
+    #    gppro.run_info()
 
     gppro.run()
     card.add_modules(gppro.parse())
 
-    print(card)
+    jcalgtest.run_support()
+
+    #print(card)
     
     exit(0)

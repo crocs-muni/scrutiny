@@ -6,14 +6,7 @@ from urllib.request import urlopen
 from zipfile import ZipFile
 
 from jcpeg.config import URL, Paths
-
-
-def errmsg(tool_name, action, e):
-    print("Oops!\n"
-          "\tSomething went wrong while", action, tool_name + ":\n",
-          str(e),
-          "\tPlease try again or check the manual set-up section in README.md")
-    return False
+from jcpeg.utils import errmsg
 
 
 def download_file(tool_name, tool_url, tool_path):

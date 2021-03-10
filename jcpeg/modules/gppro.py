@@ -34,7 +34,9 @@ class GPProInfo(GPPro):
     def parse(self):
         filename = self.get_outfile(INFO_FILE)
 
+        gpcplc = GPCPLC()
         gpinfo = GPInfo()
+        modules = [gpcplc, gpinfo]
 
         with open(filename, "r") as f:
             lines = f.readlines()
@@ -50,7 +52,8 @@ class GPProInfo(GPPro):
             i += 1
                 
             if line.startswith("ATR"):
-                gpinfo.atr = line.split(":")[1].strip()
+                atr = line.split(":")[1].strip()
+                modules.insert(0, GPATR(atr=atr))
                 continue
 
             if line.startswith("IIN"):
@@ -63,10 +66,10 @@ class GPProInfo(GPPro):
 
             if line.startswith("CPLC"):
                 first = line.split(":")[1].strip().split("=")
-                gpinfo.cplc[first[0]] = first[1]
+                gpcplc.cplc[first[0]] = first[1]
                 while i < len(lines) and lines[i][0] == " ":
                     pair = lines[i].strip().split("=")
-                    gpinfo.cplc[pair[0]] = pair[1]
+                    gpcplc.cplc[pair[0]] = pair[1]
                     i += 1
                 continue
 
@@ -85,7 +88,7 @@ class GPProInfo(GPPro):
 
             gpinfo.other.append(line)
 
-        return [gpinfo]
+        return modules
 
 
 class GPProList(GPPro):
@@ -122,13 +125,23 @@ class GPProList(GPPro):
 
         return [gplist]
 
-    
+
+class GPATR(Module):
+    def __init__(self, moduleid="gpatr", atr=None):
+        super().__init__(moduleid)
+        self.atr = atr
+
+
+class GPCPLC(Module):
+    def __init__(self, moduleid="gpcplc"):
+        super().__init__(moduleid)
+        self.cplc = {}
+
+
 class GPInfo(Module):
 
     def __init__(self, moduleid="gpinfo"):
         super().__init__(moduleid)
-        self.atr = None
-        self.cplc = {}
         self.iin = None
         self.cin = None
         self.supports = []

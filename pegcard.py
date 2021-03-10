@@ -3,8 +3,8 @@ import os
 import subprocess
 
 from jcpeg.card import Card, load_card
-from jcpeg.gppro import GPPro
-from jcpeg.jcalgtest import JCAlgTest
+from jcpeg.modules.gppro import GPPro
+from jcpeg.modules.jcalgtest import JCAlgTest
 from jcpeg.utils import isdir, errmsg
 
 def prepare_results(card_name):

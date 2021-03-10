@@ -18,3 +18,8 @@ class Card(object):
 
     def __str__(self):
         return jsonpickle.encode(self, indent=4)
+
+
+def load_card(filename):
+    with open(filename, "r") as f:
+        return jsonpickle.decode(f.read())

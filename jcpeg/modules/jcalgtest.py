@@ -108,15 +108,16 @@ class JCAlgTestSupport(JCAlgTest):
                 jcsupport.cplc[data[0]] = data[1]
                 continue
 
-            result = [None, None]
-            if len(data) >= 3 and data[2] != "":
-                result[1] = data[2]
+            result = []
             if data[1] == "yes":
-                result[0] = True
+                result.append(True)
             elif data[1] == "no":
-                result[0] = False
+                result.append(False)
             else:
-                raise Exception("Invalid format in " + filename + ", line: " + stri(i - 1))
+                raise Exception("Invalid format in",
+                                filename + ", line: " + stri(i - 1))
+            if len(data) >= 3 and data[2] != "":
+                result.append(data[2])
 
             jcsupport.support[data[0]] = result
 

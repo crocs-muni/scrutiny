@@ -9,7 +9,10 @@ class GPPro(ToolWrapper):
 
     BIN = "java -jar " + Paths.GPPRO
 
-    def run_info(self):
+
+class GPProInfo(GPPro):
+
+    def run(self):
         outfile = "results/" + self.card_name + INFO_FILE
         
         if isfile(outfile) and not self.force_mode:
@@ -19,19 +22,9 @@ class GPPro(ToolWrapper):
         print("Running gp -info.")
         cmd_line = self.BIN + " -info > " + outfile
         return execute_cmd(cmd_line)
+    
 
-    def run_list(self):
-        outfile = "results/" + self.card_name + LIST_FILE
-        
-        if isfile(outfile) and not self.force_mode:
-            print("Skipping gp -list.")
-            return 0
-
-        print("Running gp -list.")
-        cmd_line = self.BIN + " -list > " + outfile
-        return execute_cmd(cmd_line)
-
-    def parse_info(self):
+    def parse(self):
         filename = "results/" + self.card_name + INFO_FILE
 
         gpinfo = GPInfo()
@@ -85,9 +78,23 @@ class GPPro(ToolWrapper):
 
             gpinfo.other.append(line)
 
-        return gpinfo
+        return [gpinfo]
 
-    def parse_list(self):
+
+class GPProList(GPPro):
+
+    def run(self):
+        outfile = "results/" + self.card_name + LIST_FILE
+        
+        if isfile(outfile) and not self.force_mode:
+            print("Skipping gp -list.")
+            return 0
+
+        print("Running gp -list.")
+        cmd_line = self.BIN + " -list > " + outfile
+        return execute_cmd(cmd_line)
+
+    def parse(self):
 
         filename = "results/" + self.card_name + LIST_FILE
 
@@ -114,22 +121,9 @@ class GPPro(ToolWrapper):
                 gplist.pkg.append(line.split(":")[1].strip().split(" ")[0])
                 continue
 
-        return gplist
+        return [gplist]
 
-    def run(self):
-        self.run_info()
-        self.run_list()
-
-    def parse(self):
-        modules = []
-
-        modules.append(self.parse_info())
-        modules.append(self.parse_list())
-
-        return modules
-        
-                    
-
+    
 class GPInfo(Module):
 
     def __init__(self, moduleid="gpinfo"):

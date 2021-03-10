@@ -7,3 +7,9 @@ class ToolWrapper(object):
     def __init__(self, card_name, force_mode=False):
         self.card_name = card_name
         self.force_mode = force_mode
+
+    def run(self):
+        pass
+
+    def parse(self):
+        pass

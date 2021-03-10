@@ -10,9 +10,9 @@ Peg that unknown white smart card that has been lying in your drawer!
 ### 1. Download the repository:
 `$ git clone https://github.com/NimRo97/jcpeg.git`
 ### 2. Run the set-up script:
-`$ python -u setup.py`
+`$ python -u setup_script.py`
 ### 3. Connect your card and run JCPeg:
-`$ python pegcard.py -e Mysterious_Card_From_Mail`
+`$ python -u pegcard.py -e Mysterious_Card_From_Mail`
 ### 4. Profit?
 
 ## Detailed usage

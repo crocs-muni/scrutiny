@@ -23,23 +23,3 @@ Python 3 with PIP, Java Runtime Environment.
 
 ## Limitations
 JCPeg is limited by the tools it depends on. Selection from multiple connected cards is not supported. Please, have at most one card connected to the PC when using JCPeg.
-
-## Manual set-up
-If `$ python -u setup.py` finished without errors, you can safely skip this section. If the setup script fails to fetch some necessary files, you can set them up manually using this section.
-
-### GlobalPlatformPro
-Building GPPro from submodule would create time-consuming and iffy dependency. Specific release wersion is downloaded from project's repository instead.
-
-If setting up GlobalPlatformPro fails during setup.py, follow the download link in `jcpeg/jcpeg/config.py` and place `gp.jar` in `jcpeg/bin` folder (`jcpeg/bin/gp.jar`).
-
-It is important to download the specific release from link, as the output format of this tool changes between versions.
-
-### JCAlgTest
-Building JCAlgTest from submodule would create time-consuming and iffy dependency. Specific release wersion is downloaded from project's repository instead. 
-
-If setting up JCAlgTest fails during setup.py, follow the download link in `jcpeg/jcpeg/config.py` and place `AlgTestJClient.jar` in `jcpeg/bin` folder (`jcpeg/bin/AlgTestJClient.jar`). Place all 3 cap files `AlgTest***.cap` to `jcpeg/cap` folder (`jcpeg/cap/AlgTest***.cap`).
-
-It is important to download the specific release from link.
-
-### jsonpickle
-Jsonpickle Python library is needed for JCPeg to generate and work with JSON database. Try running `pip install -U jsonpickle` manually or consult download section in jsonpickle documentation https://jsonpickle.github.io/#download-install.

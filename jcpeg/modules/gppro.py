@@ -16,7 +16,7 @@ class GPPro(ToolWrapper):
     GP_BIN = "java -jar " + Paths.GPPRO
 
     def run(self, args, outfile):
-        outpath = self.get_outfile(outfile)
+        outpath = self.get_outpath(outfile)
         cmd_line = self.GP_BIN + " " + " ".join(args) + " > " + outpath
         
         if isfile(outpath) and not self.force_mode:
@@ -35,7 +35,7 @@ class GPProInfo(GPPro):
     
 
     def parse(self):
-        filename = self.get_outfile(INFO_FILE)
+        filename = self.get_outpath(INFO_FILE)
         with open(filename, "r") as f:
             lines = f.readlines()
 
@@ -98,7 +98,7 @@ class GPProList(GPPro):
 
     def parse(self):
 
-        filename = self.get_outfile(LIST_FILE)
+        filename = self.get_outpath(LIST_FILE)
         with open(filename, "r") as f:
             lines = f.readlines()
 

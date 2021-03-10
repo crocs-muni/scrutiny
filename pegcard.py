@@ -4,7 +4,7 @@ import subprocess
 
 from jcpeg.card import Card, load_card
 from jcpeg.modules.gppro import GPProInfo, GPProList
-from jcpeg.modules.jcalgtest import JCAlgTest
+from jcpeg.modules.jcalgtest import JCAlgTestSupport
 from jcpeg.utils import isdir, errmsg
 
 def prepare_results(card_name):
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     gpinfo = GPProInfo(card_name)
     gplist = GPProList(card_name)
     
-    jcalgtest = JCAlgTest(card_name, install=False)
+    jcsupport = JCAlgTestSupport(card_name, install=False)
 
     card = Card(card_name)
 
@@ -77,8 +77,8 @@ if __name__ == "__main__":
     card.add_modules(gpinfo.parse())
     card.add_modules(gplist.parse())
 
-    jcalgtest.run_support()
-    card.add_module(jcalgtest.parse_support())
+    jcsupport.run()
+    card.add_modules(jcsupport.parse())
 
     #print(card)
     

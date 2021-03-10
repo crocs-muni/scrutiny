@@ -8,6 +8,9 @@ class ToolWrapper(object):
         self.card_name = card_name
         self.force_mode = force_mode
 
+    def get_outfile(self, filename):
+        return "results/" + self.card_name + "/" + filename
+
     def run(self):
         pass
 

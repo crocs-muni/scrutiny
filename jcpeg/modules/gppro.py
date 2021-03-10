@@ -2,30 +2,37 @@ from jcpeg.config import Paths
 from jcpeg.interfaces import Module, ToolWrapper
 from jcpeg.utils import execute_cmd, isfile
 
-INFO_FILE = "/gp_info.txt"
-LIST_FILE = "/gp_list.txt"
+INFO_ARGS = ["-info"]
+INFO_FILE = "gp_info.txt"
+
+LIST_ARGS = ["-list"]
+LIST_FILE = "gp_list.txt"
 
 class GPPro(ToolWrapper):
 
-    BIN = "java -jar " + Paths.GPPRO
+    GP_BIN = "java -jar " + Paths.GPPRO
+
+    def run(self, args, outfile):
+        outpath = self.get_outfile(outfile)
+        cmd_line = self.GP_BIN + " " + " ".join(args) + " > " + outpath
+        
+        if isfile(outpath) and not self.force_mode:
+            print("Skipping " + cmd_line + " (results found).")
+            return 0
+
+        print("Running " + cmd_line + ".")
+        
+        return execute_cmd(cmd_line)
 
 
 class GPProInfo(GPPro):
 
     def run(self):
-        outfile = "results/" + self.card_name + INFO_FILE
-        
-        if isfile(outfile) and not self.force_mode:
-            print("Skipping gp -info.")
-            return 0
-
-        print("Running gp -info.")
-        cmd_line = self.BIN + " -info > " + outfile
-        return execute_cmd(cmd_line)
+        return super().run(INFO_ARGS, INFO_FILE)
     
 
     def parse(self):
-        filename = "results/" + self.card_name + INFO_FILE
+        filename = self.get_outfile(INFO_FILE)
 
         gpinfo = GPInfo()
 
@@ -84,19 +91,11 @@ class GPProInfo(GPPro):
 class GPProList(GPPro):
 
     def run(self):
-        outfile = "results/" + self.card_name + LIST_FILE
-        
-        if isfile(outfile) and not self.force_mode:
-            print("Skipping gp -list.")
-            return 0
-
-        print("Running gp -list.")
-        cmd_line = self.BIN + " -list > " + outfile
-        return execute_cmd(cmd_line)
+        return super().run(LIST_ARGS, LIST_FILE)
 
     def parse(self):
 
-        filename = "results/" + self.card_name + LIST_FILE
+        filename = self.get_outfile(LIST_FILE)
 
         gplist = GPList()
 

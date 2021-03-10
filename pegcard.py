@@ -82,7 +82,7 @@ if __name__ == "__main__":
 
     #print(card)
     
-    with open("profile.json", "w") as output:
+    with open("results/" + card_name + ".json", "w") as output:
         output.write(str(card))
     
     exit(0)

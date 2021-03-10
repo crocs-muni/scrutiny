@@ -9,9 +9,6 @@ class GPPro(ToolWrapper):
 
     BIN = "java -jar " + Paths.GPPRO
 
-    def __init__(self, card_name, force_mode=False):
-        super().__init__(card_name, force_mode)
-
     def run_info(self):
         outfile = "results/" + self.card_name + INFO_FILE
         

@@ -3,10 +3,7 @@ import jsonpickle
 class Card(object):
 
     def __init__(self, name):
-        
         self.name = name
-        self.atr = None
-
         self.modules = {}
 
     def add_module(self, module):

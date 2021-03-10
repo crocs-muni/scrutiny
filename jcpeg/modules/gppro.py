@@ -8,6 +8,9 @@ INFO_FILE = "gp_info.txt"
 LIST_ARGS = ["-list"]
 LIST_FILE = "gp_list.txt"
 
+
+# Tool Wrappers ---------------------------------------------------------------
+
 class GPPro(ToolWrapper):
 
     GP_BIN = "java -jar " + Paths.GPPRO
@@ -33,13 +36,12 @@ class GPProInfo(GPPro):
 
     def parse(self):
         filename = self.get_outfile(INFO_FILE)
+        with open(filename, "r") as f:
+            lines = f.readlines()
 
         gpcplc = GPCPLC()
         gpinfo = GPInfo()
         modules = [gpcplc, gpinfo]
-
-        with open(filename, "r") as f:
-            lines = f.readlines()
 
         GPINFO_DISCARD = ["Card Data:", "Card Capabilities:",
                           "More information about your card:",
@@ -50,6 +52,9 @@ class GPProInfo(GPPro):
                 
             line = lines[i].rstrip()
             i += 1
+
+            if line == "" or any([d in line for d in GPINFO_DISCARD]):
+                continue
                 
             if line.startswith("ATR"):
                 atr = line.split(":")[1].strip()
@@ -72,8 +77,6 @@ class GPProInfo(GPPro):
                     gpcplc.cplc[pair[0]] = pair[1]
                     i += 1
                 continue
-
-            # ---------------
                 
             if line.startswith("Support"):
                 gpinfo.supports.append(line)
@@ -81,9 +84,6 @@ class GPProInfo(GPPro):
 
             if line.startswith("Version"):
                 gpinfo.versions.append(line)
-                continue
-
-            if line == "" or any([d in line for d in GPINFO_DISCARD]):
                 continue
 
             gpinfo.other.append(line)
@@ -99,11 +99,10 @@ class GPProList(GPPro):
     def parse(self):
 
         filename = self.get_outfile(LIST_FILE)
-
-        gplist = GPList()
-
         with open(filename, "r") as f:
             lines = f.readlines()
+
+        gplist = GPList()
 
         i = 0
         while i < len(lines):
@@ -126,6 +125,7 @@ class GPProList(GPPro):
         return [gplist]
 
 
+# Modules ---------------------------------------------------------------------
 class GPATR(Module):
     def __init__(self, moduleid="gpatr", atr=None):
         super().__init__(moduleid)

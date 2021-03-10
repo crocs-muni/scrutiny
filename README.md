@@ -1,10 +1,8 @@
 # JCPeg
-An automated toolkit to identify and verify the type of Java Card smart cards.
+An automated toolkit to build and manage Java Card smart card profiles, and verify them against reference profiles.
 
 ## How does it work?
-JCPeg will run set of open-source tools to gather information about your smart card. The information will be parsed and united into JSON file, eliminating the hassle of learning and parsing results from plethora of tools. Results can be compared with existing database of cards and shown in human-readable form.
-
-Peg that unknown white smart card that has been lying in your drawer!
+JCPeg will run set of open-source tools to gather information about your smart card. The information will be parsed and united into JSON file, eliminating the hassle of learning and parsing results from plethora of tools. Results can be compared and results shown in human-readable form.
 
 ## Set-up
 ### 1. Download the repository:
@@ -12,7 +10,7 @@ Peg that unknown white smart card that has been lying in your drawer!
 ### 2. Run the set-up script:
 `$ python -u setup_script.py`
 ### 3. Connect your card and run JCPeg:
-`$ python -u pegcard.py -e Mysterious_Card_From_Mail`
+`$ python -u pegcard.py -e Supposedly_NXP_P60`
 ### 4. Profit?
 
 ## Detailed usage

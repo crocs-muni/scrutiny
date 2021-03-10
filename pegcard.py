@@ -2,7 +2,7 @@ import argparse
 import os
 import subprocess
 
-from jcpeg.card import Card
+from jcpeg.card import Card, load_card
 from jcpeg.gppro import GPPro
 from jcpeg.jcalgtest import JCAlgTest
 from jcpeg.utils import isdir, errmsg
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     prepare_results(card_name)
     
     gppro = GPPro(card_name)
-    jcalgtest = JCAlgTest(card_name)
+    jcalgtest = JCAlgTest(card_name, install=False)
 
     card = Card(card_name)
 
@@ -73,8 +73,12 @@ if __name__ == "__main__":
     gppro.run()
     card.add_modules(gppro.parse())
 
-    #jcalgtest.run_support()
+    jcalgtest.run_support()
+    card.add_module(jcalgtest.parse_support())
 
     #print(card)
+    
+    with open("profile.json", "w") as output:
+        output.write(str(card))
     
     exit(0)

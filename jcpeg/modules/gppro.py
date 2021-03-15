@@ -1,5 +1,5 @@
 from jcpeg.config import Paths
-from jcpeg.interfaces import Module, ToolWrapper
+from jcpeg.interfaces import ContrastModule, Module, ToolWrapper
 from jcpeg.utils import execute_cmd, isfile
 
 INFO_ARGS = ["-info"]
@@ -126,10 +126,27 @@ class GPProList(GPPro):
 
 
 # Modules ---------------------------------------------------------------------
+class GPATRContrast(ContrastModule):
+    def __init__(self, moduleid="gpatr", reference_atr=None, profile_atr=None):
+        super().__init__(moduleid)
+        self.reference_atr = reference_atr
+        self.profile_atr = profile_atr
+
+    def project_HTML(self):
+        pass
+
+
 class GPATR(Module):
     def __init__(self, moduleid="gpatr", atr=None):
         super().__init__(moduleid)
         self.atr = atr
+
+    def contrast(self, other):
+        super().contrast(other)
+
+        cm = GPATRContrast(reference_atr=self.atr,
+                           profile_atr=other.atr)
+        return [cm]
 
 
 class GPCPLC(Module):

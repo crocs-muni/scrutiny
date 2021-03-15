@@ -17,3 +17,6 @@ It is important to download the specific release from link.
 
 ### jsonpickle
 Jsonpickle Python library is needed for JCPeg to generate and work with JSON database. Try running `pip install -U jsonpickle` manually or consult download section in jsonpickle documentation https://jsonpickle.github.io/#download-install.
+
+### dominate
+TODO

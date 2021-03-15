@@ -111,6 +111,11 @@ if __name__ == "__main__":
     retval = retval and pip_install("jsonpickle")
 
     print()
+
+    print("Setting up dominate:")
+    retval = retval and pip_install("dominate")
+
+    print()
     if not retval:
         print("Issues occured during set-up.",
               "Check the manual set-up section in README.md for assistance.")

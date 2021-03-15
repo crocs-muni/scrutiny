@@ -130,24 +130,27 @@ class GPProList(GPPro):
 
 # Modules ---------------------------------------------------------------------
 class GPATRContrast(ContrastModule):
+
+    NAME = "ATR"
     
     def __init__(self, moduleid="gpatr", reference_atr=None, profile_atr=None):
         super().__init__(moduleid)
         self.reference_atr = reference_atr
         self.profile_atr = profile_atr
 
+    def __str__(self):
+        return self.NAME
+
     def project_HTML(self):
-        with div(id="ATR"):
-            h3("ATR")
-            with ol():
-                li("Reference ATR: " + self.reference_atr)
-                li("Profile ATR: " + self.profile_atr)
-            if self.reference_atr == self.profile_atr:
-                p("The ATR of tested card matches the reference. "
-                  "This would suggest the same smart card model.")
-            else:
-                p("The ATR of tested card does not match the reference. "
-                  "This would suggest different card models.")
+        with ol():
+            li("Reference ATR: " + self.reference_atr)
+            li("Profile ATR: " + self.profile_atr)
+        if self.reference_atr == self.profile_atr:
+            p("The ATR of tested card matches the reference. "
+              "This would suggest the same smart card model.")
+        else:
+            p("The ATR of tested card does not match the reference. "
+              "This would suggest different card models.")
         #TODO: implement ATR parse
 
 

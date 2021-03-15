@@ -15,6 +15,9 @@ class ContrastModule(object):
     def __init__(self, moduleid):
         self.id = moduleid
 
+    def __str__(self):
+        return self.moduleid
+
     def project_HTML(self):
         pass
 

@@ -1,6 +1,7 @@
 import argparse
 import dominate
 from dominate.tags import *
+from dominate.util import raw
 import jsonpickle
 
 
@@ -24,9 +25,14 @@ if __name__ == "__main__":
     with doc:
         with div(id="intro"):
             p("This is the introductory section")
+
+        with div(id="modules"):
             
-        for m in modules:
-            m.project_HTML()
+            for m in modules:
+                h2("Module: " + str(m))
+                button("Show/hide", onclick="hideButton('" + m.id + "')")
+                with div(id=m.id):
+                    m.project_HTML()
 
     with open("comparison.html", "w") as f:
         f.write(str(doc))

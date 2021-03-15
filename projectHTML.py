@@ -24,10 +24,9 @@ if __name__ == "__main__":
     with doc:
         with div(id="intro"):
             p("This is the introductory section")
+            
         for m in modules:
             m.project_HTML()
-
-    
 
     with open("comparison.html", "w") as f:
         f.write(str(doc))

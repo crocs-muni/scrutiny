@@ -130,6 +130,7 @@ class GPProList(GPPro):
 
 # Modules ---------------------------------------------------------------------
 class GPATRContrast(ContrastModule):
+    
     def __init__(self, moduleid="gpatr", reference_atr=None, profile_atr=None):
         super().__init__(moduleid)
         self.reference_atr = reference_atr

@@ -1,3 +1,6 @@
+import dominate
+from dominate.tags import *
+
 from jcpeg.config import Paths
 from jcpeg.interfaces import ContrastModule, Module, ToolWrapper
 from jcpeg.utils import execute_cmd, isfile
@@ -133,7 +136,18 @@ class GPATRContrast(ContrastModule):
         self.profile_atr = profile_atr
 
     def project_HTML(self):
-        pass
+        with div(id="ATR"):
+            h3("ATR")
+            with ol():
+                li("Reference ATR: " + self.reference_atr)
+                li("Profile ATR: " + self.profile_atr)
+            if self.reference_atr == self.profile_atr:
+                p("The ATR of tested card matches the reference. "
+                  "This would suggest the same smart card model.")
+            else:
+                p("The ATR of tested card does not match the reference. "
+                  "This would suggest different card models.")
+        #TODO: implement ATR parse
 
 
 class GPATR(Module):

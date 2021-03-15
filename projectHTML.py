@@ -13,7 +13,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     with open(args.contrast, "r") as f:
-        modules = [jsonpickle.decode(f.read())]
+        modules = jsonpickle.decode(f.read())
 
     doc = dominate.document(title='Comparison of smart cards')
 
@@ -24,6 +24,10 @@ if __name__ == "__main__":
     with doc:
         with div(id="intro"):
             p("This is the introductory section")
+        for m in modules:
+            m.project_HTML()
+
+    
 
     with open("comparison.html", "w") as f:
         f.write(str(doc))

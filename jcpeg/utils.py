@@ -1,6 +1,8 @@
 import os.path
 import subprocess
 
+from jcpeg.config import Paths
+
 
 def isfile(path):
     return os.path.isfile(path)
@@ -23,4 +25,19 @@ def execute_cmd(cmd_line):
     except Exception as e:
         errmsg("'" + cmd_line + "'", "executing", e)
         return 1
+
+def get_smart_card(atr):
     
+    with open(Paths.SMARTCARD_LIST, "r", encoding="utf8") as f:
+        lines = f.readlines()
+        
+    info = []
+    
+    for i in range(len(lines)):
+        if atr in lines[i].strip().replace(" ", ""):
+            j = 1
+            while lines[i+j].startswith("\t"):
+                info.append(lines[i+j].strip())
+                j += 1
+
+    return info

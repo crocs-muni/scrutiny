@@ -20,10 +20,10 @@ if __name__ == "__main__":
     profile = load_card(args.profile)
 
     contrasts = []
-
+    
     for module in reference.modules.values():
         if module.id in profile.modules.keys():
             contrasts.extend(module.contrast(profile.modules[module.id]))
-
+    
     with open("contrast.json", "w") as f:
         f.write(jsonpickle.encode(contrasts, indent=4))

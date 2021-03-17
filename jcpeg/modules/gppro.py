@@ -3,7 +3,7 @@ from dominate.tags import *
 
 from jcpeg.config import Paths
 from jcpeg.interfaces import ContrastModule, Module, ToolWrapper
-from jcpeg.utils import execute_cmd, isfile
+from jcpeg.utils import execute_cmd, isfile, get_smart_card
 
 INFO_ARGS = ["-info"]
 INFO_FILE = "gp_info.txt"
@@ -133,25 +133,43 @@ class GPATRContrast(ContrastModule):
 
     NAME = "ATR"
     
-    def __init__(self, moduleid="gpatr", reference_atr=None, profile_atr=None):
+    def __init__(self,
+                 reference_atr, profile_atr,
+                 reference_info, profile_info,
+                 moduleid="gpatr"):
         super().__init__(moduleid)
         self.reference_atr = reference_atr
         self.profile_atr = profile_atr
+        self.reference_info = reference_info
+        self.profile_info = profile_info
+        
+        self.match = self.reference_atr == self.profile_atr
 
     def __str__(self):
         return self.NAME
 
     def project_HTML(self):
+        
+        h3("ATR comparison results")
+        p("TODO: insert info text")
+        
+        h4("ATR:")
         with ul():
             li("Reference ATR: " + self.reference_atr)
             li("Profile ATR: " + self.profile_atr)
-        if self.reference_atr == self.profile_atr:
+        if self.match:
             p("The ATR of tested card matches the reference. "
               "This would suggest the same smart card model.")
         else:
             p("The ATR of tested card does not match the reference. "
               "This would suggest different card models.")
-        #TODO: implement ATR parse
+
+        h4("Additional info from smart card database")
+        if self.reference_info:
+            p("TODO: Card found text")
+            for i in self.reference_info:
+                li(i)
+        #TODO finish
 
 
 class GPATR(Module):
@@ -162,8 +180,13 @@ class GPATR(Module):
     def contrast(self, other):
         super().contrast(other)
 
+        selfinfo = get_smart_card(self.atr)
+        otherinfo = get_smart_card(other.atr)
+
         cm = GPATRContrast(reference_atr=self.atr,
-                           profile_atr=other.atr)
+                           profile_atr=other.atr,
+                           reference_info=selfinfo,
+                           profile_info=otherinfo)
         return [cm]
 
 

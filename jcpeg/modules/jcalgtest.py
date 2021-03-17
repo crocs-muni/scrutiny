@@ -10,9 +10,10 @@ SUPPORT_STRING = "ALGSUPPORT"
 
 def install_jcalgtest_applet(force=False):
     if force:
-        execute_cmd("java -jar bin/gp.jar -uninstall " + Paths.JCALGTEST_305)
+        execute_cmd("java -jar " + Paths.GPPRO + " -uninstall " + \
+                    Paths.JCALGTEST_305)
     for applet in Paths.JCALGTEST_CAPS:
-        cmd_line = "java -jar bin/gp.jar -install " + applet
+        cmd_line = "java -jar " + Paths.GPPRO + " -install " + applet
         if execute_cmd(cmd_line) == 0:
             break
 

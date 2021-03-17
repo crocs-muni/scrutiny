@@ -29,8 +29,8 @@ if __name__ == "__main__":
         with div(id="modules"):
             
             for m in modules:
-                h2("Module: " + str(m))
-                button("Show/hide", onclick="hideButton('" + m.id + "')")
+                h2("Module: " + str(m), style="display: inline-block;")
+                button("Show / Hide", onclick="hideButton('" + m.id + "')")
                 with div(id=m.id):
                     m.project_HTML()
 

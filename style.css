@@ -1,5 +1,41 @@
 div {
-  border-radius: 10px;
-  border: 2px solid #73AD21;
-  padding: 10px;
+  margin-top: 2px;
+  border: 3px #ffffff;
+  border-style: solid solid solid solid;
+  padding: 10px 25px;
+  background-color: #eff3f591;
+}
+
+body {
+  max-width: 90%;
+	margin: 50px 5%;
+  font-family:sans-serif;
+  color: #193441;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  border-radius: 5px;
+  color: white;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+button:hover {
+  border: none;
+  background-color: #3e9b41;
+}
+
+button:focus {
+  outline: none;
+}
+
+h1 {
+  display: inline-block;
 }

@@ -142,7 +142,7 @@ class GPATRContrast(ContrastModule):
         return self.NAME
 
     def project_HTML(self):
-        with ol():
+        with ul():
             li("Reference ATR: " + self.reference_atr)
             li("Profile ATR: " + self.profile_atr)
         if self.reference_atr == self.profile_atr:

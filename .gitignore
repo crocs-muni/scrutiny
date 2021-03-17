@@ -4,7 +4,7 @@
 *.exe
 
 # JCPeg stuff
-
+data/*
 results/* 
 *.json
 *.html

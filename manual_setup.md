@@ -1,6 +1,9 @@
 # Manual set-up
 If `$ python -u setup.py` finished without errors, you can safely skip this section. If the setup script fails to fetch some necessary files, you can set them up manually using this section.
 
+### Smart Card List
+TODO
+
 ### GlobalPlatformPro
 Building GPPro from submodule would create time-consuming and iffy dependency. Specific release wersion is downloaded from project's repository instead.
 

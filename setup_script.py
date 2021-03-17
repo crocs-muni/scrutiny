@@ -95,6 +95,10 @@ if __name__ == "__main__":
 
     retval = True
 
+    print("Setting up Smart Card List:")
+    retval = retval and \
+        download_file("Smart Card List", URL.SMARTCARD_LIST, Paths.SMARTCARD_LIST)
+
     print("Setting up GlobalPlatformPro:")
     retval = retval and \
         download_file("GlobalPlatformPro", URL.GPPRO, Paths.GPPRO)

@@ -41,16 +41,21 @@ if __name__ == "__main__":
             p("This is the introductory section")
 
         with div(id="modules"):
-            
+
+            module_count = 0
             for m in contrast.contrasts:
+                divname = m.id + str(module_count)
                 h2("Module: " + str(m), style="display: inline-block;")
                 contrast_class = m.get_state()
                 with span(cls = "dot " + contrast_class.name.lower()):
                     span(TOOLTIPTEXT[contrast_class],
                             cls = "tooltiptext " + contrast_class.name.lower())
-                button("Show / Hide", onclick="hideButton('" + m.id + "')")
-                with div(id=m.id):
+                button("Show / Hide", onclick="hideButton('" + divname + "')")
+                with div(id=divname):
                     m.project_HTML(contrast.ref_name, contrast.prof_name)
+                br()
+                module_count += 1
+                
 
     with open(args.output_file, "w") as f:
         f.write(str(doc))

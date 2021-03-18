@@ -1,3 +1,9 @@
+:root {
+  --green-color:#4CAF50;
+  --yellow-color:#d3d03e;
+  --red-color:#c04444;
+}
+
 div {
   margin-top: 2px;
   border: 3px #ffffff;
@@ -72,14 +78,14 @@ h1 {
 }
 
 .match {
-  background-color: #4CAF50;
+  background-color: var(--green-color);
 }
 
 .warn {
-  background-color: #c0be44;
+  background-color: var(--yellow-color);
   color: #193441;
 }
 
 .suspicious {
-  background-color: #c04444;
+  background-color: var(--red-color);
 }

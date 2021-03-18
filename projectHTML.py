@@ -50,7 +50,6 @@ if __name__ == "__main__":
                             cls = "tooltiptext " + contrast_class.name.lower())
                 button("Show / Hide", onclick="hideButton('" + m.id + "')")
                 with div(id=m.id):
-                    #TODO: give card names
                     m.project_HTML(contrast.ref_name, contrast.prof_name)
 
     with open(args.output_file, "w") as f:

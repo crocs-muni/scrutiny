@@ -51,7 +51,8 @@ class GPATRContrast(ContrastModule):
     def project_HTML(self, ref_name, prof_name):
         
         h3("ATR comparison results")
-        p("TODO: insert info text")
+        p("This module copares ATR of the smart cards and serches database "
+        "of known smart cards for additional information.")
         
         h4("ATR:")
         with table():
@@ -67,15 +68,23 @@ class GPATRContrast(ContrastModule):
               "This would suggest the same smart card model.")
         else:
             p("The ATR of tested card does not match the reference. "
-              "This would suggest different card models.")
+              "This would suggest different smart card models.")
 
         h4("Additional info from smart card database")
         if self.ref_info:
-            p("TODO: Card found text")
+            p("The reference card (" + ref_name + ") was found in the database:")
             with div():
                 for i in self.ref_info:
                     p(i)
-        #TODO finish
+        else:
+            p("The reference card (" + ref_name + ") was not found in the database.")
+        if self.prof_info:
+            p("The profiled card (" + prof_name + ") was found in the database:")
+            with div():
+                for i in self.prof_info:
+                    p(i)
+        else:
+            p("The profiled card (" + prof_name + " was not found in the database.")
 
 
 class GPCPLC(Module):

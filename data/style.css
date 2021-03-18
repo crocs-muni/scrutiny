@@ -15,6 +15,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+table {
+  border: solid 3px #ffffff;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: solid 3px #ffffff;
+  padding: 5px 10px;
+}
+
 button {
   background-color: #4CAF50; /* Green */
   border: none;
@@ -53,7 +63,6 @@ h1 {
 
 .tooltiptext {
   visibility: hidden;
-  background-color: #193441;
   color: #fff;
   padding: 5px 10px;
   border-radius: 6px;

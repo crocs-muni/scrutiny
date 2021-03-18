@@ -18,7 +18,7 @@ class ContrastModule(object):
     def __str__(self):
         return self.moduleid
 
-    def project_HTML(self):
+    def project_HTML(self, ref_name=None, prof_name=None):
         pass
 
 

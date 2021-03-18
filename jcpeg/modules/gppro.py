@@ -140,10 +140,10 @@ class GPATR(Module):
         selfinfo = get_smart_card(self.atr)
         otherinfo = get_smart_card(other.atr)
 
-        cm = GPATRContrast(reference_atr=self.atr,
-                           profile_atr=other.atr,
-                           reference_info=selfinfo,
-                           profile_info=otherinfo)
+        cm = GPATRContrast(ref_atr=self.atr,
+                           prof_atr=other.atr,
+                           ref_info=selfinfo,
+                           prof_info=otherinfo)
         return [cm]
 
 
@@ -152,21 +152,22 @@ class GPATRContrast(ContrastModule):
     NAME = "ATR"
     
     def __init__(self,
-                 reference_atr, profile_atr,
-                 reference_info, profile_info,
+                 ref_atr, prof_atr,
+                 ref_info, prof_info,
                  moduleid="gpatr"):
+
         super().__init__(moduleid)
-        self.reference_atr = reference_atr
-        self.profile_atr = profile_atr
-        self.reference_info = reference_info
-        self.profile_info = profile_info
+        self.ref_atr = ref_atr
+        self.prof_atr = prof_atr
+        self.ref_info = ref_info
+        self.prof_info = prof_info
         
-        self.match = self.reference_atr == self.profile_atr
+        self.match = self.ref_atr == self.prof_atr
 
     def __str__(self):
         return self.NAME
 
-    def project_HTML(self):
+    def project_HTML(self, ref_name, prof_name):
         
         h3("ATR comparison results")
         p("TODO: insert info text")
@@ -174,11 +175,11 @@ class GPATRContrast(ContrastModule):
         h4("ATR:")
         with table():
             with tr():
-                td("Reference ATR")
-                td(self.reference_atr)
+                td("Reference ATR (" + ref_name + ")")
+                td(self.ref_atr)
             with tr():
-                td("Profile ATR")
-                td(self.profile_atr)
+                td("Profile ATR (" + prof_name + ")")
+                td(self.prof_atr)
             
         if self.match:
             p("The ATR of tested card matches the reference. "
@@ -188,10 +189,10 @@ class GPATRContrast(ContrastModule):
               "This would suggest different card models.")
 
         h4("Additional info from smart card database")
-        if self.reference_info:
+        if self.ref_info:
             p("TODO: Card found text")
             with div():
-                for i in self.reference_info:
+                for i in self.ref_info:
                     p(i)
         #TODO finish
 

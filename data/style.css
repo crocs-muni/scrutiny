@@ -9,7 +9,7 @@ div {
 body {
   max-width: 90%;
 	margin: 50px 5%;
-  font-family:sans-serif;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
   color: #193441;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

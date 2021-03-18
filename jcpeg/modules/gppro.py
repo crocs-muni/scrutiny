@@ -129,6 +129,24 @@ class GPProList(GPPro):
 
 
 # Modules ---------------------------------------------------------------------
+class GPATR(Module):
+    def __init__(self, moduleid="gpatr", atr=None):
+        super().__init__(moduleid)
+        self.atr = atr
+
+    def contrast(self, other):
+        super().contrast(other)
+
+        selfinfo = get_smart_card(self.atr)
+        otherinfo = get_smart_card(other.atr)
+
+        cm = GPATRContrast(reference_atr=self.atr,
+                           profile_atr=other.atr,
+                           reference_info=selfinfo,
+                           profile_info=otherinfo)
+        return [cm]
+
+
 class GPATRContrast(ContrastModule):
 
     NAME = "ATR"
@@ -154,9 +172,14 @@ class GPATRContrast(ContrastModule):
         p("TODO: insert info text")
         
         h4("ATR:")
-        with ul():
-            li("Reference ATR: " + self.reference_atr)
-            li("Profile ATR: " + self.profile_atr)
+        with table():
+            with tr():
+                td("Reference ATR")
+                td(self.reference_atr)
+            with tr():
+                td("Profile ATR")
+                td(self.profile_atr)
+            
         if self.match:
             p("The ATR of tested card matches the reference. "
               "This would suggest the same smart card model.")
@@ -167,27 +190,10 @@ class GPATRContrast(ContrastModule):
         h4("Additional info from smart card database")
         if self.reference_info:
             p("TODO: Card found text")
-            for i in self.reference_info:
-                li(i)
+            with div():
+                for i in self.reference_info:
+                    p(i)
         #TODO finish
-
-
-class GPATR(Module):
-    def __init__(self, moduleid="gpatr", atr=None):
-        super().__init__(moduleid)
-        self.atr = atr
-
-    def contrast(self, other):
-        super().contrast(other)
-
-        selfinfo = get_smart_card(self.atr)
-        otherinfo = get_smart_card(other.atr)
-
-        cm = GPATRContrast(reference_atr=self.atr,
-                           profile_atr=other.atr,
-                           reference_info=selfinfo,
-                           profile_info=otherinfo)
-        return [cm]
 
 
 class GPCPLC(Module):

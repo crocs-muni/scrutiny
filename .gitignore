@@ -6,6 +6,7 @@
 # JCPeg stuff
 data/*
 results/* 
+output/*
 *.json
 *.html
 

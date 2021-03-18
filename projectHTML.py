@@ -32,6 +32,7 @@ if __name__ == "__main__":
                 h2("Module: " + str(m), style="display: inline-block;")
                 button("Show / Hide", onclick="hideButton('" + m.id + "')")
                 with div(id=m.id):
+                    #TODO: give card names
                     m.project_HTML()
 
     with open("comparison.html", "w") as f:

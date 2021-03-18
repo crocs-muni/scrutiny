@@ -1,8 +1,9 @@
 import os
 
 from jcpeg.config import Paths
-from jcpeg.interfaces import Module, ToolWrapper
+from jcpeg.interfaces import ToolWrapper
 from jcpeg.utils import execute_cmd, isfile
+from jcpeg.modules.jcalgtest import *
 
 
 SUPPORT_STRING = "ALGSUPPORT"
@@ -18,7 +19,6 @@ def install_jcalgtest_applet(force=False):
             break
 
 
-# Tool Wrappers --------------------------------------------------------------
 class JCAlgTest(ToolWrapper):
 
     JCALGTEST_BIN = "java -jar " + Paths.JCALGTEST
@@ -123,13 +123,3 @@ class JCAlgTestSupport(JCAlgTest):
             jcsupport.support[data[0]] = result
 
         return modules
-
-
-# Modules --------------------------------------------------------------------
-class JCSupport(Module):
-    def __init__(self, moduleid="jcsupport"):
-        super().__init__(moduleid)
-        self.test_info = {}
-        self.jcsystem = {}
-        self.cplc = {}
-        self.support = {}

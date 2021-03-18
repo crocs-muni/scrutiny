@@ -1,0 +1,85 @@
+div {
+  margin-top: 2px;
+  border: 3px #ffffff;
+  border-style: solid solid solid solid;
+  padding: 10px 25px;
+  background-color: #eff3f591;
+}
+
+body {
+  max-width: 90%;
+	margin: 50px 5%;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  color: #193441;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+table {
+  border: solid 3px #ffffff;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: solid 3px #ffffff;
+  padding: 5px 10px;
+}
+
+button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  border-radius: 5px;
+  color: white;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+button:hover {
+  border: none;
+  background-color: #3e9b41;
+}
+
+button:focus {
+  outline: none;
+}
+
+h1 {
+  display: inline-block;
+}
+
+.dot {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot:hover .tooltiptext {
+  visibility: visible;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  margin-top: -35px;
+}
+
+.match {
+  background-color: #4CAF50;
+}
+
+.warn {
+  background-color: #c0be44;
+  color: #193441;
+}
+
+.suspicious {
+  background-color: #c04444;
+}

@@ -1,135 +1,90 @@
-from jcpeg.config import Paths
-from jcpeg.interfaces import Module, ToolWrapper
-from jcpeg.utils import execute_cmd, isfile
+import dominate
+from dominate.tags import *
 
-INFO_ARGS = ["-info"]
-INFO_FILE = "gp_info.txt"
-
-LIST_ARGS = ["-list"]
-LIST_FILE = "gp_list.txt"
+from jcpeg.interfaces import ContrastModule, Module, ContrastState
+from jcpeg.utils import get_smart_card
 
 
-# Tool Wrappers ---------------------------------------------------------------
-
-class GPPro(ToolWrapper):
-
-    GP_BIN = "java -jar " + Paths.GPPRO
-
-    def run(self, args, outfile):
-        outpath = self.get_outpath(outfile)
-        cmd_line = self.GP_BIN + " " + " ".join(args) + " > " + outpath
-        
-        if isfile(outpath) and not self.force_mode:
-            print("Skipping " + cmd_line + " (results found).")
-            return 0
-
-        print("Running " + cmd_line + ".")
-        
-        return execute_cmd(cmd_line)
-
-
-class GPProInfo(GPPro):
-
-    def run(self):
-        return super().run(INFO_ARGS, INFO_FILE)
-    
-
-    def parse(self):
-        filename = self.get_outpath(INFO_FILE)
-        with open(filename, "r") as f:
-            lines = f.readlines()
-
-        gpcplc = GPCPLC()
-        gpinfo = GPInfo()
-        modules = [gpcplc, gpinfo]
-
-        GPINFO_DISCARD = ["Card Data:", "Card Capabilities:",
-                          "More information about your card:",
-                          "/parse?ATR"]
-            
-        i = 0
-        while i < len(lines):
-                
-            line = lines[i].rstrip()
-            i += 1
-
-            if line == "" or any([d in line for d in GPINFO_DISCARD]):
-                continue
-                
-            if line.startswith("ATR"):
-                atr = line.split(":")[1].strip()
-                modules.insert(0, GPATR(atr=atr))
-                continue
-
-            if line.startswith("IIN"):
-                gpinfo.iin = line.split(":")[1].strip()
-                continue
-
-            if line.startswith("CIN"):
-                gpinfo.cin = line.split(":")[1].strip()
-                continue
-
-            if line.startswith("CPLC"):
-                first = line.split(":")[1].strip().split("=")
-                gpcplc.cplc[first[0]] = first[1]
-                while i < len(lines) and lines[i][0] == " ":
-                    pair = lines[i].strip().split("=")
-                    gpcplc.cplc[pair[0]] = pair[1]
-                    i += 1
-                continue
-                
-            if line.startswith("Support"):
-                gpinfo.supports.append(line)
-                continue
-
-            if line.startswith("Version"):
-                gpinfo.versions.append(line)
-                continue
-
-            gpinfo.other.append(line)
-
-        return modules
-
-
-class GPProList(GPPro):
-
-    def run(self):
-        return super().run(LIST_ARGS, LIST_FILE)
-
-    def parse(self):
-
-        filename = self.get_outpath(LIST_FILE)
-        with open(filename, "r") as f:
-            lines = f.readlines()
-
-        gplist = GPList()
-
-        i = 0
-        while i < len(lines):
-                
-            line = lines[i].rstrip()
-            i += 1
-
-            if line.startswith("ISD"):
-                gplist.isd = line.split(":")[1].strip().split(" ")[0]
-                continue
-
-            if line.startswith("APP"):
-                gplist.app.append(line.split(":")[1].strip().split(" ")[0])
-                continue
-
-            if line.startswith("PKG"):
-                gplist.pkg.append(line.split(":")[1].strip().split(" ")[0])
-                continue
-
-        return [gplist]
-
-
-# Modules ---------------------------------------------------------------------
 class GPATR(Module):
     def __init__(self, moduleid="gpatr", atr=None):
         super().__init__(moduleid)
         self.atr = atr
+
+    def contrast(self, other):
+        super().contrast(other)
+
+        selfinfo = get_smart_card(self.atr)
+        otherinfo = get_smart_card(other.atr)
+
+        cm = GPATRContrast(ref_atr=self.atr,
+                           prof_atr=other.atr,
+                           ref_info=selfinfo,
+                           prof_info=otherinfo)
+        return [cm]
+
+
+class GPATRContrast(ContrastModule):
+
+    NAME = "ATR"
+    
+    def __init__(self,
+                 ref_atr, prof_atr,
+                 ref_info, prof_info,
+                 moduleid="gpatr"):
+
+        super().__init__(moduleid)
+        self.ref_atr = ref_atr
+        self.prof_atr = prof_atr
+        self.ref_info = ref_info
+        self.prof_info = prof_info
+        
+        self.match = self.ref_atr == self.prof_atr
+
+    def __str__(self):
+        return self.NAME
+    
+    def get_state(self):
+        if self.match:
+            return ContrastState.MATCH
+        return ContrastState.SUSPICIOUS
+
+    def project_HTML(self, ref_name, prof_name):
+        
+        h3("ATR comparison results")
+        p("This module copares ATR of the smart cards and serches database "
+        "of known smart cards for additional information.")
+        
+        h4("ATR:")
+        with table():
+            with tr():
+                td("Reference ATR (" + ref_name + ")")
+                td(self.ref_atr)
+            with tr():
+                td("Profile ATR (" + prof_name + ")")
+                td(self.prof_atr)
+            
+        if self.match:
+            p("The ATR of tested card matches the reference. "
+              "This would suggest the same smart card model.")
+        else:
+            p("The ATR of tested card does not match the reference. "
+              "This would suggest different smart card models.")
+
+        h4("Additional info from smart card database")
+        if self.ref_info:
+            p("The reference card (" + ref_name + ") was found in the database:")
+            with div():
+                for i in self.ref_info:
+                    p(i)
+        else:
+            p("The reference card (" + ref_name + ") was not found in the database.")
+        if self.prof_info:
+            p("The profiled card (" + prof_name + ") was found in the database:")
+            with div():
+                for i in self.prof_info:
+                    p(i)
+        else:
+            p("The profiled card (" + prof_name + " was not found in the database.")
 
 
 class GPCPLC(Module):

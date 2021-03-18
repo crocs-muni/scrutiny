@@ -3,7 +3,7 @@ import os
 import subprocess
 
 from jcpeg.card import Card, load_card
-from jcpeg.modules.gppro import GPProInfo, GPProList
+from jcpeg.toolwrappers.gppro import GPProInfo, GPProList
 from jcpeg.modules.jcalgtest import JCAlgTestSupport
 from jcpeg.utils import isdir, errmsg
 

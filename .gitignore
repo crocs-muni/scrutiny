@@ -9,6 +9,8 @@ results/*
 output/*
 *.json
 *.html
+!data/script.js
+!data/style.css
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

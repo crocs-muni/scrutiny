@@ -5,6 +5,14 @@ from dominate.util import raw
 import jsonpickle
 
 from jcpeg.contrast import Contrast
+from jcpeg.interfaces import ContrastState
+
+
+TOOLTIPTEXT = {
+    ContrastState.MATCH : "The cards seem to match",
+    ContrastState.WARN : "There seem to be some differencies worth checking",
+    ContrastState.SUSPICIOUS : "The cards probably don't match"
+}
 
 
 if __name__ == "__main__":
@@ -36,6 +44,10 @@ if __name__ == "__main__":
             
             for m in contrast.contrasts:
                 h2("Module: " + str(m), style="display: inline-block;")
+                contrast_class = m.get_state()
+                with span(cls = "dot " + contrast_class.name.lower()):
+                    span(TOOLTIPTEXT[contrast_class],
+                            cls = "tooltiptext " + contrast_class.name.lower())
                 button("Show / Hide", onclick="hideButton('" + m.id + "')")
                 with div(id=m.id):
                     #TODO: give card names

@@ -39,3 +39,38 @@ button:focus {
 h1 {
   display: inline-block;
 }
+
+.dot {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot:hover .tooltiptext {
+  visibility: visible;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  background-color: #193441;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  margin-top: -35px;
+}
+
+.match {
+  background-color: #4CAF50;
+}
+
+.warn {
+  background-color: #c0be44;
+  color: #193441;
+}
+
+.suspicious {
+  background-color: #c04444;
+}

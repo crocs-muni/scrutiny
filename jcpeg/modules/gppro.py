@@ -1,7 +1,7 @@
 import dominate
 from dominate.tags import *
 
-from jcpeg.interfaces import ContrastModule, Module
+from jcpeg.interfaces import ContrastModule, Module, ContrastState
 from jcpeg.utils import get_smart_card
 
 
@@ -42,6 +42,11 @@ class GPATRContrast(ContrastModule):
 
     def __str__(self):
         return self.NAME
+    
+    def get_state(self):
+        if self.match:
+            return ContrastState.MATCH
+        return ContrastState.SUSPICIOUS
 
     def project_HTML(self, ref_name, prof_name):
         

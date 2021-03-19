@@ -60,6 +60,9 @@ class AlgSupport(Module):
 
 
 class AlgSupportContrast(ContrastModule):
+    """
+    Scrutiny algorithm support contrast module
+    """
 
     def __init__(self, matching, differences, suspicions, module_name="Algorithm Support"):
         super().__init__(module_name)

@@ -38,7 +38,7 @@ class AlgSupport(Module):
         differences: Dict[str, List[Optional[SupportResult]]] = {}
         suspicions: Dict[str, List[SupportResult]] = {}
 
-        for key in self.support.keys():
+        for key in self.support:
 
             if key not in other.support.keys():
                 differences[key] = [self.support[key], None]

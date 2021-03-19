@@ -2,12 +2,12 @@ from enum import Enum
 
 
 class ToolWrapper(object):
-    def __init__(self, card_name, force_mode=False):
-        self.card_name = card_name
+    def __init__(self, device_name, force_mode=False):
+        self.device_name = device_name
         self.force_mode = force_mode
 
     def get_outpath(self, filename):
-        return "results/" + self.card_name + "/" + filename
+        return "results/" + self.device_name + "/" + filename
 
     def run(self):
         pass

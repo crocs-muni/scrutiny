@@ -1,7 +1,7 @@
 import argparse
 import jsonpickle
 
-from scrutiny.card import Card, load_card
+from scrutiny.device import Device, load_device
 from scrutiny.contrast import Contrast
 
 
@@ -21,8 +21,8 @@ if __name__ == "__main__":
                         required=False, default="contrast.json")
     args = parser.parse_args()
 
-    reference = load_card(args.reference)
-    profile = load_card(args.profile)
+    reference = load_device(args.reference)
+    profile = load_device(args.profile)
 
     contrast = Contrast(reference.name, profile.name)
     

@@ -2,7 +2,7 @@ import argparse
 import os
 import subprocess
 
-from scrutiny.card import Card, load_card
+from scrutiny.device import Device
 from scrutiny.toolwrappers.gppro import GPProInfo, GPProList
 from scrutiny.toolwrappers.jcalgtest import JCAlgTestSupport
 from scrutiny.utils import isdir, errmsg
@@ -22,8 +22,8 @@ def prepare_results(card_name):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("card_name",
-                        help="the name of the card to be used")
+    parser.add_argument("device_name",
+                        help="the name of the device to be used")
     parser.add_argument("-a", "--atr",
                         help="check card's ART",
                         action="store_true")
@@ -58,31 +58,29 @@ if __name__ == "__main__":
         args.info = True
         args.list = True
 
-    card_name = args.card_name.replace(" ", "_")
+    device_name = args.device_name.replace(" ", "_")
     
-    prepare_results(card_name)
+    prepare_results(device_name)
     
-    gpinfo = GPProInfo(card_name)
-    gplist = GPProList(card_name)
+    gpinfo = GPProInfo(device_name)
+    gplist = GPProList(device_name)
     
-    jcsupport = JCAlgTestSupport(card_name, install=False)
+    jcsupport = JCAlgTestSupport(device_name, install=False)
 
-    card = Card(card_name)
+    device = Device(device_name)
 
     #if args.info:
     #    gppro.run_info()
 
     gpinfo.run()
     gplist.run()
-    card.add_modules(gpinfo.parse())
-    card.add_modules(gplist.parse())
+    device.add_modules(gpinfo.parse())
+    device.add_modules(gplist.parse())
 
     jcsupport.run()
-    card.add_modules(jcsupport.parse())
-
-    #print(card)
+    device.add_modules(jcsupport.parse())
     
-    with open("results/" + card_name + ".json", "w") as output:
-        output.write(str(card))
+    with open("results/" + device_name + ".json", "w") as output:
+        output.write(str(device))
     
     exit(0)

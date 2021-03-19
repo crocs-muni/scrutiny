@@ -1,6 +1,6 @@
 import jsonpickle
 
-class Card(object):
+class Device(object):
 
     def __init__(self, name):
         self.name = name
@@ -17,6 +17,6 @@ class Card(object):
         return jsonpickle.encode(self, indent=4)
 
 
-def load_card(filename):
+def load_device(filename):
     with open(filename, "r") as f:
         return jsonpickle.decode(f.read())

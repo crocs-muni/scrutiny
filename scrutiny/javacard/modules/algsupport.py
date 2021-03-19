@@ -20,6 +20,9 @@ class SupportResult:
 
 
 class AlgSupport(Module):
+    """
+    Scrutiny algorithm support module
+    """
 
     def __init__(self, module_name="Algorithm Support"):
         super().__init__(module_name)

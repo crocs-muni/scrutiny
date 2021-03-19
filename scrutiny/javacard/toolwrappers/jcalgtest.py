@@ -163,5 +163,5 @@ class JCAlgTestSupport(JCAlgTest):
                 result.ram_reset = int(data[5])
 
             jcsupport.support[data[0].strip()] = result
-
+        unused = 0
         return modules

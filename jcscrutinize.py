@@ -21,7 +21,7 @@ def prepare_results(card_name):
     try:
         print("Creating", dirname + ".")
         os.mkdir(dirname)
-        unused = 0
+
         return True
     except FileExistsError as ex:
         return errmsg(dirname, "creating", ex)

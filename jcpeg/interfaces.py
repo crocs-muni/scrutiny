@@ -34,7 +34,7 @@ class ContrastModule(object):
         self.id = moduleid
 
     def __str__(self):
-        return self.moduleid
+        return self.id
     
     def get_state(self):
         pass

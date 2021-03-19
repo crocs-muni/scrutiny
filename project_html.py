@@ -1,7 +1,6 @@
 import argparse
 from datetime import datetime
-import dominate
-from dominate.tags import *
+from dominate import document, tags
 import jsonpickle
 
 from scrutiny.contrast import ContrastState
@@ -11,7 +10,6 @@ TOOLTIP_TEXT = {
     ContrastState.WARN: "There seem to be some differences worth checking",
     ContrastState.SUSPICIOUS: "The cards probably don't match"
 }
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -28,31 +26,30 @@ if __name__ == "__main__":
     with open(args.contrast, "r") as f:
         contrast = jsonpickle.decode(f.read())
 
-    doc = dominate.document(title='Comparison of smart cards')
+    doc = document(title='Comparison of smart cards')
 
     with doc.head:
-        link(rel="stylesheet", href="style.css")
-        script(type="text/javascript", src="script.js")
+        tags.link(rel="stylesheet", href="style.css")
+        tags.script(type="text/javascript", src="script.js")
 
     with doc:
-        with div(id="intro"):
-            p("This is the introductory section")
-            p("Generated on: " + datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+        with tags.div(id="intro"):
+            tags.p("This is the introductory section")
+            tags.p("Generated on: " + datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
 
-        with div(id="modules"):
-
-            module_count = 0
+        with tags.div(id="modules"):
+            module_count: int = 0
             for m in contrast.contrasts:
                 divname = m.module_name + str(module_count)
-                h2("Module: " + str(m), style="display: inline-block;")
+                tags.h2("Module: " + str(m), style="display: inline-block;")
                 contrast_class = m.get_state()
-                with span(cls="dot " + contrast_class.name.lower()):
-                    span(TOOLTIP_TEXT[contrast_class],
-                         cls="tooltiptext " + contrast_class.name.lower())
-                button("Show / Hide", onclick="hideButton('" + divname + "')")
-                with div(id=divname):
+                with tags.span(cls="dot " + contrast_class.name.lower()):
+                    tags.span(TOOLTIP_TEXT[contrast_class],
+                              cls="tooltiptext " + contrast_class.name.lower())
+                tags.button("Show / Hide", onclick="hideButton('" + divname + "')")
+                with tags.div(id=divname):
                     m.project_html(contrast.ref_name, contrast.prof_name)
-                br()
+                tags.br()
                 module_count += 1
 
     with open(args.output_file, "w") as f:

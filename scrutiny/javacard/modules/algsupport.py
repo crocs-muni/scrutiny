@@ -1,29 +1,28 @@
-from typing import Optional, Dict, Tuple, List
+from typing import Optional, Dict, List
 
-from dominate.tags import *
+from dominate import tags
 
 from scrutiny.interfaces import Module
 from scrutiny.contrast import ContrastModule, ContrastState
 
 
-class SupportResult(object):
+class SupportResult:
+    """
+    Class to store results of algorithm support testing
+    """
 
-    def __init__(
-            self,
-            support: Optional[bool] = None,
-            time_elapsed: Optional[float] = None,
-            persistent_memory: Optional[int] = None,
-            ram_deselect: Optional[int] = None,
-            ram_reset: Optional[int] = None
-    ) -> None:
-        self.support = support
-        self.time_elapsed = time_elapsed
-        self.persistent_memory = persistent_memory
-        self.ram_deselect = ram_deselect
-        self.ram_reset = ram_reset
+    def __init__(self) -> None:
+        self.support: Optional[bool] = None
+        self.time_elapsed: Optional[float] = None
+        self.persistent_memory: Optional[int] = None
+        self.ram_deselect: Optional[int] = None
+        self.ram_reset: Optional[int] = None
 
 
 class AlgSupport(Module):
+    """
+    Scrutiny algorithm support module
+    """
 
     def __init__(self, module_name="Algorithm Support"):
         super().__init__(module_name)
@@ -39,7 +38,7 @@ class AlgSupport(Module):
         differences: Dict[str, List[Optional[SupportResult]]] = {}
         suspicions: Dict[str, List[SupportResult]] = {}
 
-        for key in self.support.keys():
+        for key in self.support:
 
             if key not in other.support.keys():
                 differences[key] = [self.support[key], None]
@@ -61,6 +60,9 @@ class AlgSupport(Module):
 
 
 class AlgSupportContrast(ContrastModule):
+    """
+    Scrutiny algorithm support contrast module
+    """
 
     def __init__(self, matching, differences, suspicions, module_name="Algorithm Support"):
         super().__init__(module_name)
@@ -77,33 +79,33 @@ class AlgSupportContrast(ContrastModule):
 
     def project_html(self, ref_name, prof_name):
 
-        h3("Algorithm Support comparison results")
-        p("This module compares Java Card algorithm support between the cards.")
+        tags.h3("Algorithm Support comparison results")
+        tags.p("This module compares Java Card algorithm support between the cards.")
 
-        h4("Overview:")
+        tags.h4("Overview:")
 
-        p(
+        tags.p(
             "The cards match in " + str(len(self.matching)) + " algorithms."
         )
-        p(
+        tags.p(
             "There are " + str(len(self.differences)) + " algorithms with missing "
             "results for either card."
         )
-        p(
+        tags.p(
             "There are " + str(len(self.suspicions)) + " algorithms with different "
             "results for either card."
         )
 
         if self.suspicions:
-            h4("Differences in algorithm support:", style="color:var(--red-color)")
-            with table():
-                with th("Algorithm"):
-                    td("Reference card (" + ref_name + ")")
-                    td("Profiled card (" + prof_name + ")")
+            tags.h4("Differences in algorithm support:", style="color:var(--red-color)")
+            with tags.table():
+                with tags.th("Algorithm"):
+                    tags.td("Reference card (" + ref_name + ")")
+                    tags.td("Profiled card (" + prof_name + ")")
                 for key in self.suspicions.keys():
                     ref = self.suspicions[key][0]
                     prof = self.suspicions[key][1]
-                    with tr():
-                        td(key)
-                        td("Yes") if ref.support else td("No")
-                        td("Yes") if prof.support else td("No")
+                    with tags.tr():
+                        tags.td(key)
+                        tags.td("Yes" if ref.support else "No")
+                        tags.td("Yes" if prof.support else "No")

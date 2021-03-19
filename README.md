@@ -1,6 +1,6 @@
 # SCRUTINY
 
-[![Pylint](https://github.com/NimRo97/scrutiny/actions/workflows/main.yml/badge.svg)](https://github.com/NimRo97/scrutiny/actions/workflows/main.yml)
+[![Pylint](https://github.com/NimRo97/scrutiny/actions/workflows/pylint.yml/badge.svg)](https://github.com/NimRo97/scrutiny/actions/workflows/pylint.yml)
 
 An automated toolkit to analyze secure hardware, and build user-verifiable hardware profiles. SCRUTINY provides high-level frameworks to verify profiles against reference and produce detailed HTML reports. For now, SCRUTINY is capable of Java Card analysis and verification.
 

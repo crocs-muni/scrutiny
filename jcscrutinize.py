@@ -1,5 +1,6 @@
 import argparse
 import os
+import sys
 
 from scrutiny.device import Device, DeviceType
 from scrutiny.javacard.toolwrappers.gppro import GPProInfo, GPProList
@@ -8,6 +9,11 @@ from scrutiny.utils import isdir, errmsg
 
 
 def prepare_results(card_name):
+    """
+    Creates directory in results/
+    :param card_name: card name
+    :return: True on success
+    """
     dirname = "results/" + card_name
     if isdir(dirname):
         print(dirname, "already exists, skipping the creation.")
@@ -15,9 +21,10 @@ def prepare_results(card_name):
     try:
         print("Creating", dirname + ".")
         os.mkdir(dirname)
+
         return True
-    except Exception as e:
-        return errmsg(dirname, "creating", e)
+    except FileExistsError as ex:
+        return errmsg(dirname, "creating", ex)
 
 
 if __name__ == "__main__":
@@ -68,12 +75,12 @@ if __name__ == "__main__":
     toolwrappers = [GPProInfo(device_name),
                     GPProList(device_name),
                     JCAlgTestSupport(device_name, install=False)]
-    
+
     for tool in toolwrappers:
         tool.run()
         device.add_modules(tool.parse())
-    
+
     with open("results/" + device_name + ".json", "w") as output:
         output.write(str(device))
-    
-    exit(0)
+
+    sys.exit(0)

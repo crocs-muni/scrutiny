@@ -3,15 +3,19 @@ import os
 from scrutiny.config import Paths
 from scrutiny.interfaces import ToolWrapper
 from scrutiny.utils import execute_cmd
-from scrutiny.javacard.modules.algsupport import *
+from scrutiny.javacard.modules.algsupport import AlgSupport, SupportResult
 
 
 SUPPORT_STRING = "ALGSUPPORT"
 
 
 def install_jcalgtest_applet(force=False):
+    """
+    Installs JCAlgTest applet
+    :param force: also remove already installed JCAlgTest applets
+    """
     if force:
-        execute_cmd("java -jar " + Paths.GPPRO + " -uninstall " + \
+        execute_cmd("java -jar " + Paths.GPPRO + " -uninstall " +
                     Paths.JCALGTEST_305)
     for applet in Paths.JCALGTEST_CAPS:
         cmd_line = "java -jar " + Paths.GPPRO + " -install " + applet
@@ -20,6 +24,9 @@ def install_jcalgtest_applet(force=False):
 
 
 class JCAlgTest(ToolWrapper):
+    """
+    SCRUTINY JCAlgTest ToolWrapper
+    """
 
     JCALGTEST_BIN = "java -jar " + Paths.JCALGTEST
     CAPS = Paths.JCALGTEST_CAPS
@@ -29,8 +36,12 @@ class JCAlgTest(ToolWrapper):
         self.outfile = None
         if install:
             install_jcalgtest_applet()
-    
+
     def find_outfile(self, search_string):
+        """
+        Find JCAlgTest output file
+        :param search_string: JCAlgTest mode string
+        """
         if self.outfile:
             return self.outfile
         for file in os.listdir(self.get_outpath("")):
@@ -39,9 +50,18 @@ class JCAlgTest(ToolWrapper):
         return self.outfile
 
     def get_outfile(self):
-        pass
+        """
+        Get JCAlgTest output file name
+        :return:
+        """
 
     def run_jcalgtest(self, args, search_string):
+        """
+        Run JCAlgTest
+        :param args: JCAlgTest arguments
+        :param search_string: JCAlgTest mode string
+        :return: return code
+        """
         cmd_line = self.JCALGTEST_BIN + " " + " ".join(args)
         if self.get_outfile():
             print("Skipping " + cmd_line + " (results found).")
@@ -60,12 +80,15 @@ class JCAlgTest(ToolWrapper):
 
 
 class JCAlgTestSupport(JCAlgTest):
+    """
+    JCAlgTest -support ToolWrapper
+    """
 
     def get_outfile(self):
         return super().find_outfile(SUPPORT_STRING)
-    
+
     def run(self):
-        super().run_jcalgtest([], SUPPORT_STRING)  # TODO
+        super().run_jcalgtest([], SUPPORT_STRING)
 
     def parse(self):
         filename = self.get_outpath(self.outfile)
@@ -91,10 +114,10 @@ class JCAlgTestSupport(JCAlgTest):
                      "Package_AID_test",
                      "JavaCard support version",
                      "Total test time"]
-            
+
         i = 0
         while i < len(lines):
-                
+
             line = lines[i].strip()
             i += 1
 
@@ -107,7 +130,7 @@ class JCAlgTestSupport(JCAlgTest):
             if any([line.startswith(info) for info in TEST_INFO]):
                 jcsupport.test_info[data[0]] = data[1].strip()
                 continue
-                
+
             if line.startswith("JCSystem"):
                 jcsupport.jcsystem[data[0]] = data[1]
                 continue

@@ -2,6 +2,9 @@ from scrutiny.interfaces import Module
 
 
 class GPInfo(Module):
+    """
+    SCRUTINY GlobalPlatformPro Basin Info module
+    """
 
     def __init__(self, module_name="GPPro Basic Info"):
         super().__init__(module_name)
@@ -13,6 +16,9 @@ class GPInfo(Module):
 
 
 class GPList(Module):
+    """
+        SCRUTINY GlobalPlatformPro Applet List module
+    """
 
     def __init__(self, module_name="GPPro Applet List"):
         super().__init__(module_name)

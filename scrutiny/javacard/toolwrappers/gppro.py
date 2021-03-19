@@ -1,7 +1,9 @@
-from jcpeg.config import Paths
-from jcpeg.interfaces import ToolWrapper
-from jcpeg.utils import execute_cmd, isfile
-from jcpeg.modules.gppro import *
+from scrutiny.config import Paths
+from scrutiny.interfaces import ToolWrapper
+from scrutiny.javacard.modules.atr import Atr
+from scrutiny.javacard.modules.cplc import Cplc
+from scrutiny.utils import execute_cmd, isfile
+from scrutiny.javacard.modules.gppro import *
 
 
 INFO_ARGS = ["-info"]
@@ -15,7 +17,7 @@ class GPPro(ToolWrapper):
 
     GP_BIN = "java -jar " + Paths.GPPRO
 
-    def run(self, args, outfile):
+    def run_gppro(self, args, outfile):
         outpath = self.get_outpath(outfile)
         cmd_line = self.GP_BIN + " " + " ".join(args) + " > " + outpath
         
@@ -31,19 +33,18 @@ class GPPro(ToolWrapper):
 class GPProInfo(GPPro):
 
     def run(self):
-        return super().run(INFO_ARGS, INFO_FILE)
-    
+        return super().run_gppro(INFO_ARGS, INFO_FILE)
 
     def parse(self):
         filename = self.get_outpath(INFO_FILE)
         with open(filename, "r") as f:
             lines = f.readlines()
 
-        gpcplc = GPCPLC()
+        gpcplc = Cplc()
         gpinfo = GPInfo()
         modules = [gpcplc, gpinfo]
 
-        GPINFO_DISCARD = ["Card Data:", "Card Capabilities:",
+        gpinfo_discard = ["Card Data:", "Card Capabilities:",
                           "More information about your card:",
                           "/parse?ATR"]
             
@@ -53,12 +54,12 @@ class GPProInfo(GPPro):
             line = lines[i].rstrip()
             i += 1
 
-            if line == "" or any([d in line for d in GPINFO_DISCARD]):
+            if line == "" or any([d in line for d in gpinfo_discard]):
                 continue
                 
             if line.startswith("ATR"):
                 atr = line.split(":")[1].strip()
-                modules.insert(0, GPATR(atr=atr))
+                modules.insert(0, Atr(atr=atr))
                 continue
 
             if line.startswith("IIN"):
@@ -94,7 +95,7 @@ class GPProInfo(GPPro):
 class GPProList(GPPro):
 
     def run(self):
-        return super().run(LIST_ARGS, LIST_FILE)
+        return super().run_gppro(LIST_ARGS, LIST_FILE)
 
     def parse(self):
 

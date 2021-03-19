@@ -1,8 +1,8 @@
 import argparse
 import jsonpickle
 
-from jcpeg.card import Card, load_card
-from jcpeg.contrast import Contrast
+from scrutiny.device import load_device
+from scrutiny.contrast import Contrast
 
 
 if __name__ == "__main__":
@@ -21,14 +21,14 @@ if __name__ == "__main__":
                         required=False, default="contrast.json")
     args = parser.parse_args()
 
-    reference = load_card(args.reference)
-    profile = load_card(args.profile)
+    reference = load_device(args.reference)
+    profile = load_device(args.profile)
 
     contrast = Contrast(reference.name, profile.name)
     
     for module in reference.modules.values():
-        if module.id in profile.modules.keys():
-            contrast.add_contrasts(module.contrast(profile.modules[module.id]))
+        if module.module_name in profile.modules.keys():
+            contrast.add_contrasts(module.contrast(profile.modules[module.module_name]))
     
     with open(args.output_file, "w") as f:
         f.write(jsonpickle.encode(contrast, indent=4))

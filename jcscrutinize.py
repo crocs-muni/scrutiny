@@ -1,17 +1,17 @@
 import argparse
 import os
-import subprocess
 
-from jcpeg.card import Card, load_card
-from jcpeg.toolwrappers.gppro import GPProInfo, GPProList
-from jcpeg.toolwrappers.jcalgtest import JCAlgTestSupport
-from jcpeg.utils import isdir, errmsg
+from scrutiny.device import Device, DeviceType
+from scrutiny.javacard.toolwrappers.gppro import GPProInfo, GPProList
+from scrutiny.javacard.toolwrappers.jcalgtest import JCAlgTestSupport
+from scrutiny.utils import isdir, errmsg
+
 
 def prepare_results(card_name):
     dirname = "results/" + card_name
     if isdir(dirname):
-       print(dirname, "already exists, skipping the creation.")
-       return True
+        print(dirname, "already exists, skipping the creation.")
+        return True
     try:
         print("Creating", dirname + ".")
         os.mkdir(dirname)
@@ -19,11 +19,12 @@ def prepare_results(card_name):
     except Exception as e:
         return errmsg(dirname, "creating", e)
 
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("card_name",
-                        help="the name of the card to be used")
+    parser.add_argument("device_name",
+                        help="the name of the device to be used")
     parser.add_argument("-a", "--atr",
                         help="check card's ART",
                         action="store_true")
@@ -58,31 +59,21 @@ if __name__ == "__main__":
         args.info = True
         args.list = True
 
-    card_name = args.card_name.replace(" ", "_")
+    device_name = args.device_name.replace(" ", "_")
+
+    device = Device(device_name, DeviceType.JAVA_CARD)
+
+    prepare_results(device_name)
+
+    toolwrappers = [GPProInfo(device_name),
+                    GPProList(device_name),
+                    JCAlgTestSupport(device_name, install=False)]
     
-    prepare_results(card_name)
+    for tool in toolwrappers:
+        tool.run()
+        device.add_modules(tool.parse())
     
-    gpinfo = GPProInfo(card_name)
-    gplist = GPProList(card_name)
-    
-    jcsupport = JCAlgTestSupport(card_name, install=False)
-
-    card = Card(card_name)
-
-    #if args.info:
-    #    gppro.run_info()
-
-    gpinfo.run()
-    gplist.run()
-    card.add_modules(gpinfo.parse())
-    card.add_modules(gplist.parse())
-
-    jcsupport.run()
-    card.add_modules(jcsupport.parse())
-
-    #print(card)
-    
-    with open("results/" + card_name + ".json", "w") as output:
-        output.write(str(card))
+    with open("results/" + device_name + ".json", "w") as output:
+        output.write(str(device))
     
     exit(0)

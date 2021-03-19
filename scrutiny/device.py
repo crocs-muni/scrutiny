@@ -1,13 +1,21 @@
+from enum import Enum
+
 import jsonpickle
 
-class Card(object):
 
-    def __init__(self, name):
+class DeviceType(Enum):
+    JAVA_CARD = 1
+
+
+class Device(object):
+
+    def __init__(self, name, device_type):
         self.name = name
+        self.device_type = device_type
         self.modules = {}
 
     def add_module(self, module):
-        self.modules[module.id] = module
+        self.modules[module.module_name] = module
 
     def add_modules(self, modules):
         for module in modules:
@@ -17,6 +25,6 @@ class Card(object):
         return jsonpickle.encode(self, indent=4)
 
 
-def load_card(filename):
+def load_device(filename):
     with open(filename, "r") as f:
         return jsonpickle.decode(f.read())

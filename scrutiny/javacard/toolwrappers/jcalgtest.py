@@ -3,7 +3,7 @@ import os
 from scrutiny.config import Paths
 from scrutiny.interfaces import ToolWrapper
 from scrutiny.utils import execute_cmd
-from scrutiny.javacard.modules.algsupport import *
+from scrutiny.javacard.modules.algsupport import AlgSupport, SupportResult
 
 
 SUPPORT_STRING = "ALGSUPPORT"
@@ -11,7 +11,7 @@ SUPPORT_STRING = "ALGSUPPORT"
 
 def install_jcalgtest_applet(force=False):
     if force:
-        execute_cmd("java -jar " + Paths.GPPRO + " -uninstall " + \
+        execute_cmd("java -jar " + Paths.GPPRO + " -uninstall " +
                     Paths.JCALGTEST_305)
     for applet in Paths.JCALGTEST_CAPS:
         cmd_line = "java -jar " + Paths.GPPRO + " -install " + applet

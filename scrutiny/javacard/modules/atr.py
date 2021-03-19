@@ -1,8 +1,8 @@
-from dominate.tags import h3, p, h4, table, tr, td, div
+from dominate import tags
 
 from scrutiny.contrast import ContrastModule, ContrastState
 from scrutiny.interfaces import Module
-from scrutiny.javacard.utils import get_smart_card
+from scrutiny.javacard.utils import find_atr_in_database
 
 
 class Atr(Module):
@@ -13,8 +13,8 @@ class Atr(Module):
     def contrast(self, other):
         super().contrast(other)
 
-        selfinfo = get_smart_card(self.atr)
-        otherinfo = get_smart_card(other.atr)
+        selfinfo = find_atr_in_database(self.atr)
+        otherinfo = find_atr_in_database(other.atr)
 
         cm = AtrContrast(ref_atr=self.atr,
                          prof_atr=other.atr,
@@ -45,38 +45,38 @@ class AtrContrast(ContrastModule):
 
     def project_html(self, ref_name, prof_name):
 
-        h3("ATR comparison results")
-        p("This module compares ATR of the smart cards and searches database "
-          "of known smart cards for additional information.")
+        tags.h3("ATR comparison results")
+        tags.p("This module compares ATR of the smart cards and searches database "
+               "of known smart cards for additional information.")
 
-        h4("ATR:")
-        with table():
-            with tr():
-                td("Reference ATR (" + ref_name + ")")
-                td(self.ref_atr)
-            with tr():
-                td("Profile ATR (" + prof_name + ")")
-                td(self.prof_atr)
+        tags.h4("ATR:")
+        with tags.table():
+            with tags.tr():
+                tags.td("Reference ATR (" + ref_name + ")")
+                tags.td(self.ref_atr)
+            with tags.tr():
+                tags.td("Profile ATR (" + prof_name + ")")
+                tags.td(self.prof_atr)
 
         if self.match:
-            p("The ATR of tested card matches the reference. "
-              "This would suggest the same smart card model.")
+            tags.p("The ATR of tested card matches the reference. "
+                   "This would suggest the same smart card model.")
         else:
-            p("The ATR of tested card does not match the reference. "
-              "This would suggest different smart card models.")
+            tags.p("The ATR of tested card does not match the reference. "
+                   "This would suggest different smart card models.")
 
-        h4("Additional info from smart card database")
+        tags.h4("Additional info from smart card database")
         if self.ref_info:
-            p("The reference card (" + ref_name + ") was found in the database:")
-            with div():
+            tags.p("The reference card (" + ref_name + ") was found in the database:")
+            with tags.div():
                 for i in self.ref_info:
-                    p(i)
+                    tags.p(i)
         else:
-            p("The reference card (" + ref_name + ") was not found in the database.")
+            tags.p("The reference card (" + ref_name + ") was not found in the database.")
         if self.prof_info:
-            p("The profiled card (" + prof_name + ") was found in the database:")
-            with div():
+            tags.p("The profiled card (" + prof_name + ") was found in the database:")
+            with tags.div():
                 for i in self.prof_info:
-                    p(i)
+                    tags.p(i)
         else:
-            p("The profiled card (" + prof_name + " was not found in the database.")
+            tags.p("The profiled card (" + prof_name + " was not found in the database.")

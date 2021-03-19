@@ -1,12 +1,11 @@
-import dominate
 from dominate.tags import *
 
 from scrutiny.interfaces import Module
 from scrutiny.contrast import ContrastModule, ContrastState
 
 
-class JCSupport(Module):
-    def __init__(self, module_name="jcsupport"):
+class AlgSupport(Module):
+    def __init__(self, module_name="Algorithm Support"):
         super().__init__(module_name)
         self.test_info = {}
         self.jcsystem = {}
@@ -37,12 +36,12 @@ class JCSupport(Module):
             if key not in self.support.keys():
                 differences.append((key, False, True))
         
-        return [JCSupportContrast(matching, differences, suspicions)]
+        return [AlgSupportContrast(matching, differences, suspicions)]
 
 
-class JCSupportContrast(ContrastModule):
+class AlgSupportContrast(ContrastModule):
 
-    def __init__(self, matching, differences, suspicions, module_name="jcsupport"):
+    def __init__(self, matching, differences, suspicions, module_name="Algorithm Support"):
         super().__init__(module_name)
         self.matching = matching
         self.differences = differences
@@ -80,10 +79,9 @@ class JCSupportContrast(ContrastModule):
                 with th("Algorithm"):
                     td("Reference card (" + ref_name + ")")
                     td("Profiled card (" + prof_name + ")")
-                for s in self.suspicions:
-                    key, ref, prof = s
+                for suspicion in self.suspicions:
+                    key, ref, prof = suspicion
                     with tr():
                         td(key)
                         td("Yes") if ref[0] else td("No")
                         td("Yes") if prof[0] else td("No")
-

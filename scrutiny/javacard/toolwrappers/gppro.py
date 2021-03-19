@@ -1,7 +1,7 @@
 from scrutiny.config import Paths
 from scrutiny.interfaces import ToolWrapper
 from scrutiny.utils import execute_cmd, isfile
-from scrutiny.modules.gppro import *
+from scrutiny.javacard.modules.gppro import *
 
 
 INFO_ARGS = ["-info"]

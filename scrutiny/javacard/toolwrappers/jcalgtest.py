@@ -3,7 +3,7 @@ import os
 from scrutiny.config import Paths
 from scrutiny.interfaces import ToolWrapper
 from scrutiny.utils import execute_cmd, isfile
-from scrutiny.modules.jcalgtest import *
+from scrutiny.javacard.modules.jcalgtest import *
 
 
 SUPPORT_STRING = "ALGSUPPORT"

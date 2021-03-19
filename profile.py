@@ -3,8 +3,8 @@ import os
 import subprocess
 
 from scrutiny.device import Device
-from scrutiny.toolwrappers.gppro import GPProInfo, GPProList
-from scrutiny.toolwrappers.jcalgtest import JCAlgTestSupport
+from scrutiny.javacard.toolwrappers.gppro import GPProInfo, GPProList
+from scrutiny.javacard.toolwrappers.jcalgtest import JCAlgTestSupport
 from scrutiny.utils import isdir, errmsg
 
 def prepare_results(card_name):

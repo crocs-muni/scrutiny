@@ -1,8 +1,8 @@
 import dominate
 from dominate.tags import *
 
-from jcpeg.interfaces import ContrastModule, Module, ContrastState
-from jcpeg.utils import get_smart_card
+from scrutiny.interfaces import ContrastModule, Module, ContrastState
+from scrutiny.utils import get_smart_card
 
 
 class GPATR(Module):

@@ -2,10 +2,10 @@ import argparse
 import os
 import subprocess
 
-from jcpeg.card import Card, load_card
-from jcpeg.toolwrappers.gppro import GPProInfo, GPProList
-from jcpeg.toolwrappers.jcalgtest import JCAlgTestSupport
-from jcpeg.utils import isdir, errmsg
+from scrutiny.card import Card, load_card
+from scrutiny.toolwrappers.gppro import GPProInfo, GPProList
+from scrutiny.toolwrappers.jcalgtest import JCAlgTestSupport
+from scrutiny.utils import isdir, errmsg
 
 def prepare_results(card_name):
     dirname = "results/" + card_name

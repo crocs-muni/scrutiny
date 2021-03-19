@@ -1,7 +1,7 @@
-from jcpeg.config import Paths
-from jcpeg.interfaces import ToolWrapper
-from jcpeg.utils import execute_cmd, isfile
-from jcpeg.modules.gppro import *
+from scrutiny.config import Paths
+from scrutiny.interfaces import ToolWrapper
+from scrutiny.utils import execute_cmd, isfile
+from scrutiny.modules.gppro import *
 
 
 INFO_ARGS = ["-info"]

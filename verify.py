@@ -1,8 +1,8 @@
 import argparse
 import jsonpickle
 
-from jcpeg.card import Card, load_card
-from jcpeg.contrast import Contrast
+from scrutiny.card import Card, load_card
+from scrutiny.contrast import Contrast
 
 
 if __name__ == "__main__":

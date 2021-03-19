@@ -1,9 +1,9 @@
 import os
 
-from jcpeg.config import Paths
-from jcpeg.interfaces import ToolWrapper
-from jcpeg.utils import execute_cmd, isfile
-from jcpeg.modules.jcalgtest import *
+from scrutiny.config import Paths
+from scrutiny.interfaces import ToolWrapper
+from scrutiny.utils import execute_cmd, isfile
+from scrutiny.modules.jcalgtest import *
 
 
 SUPPORT_STRING = "ALGSUPPORT"

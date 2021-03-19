@@ -5,8 +5,8 @@ import sys
 from urllib.request import urlopen
 from zipfile import ZipFile
 
-from jcpeg.config import URL, Paths
-from jcpeg.utils import errmsg
+from scrutiny.config import URL, Paths
+from scrutiny.utils import errmsg
 
 
 def download_file(tool_name, tool_url, tool_path):

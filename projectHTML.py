@@ -4,8 +4,8 @@ from dominate.tags import *
 from dominate.util import raw
 import jsonpickle
 
-from jcpeg.contrast import Contrast
-from jcpeg.interfaces import ContrastState
+from scrutiny.contrast import Contrast
+from scrutiny.interfaces import ContrastState
 
 
 TOOLTIPTEXT = {

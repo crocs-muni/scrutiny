@@ -1,7 +1,7 @@
 import dominate
 from dominate.tags import *
 
-from jcpeg.interfaces import Module, ContrastModule, ContrastState
+from scrutiny.interfaces import Module, ContrastModule, ContrastState
 
 
 class JCSupport(Module):

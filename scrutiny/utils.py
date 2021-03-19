@@ -1,7 +1,7 @@
 import os.path
 import subprocess
 
-from jcpeg.config import Paths
+from scrutiny.config import Paths
 
 
 def isfile(path):

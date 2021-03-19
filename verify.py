@@ -1,7 +1,7 @@
 import argparse
 import jsonpickle
 
-from scrutiny.device import Device, load_device
+from scrutiny.device import load_device
 from scrutiny.contrast import Contrast
 
 

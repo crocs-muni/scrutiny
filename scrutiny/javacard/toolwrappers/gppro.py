@@ -32,7 +32,6 @@ class GPProInfo(GPPro):
 
     def run(self):
         return super().run(INFO_ARGS, INFO_FILE)
-    
 
     def parse(self):
         filename = self.get_outpath(INFO_FILE)

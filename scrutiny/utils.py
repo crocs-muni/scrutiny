@@ -7,8 +7,10 @@ from scrutiny.config import Paths
 def isfile(path):
     return os.path.isfile(path)
 
+
 def isdir(path):
     return os.path.isdir(path)
+
 
 def errmsg(tool_name, action, e):
     print("Oops!\n"
@@ -16,6 +18,7 @@ def errmsg(tool_name, action, e):
           str(e),
           "\tPlease try again or check the manual set-up section in README.md")
     return False
+
 
 def execute_cmd(cmd_line):
     try:
@@ -25,6 +28,7 @@ def execute_cmd(cmd_line):
     except Exception as e:
         errmsg("'" + cmd_line + "'", "executing", e)
         return 1
+
 
 def get_smart_card(atr):
     

@@ -1,4 +1,3 @@
-import dominate
 from dominate.tags import *
 
 from scrutiny.interfaces import ContrastModule, Module, ContrastState
@@ -24,9 +23,8 @@ class GPATR(Module):
 
 
 class GPATRContrast(ContrastModule):
-
     NAME = "ATR"
-    
+
     def __init__(self,
                  ref_atr, prof_atr,
                  ref_info, prof_info,
@@ -37,23 +35,23 @@ class GPATRContrast(ContrastModule):
         self.prof_atr = prof_atr
         self.ref_info = ref_info
         self.prof_info = prof_info
-        
+
         self.match = self.ref_atr == self.prof_atr
 
     def __str__(self):
         return self.NAME
-    
+
     def get_state(self):
         if self.match:
             return ContrastState.MATCH
         return ContrastState.SUSPICIOUS
 
-    def project_HTML(self, ref_name, prof_name):
-        
+    def project_html(self, ref_name, prof_name):
+
         h3("ATR comparison results")
         p("This module copares ATR of the smart cards and serches database "
-        "of known smart cards for additional information.")
-        
+          "of known smart cards for additional information.")
+
         h4("ATR:")
         with table():
             with tr():
@@ -62,7 +60,7 @@ class GPATRContrast(ContrastModule):
             with tr():
                 td("Profile ATR (" + prof_name + ")")
                 td(self.prof_atr)
-            
+
         if self.match:
             p("The ATR of tested card matches the reference. "
               "This would suggest the same smart card model.")

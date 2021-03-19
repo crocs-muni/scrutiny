@@ -54,7 +54,7 @@ class JCSupportContrast(ContrastModule):
             return ContrastState.WARN
         return ContrastState.MATCH
     
-    def project_HTML(self, ref_name, prof_name):
+    def project_html(self, ref_name, prof_name):
         
         h3("Algorithm Support comparison results")
         p("This module compares Java Card algorithm support between the cards.")

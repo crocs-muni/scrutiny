@@ -39,7 +39,7 @@ class ContrastModule(object):
     def get_state(self):
         pass
 
-    def project_HTML(self, ref_name=None, prof_name=None):
+    def project_html(self, ref_name, prof_name):
         pass
 
 

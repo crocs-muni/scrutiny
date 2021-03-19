@@ -47,7 +47,7 @@ class JCAlgTest(ToolWrapper):
         retcode = execute_cmd(cmd_line)
 
         for file in os.listdir("./"):
-            if search_string in file and self.card_name in file:
+            if search_string in file and self.device_name in file:
                 dest = self.get_outpath(file)
                 os.replace(file, dest)
                 self.outfile = file
@@ -116,7 +116,7 @@ class JCAlgTestSupport(JCAlgTest):
                 result.append(False)
             else:
                 raise Exception("Invalid format in",
-                                filename + ", line: " + stri(i - 1))
+                                filename + ", line: " + str(i - 1))
             if len(data) >= 3 and data[2] != "":
                 result.append(data[2])
 

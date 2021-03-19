@@ -18,8 +18,8 @@ def find_atr_in_database(atr: str) -> List[str]:
 
     info = []
 
-    for i in range(len(lines)):
-        if atr in lines[i].strip().replace(" ", ""):
+    for i, line in enumerate(lines):
+        if atr in line.strip().replace(" ", ""):
             j = 1
             while lines[i+j].startswith("\t"):
                 info.append(lines[i+j].strip())

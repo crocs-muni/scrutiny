@@ -1,24 +1,47 @@
-class ToolWrapper(object):
+class ToolWrapper:
+    """
+    SCRUTINY ToolWrapper Interface
+    """
+
     def __init__(self, device_name, force_mode=False):
         self.device_name = device_name
         self.force_mode = force_mode
 
     def get_outpath(self, filename):
+        """
+        Returns the path to the tool output
+        :param filename: output file name
+        :return: path
+        """
         return "results/" + self.device_name + "/" + filename
 
     def run(self):
-        pass
+        """
+        Run the wrapped tool
+        :return: return code
+        """
 
     def parse(self):
-        pass
+        """
+        Parse the results of the wrapped tool and produce modules
+        :return: modules
+        """
 
 
-class Module(object):
+class Module:
+    """
+    Scrutiny Module Interface
+    """
 
     def __init__(self, module_name):
         self.module_name = module_name
 
     def contrast(self, other):
+        """
+        Produce contras module by comparing self to other module
+        :param other: other module of the same type
+        :return: list of contrast modules
+        """
         if self.module_name != other.module_name:
             raise Exception("Comparing module " + self.module_name +
                             " with " + other.module_name + ".")

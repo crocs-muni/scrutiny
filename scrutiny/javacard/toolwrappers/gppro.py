@@ -3,7 +3,7 @@ from scrutiny.interfaces import ToolWrapper
 from scrutiny.javacard.modules.atr import Atr
 from scrutiny.javacard.modules.cplc import Cplc
 from scrutiny.utils import execute_cmd, isfile
-from scrutiny.javacard.modules.gppro import *
+from scrutiny.javacard.modules.gppro import GPInfo, GPList
 
 
 INFO_ARGS = ["-info"]
@@ -14,23 +14,33 @@ LIST_FILE = "gp_list.txt"
 
 
 class GPPro(ToolWrapper):
+    """
+    SCRUTINY ToolWrapper for GlobalPlatformPro
+    """
 
     GP_BIN = "java -jar " + Paths.GPPRO
 
     def run_gppro(self, args, outfile):
+        """
+        Wrapper for running GlobalPlatformPro
+        """
+
         outpath = self.get_outpath(outfile)
         cmd_line = self.GP_BIN + " " + " ".join(args) + " > " + outpath
-        
+
         if isfile(outpath) and not self.force_mode:
             print("Skipping " + cmd_line + " (results found).")
             return 0
 
         print("Running " + cmd_line + ".")
-        
+
         return execute_cmd(cmd_line)
 
 
 class GPProInfo(GPPro):
+    """
+    SCRUTINY ToolWrapper for GlobalPlatformPro -info
+    """
 
     def run(self):
         return super().run_gppro(INFO_ARGS, INFO_FILE)
@@ -47,16 +57,16 @@ class GPProInfo(GPPro):
         gpinfo_discard = ["Card Data:", "Card Capabilities:",
                           "More information about your card:",
                           "/parse?ATR"]
-            
+
         i = 0
         while i < len(lines):
-                
+
             line = lines[i].rstrip()
             i += 1
 
             if line == "" or any([d in line for d in gpinfo_discard]):
                 continue
-                
+
             if line.startswith("ATR"):
                 atr = line.split(":")[1].strip()
                 modules.insert(0, Atr(atr=atr))
@@ -78,7 +88,7 @@ class GPProInfo(GPPro):
                     gpcplc.cplc[pair[0]] = pair[1]
                     i += 1
                 continue
-                
+
             if line.startswith("Support"):
                 gpinfo.supports.append(line)
                 continue
@@ -93,6 +103,9 @@ class GPProInfo(GPPro):
 
 
 class GPProList(GPPro):
+    """
+    SCRUTINY ToolWrapper for GlobalPlatformPro -list
+    """
 
     def run(self):
         return super().run_gppro(LIST_ARGS, LIST_FILE)
@@ -107,7 +120,7 @@ class GPProList(GPPro):
 
         i = 0
         while i < len(lines):
-                
+
             line = lines[i].rstrip()
             i += 1
 

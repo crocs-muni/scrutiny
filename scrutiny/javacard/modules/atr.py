@@ -6,6 +6,10 @@ from scrutiny.javacard.utils import find_atr_in_database
 
 
 class Atr(Module):
+    """
+    SCRUTINY ATR module
+    """
+
     def __init__(self, module_name="ATR", atr=None):
         super().__init__(module_name)
         self.atr = atr
@@ -13,28 +17,31 @@ class Atr(Module):
     def contrast(self, other):
         super().contrast(other)
 
-        selfinfo = find_atr_in_database(self.atr)
-        otherinfo = find_atr_in_database(other.atr)
+        self_info = find_atr_in_database(self.atr)
+        other_info = find_atr_in_database(other.atr)
 
-        cm = AtrContrast(ref_atr=self.atr,
-                         prof_atr=other.atr,
-                         ref_info=selfinfo,
-                         prof_info=otherinfo)
+        cm = AtrContrast()
+
+        cm.ref_atr = self.atr
+        cm.prof_atr = other.atr
+        cm.ref_info = self_info
+        cm.prof_info = other_info
+
         return [cm]
 
 
 class AtrContrast(ContrastModule):
+    """
+    SCRUTINY ATR contrast module
+    """
 
-    def __init__(self,
-                 ref_atr, prof_atr,
-                 ref_info, prof_info,
-                 module_name="ATR"):
+    def __init__(self, module_name="ATR"):
 
         super().__init__(module_name)
-        self.ref_atr = ref_atr
-        self.prof_atr = prof_atr
-        self.ref_info = ref_info
-        self.prof_info = prof_info
+        self.ref_atr = None
+        self.prof_atr = None
+        self.ref_info = None
+        self.prof_info = None
 
         self.match = self.ref_atr == self.prof_atr
 

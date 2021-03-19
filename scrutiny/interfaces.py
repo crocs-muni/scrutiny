@@ -19,22 +19,22 @@ class ToolWrapper(object):
 class Module(object):
 
     def __init__(self, moduleid):
-        self.id = moduleid
+        self.module_name = moduleid
 
     def contrast(self, other):
-        if self.id != other.id:
-            raise Exception("Comparing module " + self.id + \
-                            " with " + other.id + ".")
+        if self.module_name != other.module_name:
+            raise Exception("Comparing module " + self.module_name + \
+                            " with " + other.module_name + ".")
         return []
 
 
 class ContrastModule(object):
 
     def __init__(self, moduleid):
-        self.id = moduleid
+        self.module_name = moduleid
 
     def __str__(self):
-        return self.id
+        return self.module_name
     
     def get_state(self):
         pass

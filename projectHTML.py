@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
             module_count = 0
             for m in contrast.contrasts:
-                divname = m.id + str(module_count)
+                divname = m.module_name + str(module_count)
                 h2("Module: " + str(m), style="display: inline-block;")
                 contrast_class = m.get_state()
                 with span(cls = "dot " + contrast_class.name.lower()):

@@ -7,7 +7,7 @@ class Device(object):
         self.modules = {}
 
     def add_module(self, module):
-        self.modules[module.id] = module
+        self.modules[module.module_name] = module
 
     def add_modules(self, modules):
         for module in modules:

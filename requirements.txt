@@ -1,0 +1,2 @@
+dominate==2.6.0
+jsonpickle==2.0.0

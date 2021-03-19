@@ -5,8 +5,8 @@ from scrutiny.interfaces import Module, ContrastModule, ContrastState
 
 
 class JCSupport(Module):
-    def __init__(self, moduleid="jcsupport"):
-        super().__init__(moduleid)
+    def __init__(self, module_name="jcsupport"):
+        super().__init__(module_name)
         self.test_info = {}
         self.jcsystem = {}
         self.cplc = {}
@@ -41,8 +41,8 @@ class JCSupport(Module):
 
 class JCSupportContrast(ContrastModule):
 
-    def __init__(self, matching, differences, suspicions, moduleid="jcsupport"):
-        super().__init__(moduleid)
+    def __init__(self, matching, differences, suspicions, module_name="jcsupport"):
+        super().__init__(module_name)
         self.matching = matching
         self.differences = differences
         self.suspicions = suspicions

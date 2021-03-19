@@ -18,8 +18,8 @@ class ToolWrapper(object):
 
 class Module(object):
 
-    def __init__(self, moduleid):
-        self.module_name = moduleid
+    def __init__(self, module_name):
+        self.module_name = module_name
 
     def contrast(self, other):
         if self.module_name != other.module_name:
@@ -30,8 +30,8 @@ class Module(object):
 
 class ContrastModule(object):
 
-    def __init__(self, moduleid):
-        self.module_name = moduleid
+    def __init__(self, module_name):
+        self.module_name = module_name
 
     def __str__(self):
         return self.module_name

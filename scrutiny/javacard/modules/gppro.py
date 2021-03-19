@@ -6,8 +6,8 @@ from scrutiny.utils import get_smart_card
 
 
 class GPATR(Module):
-    def __init__(self, moduleid="gpatr", atr=None):
-        super().__init__(moduleid)
+    def __init__(self, module_name="gpatr", atr=None):
+        super().__init__(module_name)
         self.atr = atr
 
     def contrast(self, other):
@@ -30,9 +30,9 @@ class GPATRContrast(ContrastModule):
     def __init__(self,
                  ref_atr, prof_atr,
                  ref_info, prof_info,
-                 moduleid="gpatr"):
+                 module_name="gpatr"):
 
-        super().__init__(moduleid)
+        super().__init__(module_name)
         self.ref_atr = ref_atr
         self.prof_atr = prof_atr
         self.ref_info = ref_info
@@ -88,15 +88,15 @@ class GPATRContrast(ContrastModule):
 
 
 class GPCPLC(Module):
-    def __init__(self, moduleid="gpcplc"):
-        super().__init__(moduleid)
+    def __init__(self, module_name="gpcplc"):
+        super().__init__(module_name)
         self.cplc = {}
 
 
 class GPInfo(Module):
 
-    def __init__(self, moduleid="gpinfo"):
-        super().__init__(moduleid)
+    def __init__(self, module_name="gpinfo"):
+        super().__init__(module_name)
         self.iin = None
         self.cin = None
         self.supports = []
@@ -106,8 +106,8 @@ class GPInfo(Module):
 
 class GPList(Module):
 
-    def __init__(self, moduleid="gplist"):
-        super().__init__(moduleid)
+    def __init__(self, module_name="gplist"):
+        super().__init__(module_name)
         self.isd = None
         self.app = []
         self.pkg = []

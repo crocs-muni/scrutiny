@@ -7,6 +7,9 @@ from scrutiny.contrast import ContrastModule, ContrastState
 
 
 class SupportResult:
+    """
+    Class to store results of algorithm support testing
+    """
 
     def __init__(self) -> None:
         self.support: Optional[bool] = None

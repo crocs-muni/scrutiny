@@ -46,7 +46,7 @@ class AtrContrast(ContrastModule):
     def project_html(self, ref_name, prof_name):
 
         h3("ATR comparison results")
-        p("This module copares ATR of the smart cards and serches database "
+        p("This module compares ATR of the smart cards and searches database "
           "of known smart cards for additional information.")
 
         h4("ATR:")

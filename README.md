@@ -40,7 +40,7 @@ Run any of the scripts with `-h/--help` to show detailed usage instructions.
 
 ## Dependencies
 
-Python 3 with PIP, Java Runtime Environment.
+Python 3.8 with PIP, Java Runtime Environment.
 
 ## Limitations
 

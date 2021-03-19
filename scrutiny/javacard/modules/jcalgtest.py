@@ -1,7 +1,8 @@
 import dominate
 from dominate.tags import *
 
-from scrutiny.interfaces import Module, ContrastModule, ContrastState
+from scrutiny.interfaces import Module
+from scrutiny.contrast import ContrastModule, ContrastState
 
 
 class JCSupport(Module):

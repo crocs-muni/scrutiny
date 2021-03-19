@@ -4,8 +4,7 @@ import dominate
 from dominate.tags import *
 import jsonpickle
 
-from scrutiny.interfaces import ContrastState
-
+from scrutiny.contrast import ContrastState
 
 TOOLTIP_TEXT = {
     ContrastState.MATCH: "The cards seem to match",

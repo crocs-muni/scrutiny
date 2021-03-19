@@ -1,9 +1,17 @@
+from enum import Enum
+
 import jsonpickle
+
+
+class DeviceType(Enum):
+    JAVA_CARD = 1
+
 
 class Device(object):
 
-    def __init__(self, name):
+    def __init__(self, name, device_type):
         self.name = name
+        self.device_type = device_type
         self.modules = {}
 
     def add_module(self, module):

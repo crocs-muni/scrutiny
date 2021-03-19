@@ -1,7 +1,8 @@
 from dominate.tags import *
 
-from scrutiny.interfaces import ContrastModule, Module, ContrastState
-from scrutiny.utils import get_smart_card
+from scrutiny.interfaces import Module
+from scrutiny.contrast import ContrastModule, ContrastState
+from scrutiny.javacard.utils import get_smart_card
 
 
 class GPATR(Module):

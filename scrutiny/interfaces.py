@@ -1,6 +1,3 @@
-from enum import Enum
-
-
 class ToolWrapper(object):
     def __init__(self, device_name, force_mode=False):
         self.device_name = device_name
@@ -23,25 +20,6 @@ class Module(object):
 
     def contrast(self, other):
         if self.module_name != other.module_name:
-            raise Exception("Comparing module " + self.module_name + \
+            raise Exception("Comparing module " + self.module_name +
                             " with " + other.module_name + ".")
         return []
-
-
-class ContrastModule(object):
-
-    def __init__(self, module_name):
-        self.module_name = module_name
-
-    def __str__(self):
-        return self.module_name
-    
-    def get_state(self):
-        pass
-
-    def project_html(self, ref_name, prof_name):
-        pass
-
-
-class ContrastState(Enum):
-    MATCH, WARN, SUSPICIOUS = range(3)

@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from scrutiny.device import Device
+from scrutiny.device import Device, DeviceType
 from scrutiny.javacard.toolwrappers.gppro import GPProInfo, GPProList
 from scrutiny.javacard.toolwrappers.jcalgtest import JCAlgTestSupport
 from scrutiny.utils import isdir, errmsg
@@ -61,7 +61,7 @@ if __name__ == "__main__":
 
     device_name = args.device_name.replace(" ", "_")
 
-    device = Device(device_name)
+    device = Device(device_name, DeviceType.JAVA_CARD)
 
     prepare_results(device_name)
 

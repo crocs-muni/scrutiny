@@ -38,7 +38,7 @@ if __name__ == "__main__":
             tags.p("Generated on: " + datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
 
         with tags.div(id="modules"):
-            module_count = 0
+            module_count: int = 0
             for m in contrast.contrasts:
                 divname = m.module_name + str(module_count)
                 tags.h2("Module: " + str(m), style="display: inline-block;")

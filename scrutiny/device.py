@@ -4,7 +4,7 @@ import jsonpickle
 
 
 class DeviceType(Enum):
-    JAVA_CARD = 1
+    JAVA_CARD = "Java Card enabled smart card"
 
 
 class Device(object):

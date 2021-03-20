@@ -1,9 +1,9 @@
-# JCPeg binaries
+# SCRUTINY binaries
 *.jar
 *.cap
 *.exe
 
-# JCPeg stuff
+# SCRUTINY stuff
 data/*
 results/* 
 output/*
@@ -12,6 +12,10 @@ output/*
 test.sh
 !data/script.js
 !data/style.css
+
+# IntelliJ
+
+.idea/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

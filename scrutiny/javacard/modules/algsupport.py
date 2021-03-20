@@ -2,8 +2,8 @@ from typing import Optional, Dict, List
 
 from dominate import tags
 
-from scrutiny.interfaces import Module
 from scrutiny.contrast import ContrastModule, ContrastState
+from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule
 
 
 class SupportResult:
@@ -19,17 +19,13 @@ class SupportResult:
         self.ram_reset: Optional[int] = None
 
 
-class AlgSupport(Module):
+class AlgSupport(JCAlgTestModule):
     """
     Scrutiny algorithm support module
     """
 
     def __init__(self, module_name="Algorithm Support"):
         super().__init__(module_name)
-        self.test_info = {}
-        self.jcsystem = {}
-        self.apdu = {}
-        self.cplc = {}
         self.support: Dict[str, SupportResult] = {}
 
     def contrast(self, other):

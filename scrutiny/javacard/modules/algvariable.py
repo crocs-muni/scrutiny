@@ -3,13 +3,14 @@ from typing import Dict, List
 from overrides import overrides
 
 from scrutiny.interfaces import ContrastModule
-from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule, PerformanceResult
+from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule,\
+    PerformanceResult
 
 
 class AlgVariable(JCAlgTestModule):
     """Scrutiny algorithm variable performance module"""
 
-    def __init__(self, module_name="Algorithm Data-Length-Dependent Performance"):
+    def __init__(self, module_name="Algorithm Variable Performance"):
         super().__init__(module_name)
         self.performance: Dict[str, List[PerformanceResult]] = {}
 

@@ -61,7 +61,8 @@ class PerformanceResult:
         """
         if self.iterations % len(self.operation) != 0:
             raise Exception(
-                "Total iterations count is not multiple of operation data length"
+                "Total iterations count is not "
+                "multiple of operation data length"
             )
         return int(self.iterations / len(self.operation))
 

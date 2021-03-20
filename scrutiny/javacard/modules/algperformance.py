@@ -3,7 +3,8 @@ from typing import Dict
 from overrides import overrides
 
 from scrutiny.interfaces import ContrastModule
-from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule, PerformanceResult
+from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule,\
+    PerformanceResult
 
 
 class AlgPerformance(JCAlgTestModule):

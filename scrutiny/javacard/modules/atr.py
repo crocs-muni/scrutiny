@@ -56,8 +56,9 @@ class AtrContrast(ContrastModule):
     def project_html(self, ref_name, prof_name):
 
         tags.h3("ATR comparison results")
-        tags.p("This module compares ATR of the smart cards and searches database "
-               "of known smart cards for additional information.")
+        tags.p("This module compares ATR of the smart cards "
+               "and searches database of known smart cards "
+               "for additional information.")
 
         tags.h4("ATR:")
         with tags.table():
@@ -77,16 +78,20 @@ class AtrContrast(ContrastModule):
 
         tags.h4("Additional info from smart card database")
         if self.ref_info:
-            tags.p("The reference card (" + ref_name + ") was found in the database:")
+            tags.p("The reference card (" + ref_name +
+                   ") was found in the database:")
             with tags.div():
                 for i in self.ref_info:
                     tags.p(i)
         else:
-            tags.p("The reference card (" + ref_name + ") was not found in the database.")
+            tags.p("The reference card (" + ref_name +
+                   ") was not found in the database.")
         if self.prof_info:
-            tags.p("The profiled card (" + prof_name + ") was found in the database:")
+            tags.p("The profiled card (" + prof_name +
+                   ") was found in the database:")
             with tags.div():
                 for i in self.prof_info:
                     tags.p(i)
         else:
-            tags.p("The profiled card (" + prof_name + " was not found in the database.")
+            tags.p("The profiled card (" + prof_name +
+                   " was not found in the database.")

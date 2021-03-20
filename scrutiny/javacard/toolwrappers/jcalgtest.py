@@ -8,7 +8,8 @@ from scrutiny.config import Paths
 from scrutiny.interfaces import ToolWrapper
 from scrutiny.javacard.modules.algperformance import AlgPerformance
 from scrutiny.javacard.modules.algvariable import AlgVariable
-from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule, PerformanceResult
+from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule,\
+    PerformanceResult
 from scrutiny.utils import execute_cmd
 from scrutiny.javacard.modules.algsupport import AlgSupport, SupportResult
 
@@ -85,22 +86,24 @@ def parse_common_line(module: JCAlgTestModule, line: str) -> bool:
     return False
 
 
-def parse_performance_block(lines: List[str], position: int, result: PerformanceResult):
+def parse_performance_block(lines: List[str], position: int,
+                            result: PerformanceResult):
     """
     Parse performance block in JCAlgTest performance data
 
     Example of the parsed data:
-      method name:; TYPE_DES LENGTH_DES ALG_DES_CBC_NOPAD Cipher_update()
-      measurement config:;appletPrepareINS;31;appletMeasureINS;43;config;00...
-      baseline measurements (ms):;154,00;151,00;152,00;152,00;151,00;
-      baseline stats (ms):;avg:;152,00;min:;151,00;max:;154,00;
-      operation raw measurements (ms):;986,00;989,00;989,00;988,00;988,00;
-      operation stats (ms/op):;avg op:;19,76;min op:;19,72;max op:;19,78;
-      operation info:;data length;256;total iterations;250;total invocations;250;
+    method name:; TYPE_DES LENGTH_DES ALG_DES_CBC_NOPAD Cipher_update()
+    measurement config:;appletPrepareINS;31;appletMeasureINS;43;config;00...
+    baseline measurements (ms):;154,00;151,00;152,00;152,00;151,00;
+    baseline stats (ms):;avg:;152,00;min:;151,00;max:;154,00;
+    operation raw measurements (ms):;986,00;989,00;989,00;988,00;988,00;
+    operation stats (ms/op):;avg op:;19,76;min op:;19,72;max op:;19,78;
+    operation info:;data length;256;total iterations;250;total invocations;250;
     """
 
     conf, base, base_stats, op, op_stats, op_info = \
-        ([col.strip() for col in lines[position + i].split(";")] for i in range(1, 7))
+        ([col.strip() for col in lines[position + i].split(";")]
+         for i in range(1, 7))
 
     if conf[0] != "measurement config:":
         result.error = ";".join(conf)

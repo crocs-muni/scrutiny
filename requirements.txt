@@ -1,2 +1,4 @@
-dominate==2.6.0
-jsonpickle==2.0.0
+dominate~=2.6.0
+jsonpickle~=2.0.0
+overrides~=3.1.0
+flake8~=3.9.0

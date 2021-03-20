@@ -3,7 +3,7 @@ from datetime import datetime
 from dominate import document, tags
 import jsonpickle
 
-from scrutiny.contrast import ContrastState
+from scrutiny.interfaces import ContrastState
 
 TOOLTIP_TEXT = {
     ContrastState.MATCH: "The cards seem to match",
@@ -35,7 +35,8 @@ if __name__ == "__main__":
     with doc:
         with tags.div(id="intro"):
             tags.p("This is the introductory section")
-            tags.p("Generated on: " + datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+            tags.p("Generated on: " +
+                   datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
 
         with tags.div(id="modules"):
             module_count: int = 0
@@ -44,9 +45,11 @@ if __name__ == "__main__":
                 tags.h2("Module: " + str(m), style="display: inline-block;")
                 contrast_class = m.get_state()
                 with tags.span(cls="dot " + contrast_class.name.lower()):
-                    tags.span(TOOLTIP_TEXT[contrast_class],
-                              cls="tooltiptext " + contrast_class.name.lower())
-                tags.button("Show / Hide", onclick="hideButton('" + divname + "')")
+                    tags.span(
+                        TOOLTIP_TEXT[contrast_class],
+                        cls="tooltiptext " + contrast_class.name.lower())
+                tags.button("Show / Hide",
+                            onclick="hideButton('" + divname + "')")
                 with tags.div(id=divname):
                     m.project_html(contrast.ref_name, contrast.prof_name)
                 tags.br()

@@ -119,17 +119,17 @@ if __name__ == "__main__":
 
     print("Setting up Smart Card List:")
     return_value = return_value and \
-                   download_file("Smart Card List", URL.SMARTCARD_LIST, Paths.SMARTCARD_LIST)
+        download_file("Smart Card List",
+                      URL.SMARTCARD_LIST, Paths.SMARTCARD_LIST)
 
     print("Setting up GlobalPlatformPro:")
     return_value = return_value and \
-                   download_file("GlobalPlatformPro", URL.GPPRO, Paths.GPPRO)
+        download_file("GlobalPlatformPro", URL.GPPRO, Paths.GPPRO)
 
     print()
 
     print("Setting up JCAlgTest:")
-    return_value = return_value and \
-                   setup_jcalgtest()
+    return_value = return_value and setup_jcalgtest()
 
     print()
 

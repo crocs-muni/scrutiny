@@ -1,8 +1,9 @@
 from typing import Optional, Dict, List
 
 from dominate import tags
+from overrides import overrides
 
-from scrutiny.contrast import ContrastModule, ContrastState
+from scrutiny.interfaces import ContrastModule, ContrastState
 from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule
 
 
@@ -24,10 +25,15 @@ class AlgSupport(JCAlgTestModule):
     Scrutiny algorithm support module
     """
 
+    @overrides
+    def add_result(self, key: str, result: SupportResult) -> None:
+        self.support[key] = result
+
     def __init__(self, module_name="Algorithm Support"):
         super().__init__(module_name)
         self.support: Dict[str, SupportResult] = {}
 
+    @overrides
     def contrast(self, other):
 
         matching: Dict[str, List[SupportResult]] = {}
@@ -60,23 +66,27 @@ class AlgSupportContrast(ContrastModule):
     Scrutiny algorithm support contrast module
     """
 
-    def __init__(self, matching, differences, suspicions, module_name="Algorithm Support"):
+    def __init__(self, matching, differences, suspicions,
+                 module_name="Algorithm Support"):
         super().__init__(module_name)
         self.matching: Dict[str, List[SupportResult]] = matching
-        self.differences: Dict[str, List[Optional[SupportResult]]] = differences
+        self.different: Dict[str, List[Optional[SupportResult]]] = differences
         self.suspicions: Dict[str, List[SupportResult]] = suspicions
 
+    @overrides
     def get_state(self):
         if self.suspicions:
             return ContrastState.SUSPICIOUS
-        if self.differences:
+        if self.different:
             return ContrastState.WARN
         return ContrastState.MATCH
 
+    @overrides
     def project_html(self, ref_name, prof_name):
 
         tags.h3("Algorithm Support comparison results")
-        tags.p("This module compares Java Card algorithm support between the cards.")
+        tags.p("This module compares Java Card "
+               "1algorithm support between the cards.")
 
         tags.h4("Overview:")
 
@@ -84,16 +94,19 @@ class AlgSupportContrast(ContrastModule):
             "The cards match in " + str(len(self.matching)) + " algorithms."
         )
         tags.p(
-            "There are " + str(len(self.differences)) + " algorithms with missing "
+            "There are " + str(len(self.different)) +
+            " algorithms with missing "
             "results for either card."
         )
         tags.p(
-            "There are " + str(len(self.suspicions)) + " algorithms with different "
+            "There are " + str(len(self.suspicions)) +
+            " algorithms with different "
             "results for either card."
         )
 
         if self.suspicions:
-            tags.h4("Differences in algorithm support:", style="color:var(--red-color)")
+            tags.h4("Differences in algorithm support:",
+                    style="color:var(--red-color)")
             with tags.table():
                 with tags.th("Algorithm"):
                     tags.td("Reference card (" + ref_name + ")")

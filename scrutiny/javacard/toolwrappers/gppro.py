@@ -1,3 +1,8 @@
+from abc import ABC
+from typing import final
+
+from overrides import overrides, EnforceOverrides
+
 from scrutiny.config import Paths
 from scrutiny.interfaces import ToolWrapper
 from scrutiny.javacard.modules.atr import Atr
@@ -13,13 +18,14 @@ LIST_ARGS = ["-list"]
 LIST_FILE = "gp_list.txt"
 
 
-class GPPro(ToolWrapper):
+class GPPro(ToolWrapper, ABC, EnforceOverrides):
     """
     SCRUTINY ToolWrapper for GlobalPlatformPro
     """
 
     GP_BIN = "java -jar " + Paths.GPPRO
 
+    @final
     def run_gppro(self, args, outfile):
         """
         Wrapper for running GlobalPlatformPro
@@ -42,9 +48,11 @@ class GPProInfo(GPPro):
     SCRUTINY ToolWrapper for GlobalPlatformPro -info
     """
 
+    @overrides
     def run(self):
         return super().run_gppro(INFO_ARGS, INFO_FILE)
 
+    @overrides
     def parse(self):
         filename = self.get_outpath(INFO_FILE)
         with open(filename, "r") as f:
@@ -107,9 +115,11 @@ class GPProList(GPPro):
     SCRUTINY ToolWrapper for GlobalPlatformPro -list
     """
 
+    @overrides
     def run(self):
         return super().run_gppro(LIST_ARGS, LIST_FILE)
 
+    @overrides
     def parse(self):
 
         filename = self.get_outpath(LIST_FILE)

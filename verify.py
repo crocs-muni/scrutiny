@@ -2,8 +2,7 @@ import argparse
 import jsonpickle
 
 from scrutiny.device import load_device
-from scrutiny.contrast import Contrast
-
+from scrutiny.interfaces import Contrast
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -28,7 +27,8 @@ if __name__ == "__main__":
 
     for module in reference.modules.values():
         if module.module_name in profile.modules.keys():
-            contrast.add_contrasts(module.contrast(profile.modules[module.module_name]))
+            contrast.add_contrasts(
+                module.contrast(profile.modules[module.module_name]))
 
     with open(args.output_file, "w") as f:
         f.write(jsonpickle.encode(contrast, indent=4))

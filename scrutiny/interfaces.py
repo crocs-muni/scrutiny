@@ -1,4 +1,10 @@
-class ToolWrapper:
+from abc import ABC, abstractmethod
+from enum import Enum
+
+from overrides import EnforceOverrides
+
+
+class ToolWrapper(ABC, EnforceOverrides):
     """
     SCRUTINY ToolWrapper Interface
     """
@@ -15,12 +21,14 @@ class ToolWrapper:
         """
         return "results/" + self.device_name + "/" + filename
 
+    @abstractmethod
     def run(self):
         """
         Run the wrapped tool
         :return: return code
         """
 
+    @abstractmethod
     def parse(self):
         """
         Parse the results of the wrapped tool and produce modules
@@ -28,7 +36,7 @@ class ToolWrapper:
         """
 
 
-class Module:
+class Module(ABC, EnforceOverrides):
     """
     Scrutiny Module Interface
     """
@@ -36,6 +44,7 @@ class Module:
     def __init__(self, module_name):
         self.module_name = module_name
 
+    @abstractmethod
     def contrast(self, other):
         """
         Produce contras module by comparing self to other module
@@ -46,3 +55,58 @@ class Module:
             raise Exception("Comparing module " + self.module_name +
                             " with " + other.module_name + ".")
         return []
+
+
+class Contrast(ABC, EnforceOverrides):
+    """
+    Contrast in-memory representation
+    """
+
+    def __init__(self, ref_name, prof_name):
+        self.ref_name = ref_name
+        self.prof_name = prof_name
+        self.contrasts = []
+
+    def add_contrasts(self, contrasts):
+        """
+        Add contrasts to the list
+        :param contrasts:
+        :return:
+        """
+        self.contrasts.extend(contrasts)
+
+
+class ContrastModule(ABC, EnforceOverrides):
+    """
+    SCRUTINY Contrast module
+    """
+
+    def __init__(self, module_name):
+        self.module_name = module_name
+
+    def __str__(self):
+        return self.module_name
+
+    @abstractmethod
+    def get_state(self):
+        """
+        Get ContrastState according to the module-specific internal state
+        :return:
+        """
+
+    @abstractmethod
+    def project_html(self, ref_name: str, prof_name: str) -> None:
+        """
+        Represent contrast using dominate tags
+            happens within dominate div tag
+
+        :param ref_name: Reference device name
+        :param prof_name: Profile device name
+        """
+
+
+class ContrastState(Enum):
+    """
+    Contrast State representation
+    """
+    MATCH, WARN, SUSPICIOUS = range(3)

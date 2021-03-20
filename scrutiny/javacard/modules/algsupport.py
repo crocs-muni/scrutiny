@@ -1,6 +1,7 @@
 from typing import Optional, Dict, List
 
 from dominate import tags
+from overrides import overrides
 
 from scrutiny.interfaces import ContrastModule, ContrastState
 from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule
@@ -24,10 +25,15 @@ class AlgSupport(JCAlgTestModule):
     Scrutiny algorithm support module
     """
 
+    @overrides
+    def add_result(self, key: str, result: SupportResult) -> None:
+        self.support[key] = result
+
     def __init__(self, module_name="Algorithm Support"):
         super().__init__(module_name)
         self.support: Dict[str, SupportResult] = {}
 
+    @overrides
     def contrast(self, other):
 
         matching: Dict[str, List[SupportResult]] = {}
@@ -66,6 +72,7 @@ class AlgSupportContrast(ContrastModule):
         self.differences: Dict[str, List[Optional[SupportResult]]] = differences
         self.suspicions: Dict[str, List[SupportResult]] = suspicions
 
+    @overrides
     def get_state(self):
         if self.suspicions:
             return ContrastState.SUSPICIOUS
@@ -73,6 +80,7 @@ class AlgSupportContrast(ContrastModule):
             return ContrastState.WARN
         return ContrastState.MATCH
 
+    @overrides
     def project_html(self, ref_name, prof_name):
 
         tags.h3("Algorithm Support comparison results")

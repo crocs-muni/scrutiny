@@ -1,9 +1,12 @@
+from abc import ABC, abstractmethod
 from typing import Optional, List
+
+from overrides import EnforceOverrides
 
 from scrutiny.interfaces import Module
 
 
-class JCAlgTestModule(Module):
+class JCAlgTestModule(Module, ABC, EnforceOverrides):
     """
     Common base for JCAlgTest modules
     """
@@ -15,6 +18,7 @@ class JCAlgTestModule(Module):
         self.apdu = {}
         self.cplc = {}
 
+    @abstractmethod
     def add_result(self, key: str, result: object) -> None:
         """Abstract method to add any result"""
 

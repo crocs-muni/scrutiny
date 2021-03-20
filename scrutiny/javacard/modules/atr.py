@@ -1,4 +1,5 @@
 from dominate import tags
+from overrides import overrides
 
 from scrutiny.interfaces import Module, ContrastModule, ContrastState
 from scrutiny.javacard.utils import find_atr_in_database
@@ -13,6 +14,7 @@ class Atr(Module):
         super().__init__(module_name)
         self.atr = atr
 
+    @overrides
     def contrast(self, other):
         super().contrast(other)
 
@@ -44,11 +46,13 @@ class AtrContrast(ContrastModule):
 
         self.match = self.ref_atr == self.prof_atr
 
+    @overrides
     def get_state(self):
         if self.match:
             return ContrastState.MATCH
         return ContrastState.SUSPICIOUS
 
+    @overrides
     def project_html(self, ref_name, prof_name):
 
         tags.h3("ATR comparison results")

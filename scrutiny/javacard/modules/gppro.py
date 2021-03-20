@@ -1,3 +1,5 @@
+from overrides import overrides
+
 from scrutiny.interfaces import Module
 
 
@@ -14,6 +16,7 @@ class GPInfo(Module):
         self.versions = []
         self.other = []
 
+    @overrides
     def contrast(self, other):
         return []
 
@@ -29,5 +32,6 @@ class GPList(Module):
         self.app = []
         self.pkg = []
 
+    @overrides
     def contrast(self, other):
         return []

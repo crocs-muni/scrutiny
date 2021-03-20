@@ -1,3 +1,5 @@
+from overrides import overrides
+
 from scrutiny.interfaces import Module
 
 
@@ -9,5 +11,6 @@ class Cplc(Module):
         super().__init__(module_name)
         self.cplc = {}
 
+    @overrides
     def contrast(self, other):
         return []

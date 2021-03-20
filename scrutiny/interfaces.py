@@ -1,8 +1,10 @@
 from abc import ABC, abstractmethod
 from enum import Enum
 
+from overrides import EnforceOverrides
 
-class ToolWrapper(ABC):
+
+class ToolWrapper(ABC, EnforceOverrides):
     """
     SCRUTINY ToolWrapper Interface
     """
@@ -34,7 +36,7 @@ class ToolWrapper(ABC):
         """
 
 
-class Module(ABC):
+class Module(ABC, EnforceOverrides):
     """
     Scrutiny Module Interface
     """
@@ -55,7 +57,7 @@ class Module(ABC):
         return []
 
 
-class Contrast(ABC):
+class Contrast(ABC, EnforceOverrides):
     """
     Contrast in-memory representation
     """
@@ -74,7 +76,7 @@ class Contrast(ABC):
         self.contrasts.extend(contrasts)
 
 
-class ContrastModule(ABC):
+class ContrastModule(ABC, EnforceOverrides):
     """
     SCRUTINY Contrast module
     """

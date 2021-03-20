@@ -1,6 +1,8 @@
 import os
-from abc import ABC
-from typing import List
+from abc import ABC, abstractmethod
+from typing import List, final
+
+from overrides import overrides, EnforceOverrides
 
 from scrutiny.config import Paths
 from scrutiny.interfaces import ToolWrapper
@@ -141,7 +143,7 @@ def parse_performance_block(lines: List[str], position: int, result: Performance
     result.invocations = int(op_info[6])
 
 
-class JCAlgTest(ToolWrapper, ABC):
+class JCAlgTest(ToolWrapper, ABC, EnforceOverrides):
     """SCRUTINY JCAlgTest ToolWrapper"""
 
     JCALGTEST_BIN = "java -jar " + Paths.JCALGTEST
@@ -153,6 +155,7 @@ class JCAlgTest(ToolWrapper, ABC):
         if install:
             install_jcalgtest_applet()
 
+    @final
     def find_outfile(self, search_string):
         """
         Find JCAlgTest output file
@@ -165,12 +168,14 @@ class JCAlgTest(ToolWrapper, ABC):
                 self.outfile = file
         return self.outfile
 
+    @abstractmethod
     def get_outfile(self):
         """
         Get JCAlgTest output file name
         :return: Output file name if it exists
         """
 
+    @final
     def run_jcalgtest(self, args, search_string):
         """
         Run JCAlgTest
@@ -207,6 +212,7 @@ class JCAlgTest(ToolWrapper, ABC):
         """
 
     @classmethod
+    @final
     def parse_loop(cls, module, filename) -> None:
         """Performs general parsing loop for JCAlgTest result files"""
 
@@ -226,12 +232,15 @@ class JCAlgTest(ToolWrapper, ABC):
 class JCAlgTestSupport(JCAlgTest):
     """JCAlgTest support ToolWrapper"""
 
+    @overrides
     def get_outfile(self):
         return self.find_outfile(SUPPORT_STRING)
 
+    @overrides
     def run(self):
         return self.run_jcalgtest([], SUPPORT_STRING)
 
+    @overrides
     def parse(self):
         alg_support = AlgSupport()
         modules = [alg_support]
@@ -239,6 +248,7 @@ class JCAlgTestSupport(JCAlgTest):
         return modules
 
     @classmethod
+    @overrides
     def parse_specific_lines(cls, line: str, module: AlgSupport,
                              lines: List[str], position: int) -> None:
 
@@ -267,12 +277,15 @@ class JCAlgTestSupport(JCAlgTest):
 class JCAlgTestPerformance(JCAlgTest):
     """JCAlgTest performance ToolWrapper"""
 
+    @overrides
     def get_outfile(self):
         return self.find_outfile(PERFORMANCE_STRING)
 
+    @overrides
     def run(self):
         return self.run_jcalgtest([], PERFORMANCE_STRING)
 
+    @overrides
     def parse(self):
         alg_performance = AlgPerformance()
         modules = [alg_performance]
@@ -280,6 +293,7 @@ class JCAlgTestPerformance(JCAlgTest):
         return modules
 
     @classmethod
+    @overrides
     def parse_specific_lines(cls, line: str, module: JCAlgTestModule,
                              lines: List[str], position: int) -> None:
 
@@ -296,12 +310,15 @@ class JCAlgTestPerformance(JCAlgTest):
 class JCAlgTestVariable(JCAlgTestPerformance):
     """JCAlgTest variable performance ToolWrapper"""
 
+    @overrides
     def get_outfile(self):
         return self.find_outfile(VARIABLE_STRING)
 
+    @overrides
     def run(self):
         return self.run_jcalgtest([], VARIABLE_STRING)
 
+    @overrides
     def parse(self):
         alg_variable = AlgVariable()
         modules = [alg_variable]

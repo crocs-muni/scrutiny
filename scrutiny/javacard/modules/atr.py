@@ -1,7 +1,6 @@
 from dominate import tags
 
-from scrutiny.contrast import ContrastModule, ContrastState
-from scrutiny.interfaces import Module
+from scrutiny.interfaces import Module, ContrastModule, ContrastState
 from scrutiny.javacard.utils import find_atr_in_database
 
 

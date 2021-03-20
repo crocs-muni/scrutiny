@@ -2,7 +2,7 @@ from typing import Optional, Dict, List
 
 from dominate import tags
 
-from scrutiny.contrast import ContrastModule, ContrastState
+from scrutiny.interfaces import ContrastModule, ContrastState
 from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule
 
 

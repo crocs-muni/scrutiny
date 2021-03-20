@@ -3,7 +3,7 @@ from datetime import datetime
 from dominate import document, tags
 import jsonpickle
 
-from scrutiny.contrast import ContrastState
+from scrutiny.interfaces import ContrastState
 
 TOOLTIP_TEXT = {
     ContrastState.MATCH: "The cards seem to match",

@@ -2,8 +2,7 @@ import argparse
 import jsonpickle
 
 from scrutiny.device import load_device
-from scrutiny.contrast import Contrast
-
+from scrutiny.interfaces import Contrast
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

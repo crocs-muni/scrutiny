@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from scrutiny.contrast import ContrastModule
+from scrutiny.interfaces import ContrastModule
 from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule, PerformanceResult
 
 

@@ -1,0 +1,16 @@
+on:
+  push:
+    branches:
+      - main
+      - develop
+name: Flake8
+jobs:
+  gitHubActionForFlake8:
+    name: GitHub Action for Flake8
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: GitHub Action for flake8
+      uses: suo/flake8-github-action@v1
+      with:
+        checkname: GitHub Action for Flake8

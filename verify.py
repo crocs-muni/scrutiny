@@ -16,7 +16,7 @@ if __name__ == "__main__":
                         required=True)
     parser.add_argument("-o", "--output-file",
                         help="Name of output file",
-                        action="store", metavar="outfile",
+                         action="store", metavar="outfile",
                         required=False, default="contrast.json")
     args = parser.parse_args()
 

@@ -1,4 +1,5 @@
 import os
+from abc import ABC
 from typing import List
 
 from scrutiny.config import Paths
@@ -140,7 +141,7 @@ def parse_performance_block(lines: List[str], position: int, result: Performance
     result.invocations = int(op_info[6])
 
 
-class JCAlgTest(ToolWrapper):
+class JCAlgTest(ToolWrapper, ABC):
     """SCRUTINY JCAlgTest ToolWrapper"""
 
     JCALGTEST_BIN = "java -jar " + Paths.JCALGTEST
@@ -193,7 +194,8 @@ class JCAlgTest(ToolWrapper):
 
         return retcode
 
-    def parse_specific_lines(self, line: str, module: JCAlgTestModule,
+    @classmethod
+    def parse_specific_lines(cls, line: str, module: JCAlgTestModule,
                              lines: List[str], position: int) -> None:
         """
         Parses lines from different types of JCAlgTest results
@@ -204,10 +206,10 @@ class JCAlgTest(ToolWrapper):
         :return:
         """
 
-    def parse_loop(self, module) -> None:
+    @classmethod
+    def parse_loop(cls, module, filename) -> None:
         """Performs general parsing loop for JCAlgTest result files"""
 
-        filename = self.get_outpath(self.outfile)
         with open(filename, "r") as f:
             lines = f.readlines()
 
@@ -218,7 +220,7 @@ class JCAlgTest(ToolWrapper):
             if parse_common_line(module, line):
                 continue
 
-            self.parse_specific_lines(line, module, lines, i)
+            cls.parse_specific_lines(line, module, lines, i)
 
 
 class JCAlgTestSupport(JCAlgTest):
@@ -233,10 +235,11 @@ class JCAlgTestSupport(JCAlgTest):
     def parse(self):
         alg_support = AlgSupport()
         modules = [alg_support]
-        self.parse_loop(alg_support)
+        self.parse_loop(alg_support, self.get_outpath(self.outfile))
         return modules
 
-    def parse_specific_lines(self, line: str, module: AlgSupport,
+    @classmethod
+    def parse_specific_lines(cls, line: str, module: AlgSupport,
                              lines: List[str], position: int) -> None:
 
         result = SupportResult()
@@ -247,9 +250,8 @@ class JCAlgTestSupport(JCAlgTest):
         elif data[1] == "no":
             result.support = False
         else:
-            raise Exception("Invalid format in",
-                            str(self.get_outfile()) + ", line: " + str(position),
-                            line)
+            raise Exception("Invalid format in line: " + line)
+
         if len(data) >= 3 and data[2] != "":
             if "sec" in data[2]:
                 data[2] = data[2].split(" ")[0]
@@ -274,10 +276,11 @@ class JCAlgTestPerformance(JCAlgTest):
     def parse(self):
         alg_performance = AlgPerformance()
         modules = [alg_performance]
-        self.parse_loop(alg_performance)
+        self.parse_loop(alg_performance, self.get_outpath(self.outfile))
         return modules
 
-    def parse_specific_lines(self, line: str, module: JCAlgTestModule,
+    @classmethod
+    def parse_specific_lines(cls, line: str, module: JCAlgTestModule,
                              lines: List[str], position: int) -> None:
 
         if not line.startswith("method name:"):
@@ -302,5 +305,5 @@ class JCAlgTestVariable(JCAlgTestPerformance):
     def parse(self):
         alg_variable = AlgVariable()
         modules = [alg_variable]
-        self.parse_loop(alg_variable)
+        self.parse_loop(alg_variable, self.get_outpath(self.outfile))
         return modules

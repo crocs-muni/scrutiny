@@ -1,7 +1,8 @@
+from abc import ABC, abstractmethod
 from enum import Enum
 
 
-class ToolWrapper:
+class ToolWrapper(ABC):
     """
     SCRUTINY ToolWrapper Interface
     """
@@ -18,12 +19,14 @@ class ToolWrapper:
         """
         return "results/" + self.device_name + "/" + filename
 
+    @abstractmethod
     def run(self):
         """
         Run the wrapped tool
         :return: return code
         """
 
+    @abstractmethod
     def parse(self):
         """
         Parse the results of the wrapped tool and produce modules
@@ -31,7 +34,7 @@ class ToolWrapper:
         """
 
 
-class Module:
+class Module(ABC):
     """
     Scrutiny Module Interface
     """
@@ -39,6 +42,7 @@ class Module:
     def __init__(self, module_name):
         self.module_name = module_name
 
+    @abstractmethod
     def contrast(self, other):
         """
         Produce contras module by comparing self to other module
@@ -51,7 +55,7 @@ class Module:
         return []
 
 
-class Contrast:
+class Contrast(ABC):
     """
     Contrast in-memory representation
     """
@@ -70,7 +74,7 @@ class Contrast:
         self.contrasts.extend(contrasts)
 
 
-class ContrastModule:
+class ContrastModule(ABC):
     """
     SCRUTINY Contrast module
     """
@@ -81,12 +85,14 @@ class ContrastModule:
     def __str__(self):
         return self.module_name
 
+    @abstractmethod
     def get_state(self):
         """
         Get ContrastState according to the module-specific internal state
         :return:
         """
 
+    @abstractmethod
     def project_html(self, ref_name: str, prof_name: str) -> None:
         """
         Represent contrast using dominate tags

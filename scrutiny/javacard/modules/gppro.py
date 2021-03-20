@@ -14,6 +14,9 @@ class GPInfo(Module):
         self.versions = []
         self.other = []
 
+    def contrast(self, other):
+        return []
+
 
 class GPList(Module):
     """
@@ -25,3 +28,6 @@ class GPList(Module):
         self.isd = None
         self.app = []
         self.pkg = []
+
+    def contrast(self, other):
+        return []

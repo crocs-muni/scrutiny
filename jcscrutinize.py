@@ -4,7 +4,8 @@ import sys
 
 from scrutiny.device import Device, DeviceType
 from scrutiny.javacard.toolwrappers.gppro import GPProInfo, GPProList
-from scrutiny.javacard.toolwrappers.jcalgtest import JCAlgTestSupport
+from scrutiny.javacard.toolwrappers.jcalgtest import JCAlgTestSupport,\
+    JCAlgTestPerformance, JCAlgTestVariable
 from scrutiny.utils import isdir, errmsg
 
 
@@ -72,11 +73,13 @@ if __name__ == "__main__":
 
     prepare_results(device_name)
 
-    toolwrappers = [GPProInfo(device_name),
-                    GPProList(device_name),
-                    JCAlgTestSupport(device_name, install=False)]
+    tool_wrappers = [GPProInfo(device_name),
+                     GPProList(device_name),
+                     JCAlgTestSupport(device_name, install=False),
+                     JCAlgTestPerformance(device_name, install=False),
+                     JCAlgTestVariable(device_name, install=False)]
 
-    for tool in toolwrappers:
+    for tool in tool_wrappers:
         tool.run()
         device.add_modules(tool.parse())
 

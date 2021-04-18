@@ -38,9 +38,10 @@ class AlgSupport(JCAlgTestModule):
 
     @overrides
     def contrast(self, other):
+        super().contrast(other)
 
         matching: Dict[str, List[SupportResult]] = {}
-        differences: Dict[str, List[Optional[SupportResult]]] = {}
+        missing: Dict[str, List[Optional[SupportResult]]] = {}
         support_mismatch: Dict[str, List[SupportResult]] = {}
         memory_mismatch: Dict[str, List[SupportResult]] = {}
         reset_mismatch: Dict[str, List[SupportResult]] = {}
@@ -49,7 +50,7 @@ class AlgSupport(JCAlgTestModule):
         for key in self.support:
 
             if key not in other.support.keys():
-                differences[key] = [self.support[key], None]
+                missing[key] = [self.support[key], None]
                 continue
 
             ref: SupportResult = self.support[key]
@@ -79,11 +80,11 @@ class AlgSupport(JCAlgTestModule):
 
         for key in other.support.keys():
             if key not in self.support.keys():
-                differences[key] = [None, other.support[key]]
+                missing[key] = [None, other.support[key]]
 
         contrast = AlgSupportContrast()
         contrast.matching = matching
-        contrast.missing = differences
+        contrast.missing = missing
         contrast.support_mismatch = support_mismatch
         contrast.memory_mismatch = memory_mismatch
         contrast.reset_mismatch = reset_mismatch
@@ -110,7 +111,8 @@ class AlgSupportContrast(ContrastModule):
     def get_state(self):
         if self.support_mismatch:
             return ContrastState.SUSPICIOUS
-        if self.missing:
+        if self.missing or self.memory_mismatch or self.reset_mismatch \
+                or self.deselect_mismatch:
             return ContrastState.WARN
         return ContrastState.MATCH
 
@@ -149,7 +151,7 @@ class AlgSupportContrast(ContrastModule):
         )
         tags.p(
             "There are " + str(len(self.support_mismatch)) +
-            " algorithms with different results for either card."
+            " algorithms with different results."
         )
         mem_mismatch = len(self.memory_mismatch) + len(self.reset_mismatch) \
             + len(self.deselect_mismatch)
@@ -281,7 +283,7 @@ class AlgSupportContrast(ContrastModule):
                   red_value="Unsupported")
 
     def output_matching(self):
-        """Output suspicions section"""
+        """Output matching section"""
 
         tags.h4("List of algorithms with matching results:",
                 style="color:var(--green-color);display:inline-block")

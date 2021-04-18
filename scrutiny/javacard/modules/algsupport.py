@@ -39,7 +39,7 @@ class AlgSupport(JCAlgTestModule):
 
         matching: Dict[str, List[SupportResult]] = {}
         differences: Dict[str, List[Optional[SupportResult]]] = {}
-        suspicions: Dict[str, List[SupportResult]] = {}
+        support_mismatch: Dict[str, List[SupportResult]] = {}
 
         for key in self.support:
 
@@ -53,13 +53,18 @@ class AlgSupport(JCAlgTestModule):
             if ref.support == prof.support:
                 matching[key] = [ref, prof]
             else:
-                suspicions[key] = [ref, prof]
+                support_mismatch[key] = [ref, prof]
 
         for key in other.support.keys():
             if key not in self.support.keys():
                 differences[key] = [None, other.support[key]]
 
-        return [AlgSupportContrast(matching, differences, suspicions)]
+        contrast = AlgSupportContrast()
+        contrast.matching = matching
+        contrast.different = differences
+        contrast.support_mismatch = support_mismatch
+
+        return [contrast]
 
 
 class AlgSupportContrast(ContrastModule):
@@ -67,16 +72,15 @@ class AlgSupportContrast(ContrastModule):
     Scrutiny algorithm support contrast module
     """
 
-    def __init__(self, matching, differences, suspicions,
-                 module_name="Algorithm Support"):
+    def __init__(self, module_name="Algorithm Support"):
         super().__init__(module_name)
-        self.matching: Dict[str, List[SupportResult]] = matching
-        self.different: Dict[str, List[Optional[SupportResult]]] = differences
-        self.suspicions: Dict[str, List[SupportResult]] = suspicions
+        self.matching: Dict[str, List[SupportResult]] = {}
+        self.different: Dict[str, List[Optional[SupportResult]]] = {}
+        self.support_mismatch: Dict[str, List[SupportResult]] = {}
 
     @overrides
     def get_state(self):
-        if self.suspicions:
+        if self.support_mismatch:
             return ContrastState.SUSPICIOUS
         if self.different:
             return ContrastState.WARN
@@ -87,8 +91,8 @@ class AlgSupportContrast(ContrastModule):
 
         self.output_intro()
 
-        if self.suspicions:
-            self.output_suspicions(prof_name, ref_name)
+        if self.support_mismatch:
+            self.output_support_mismatch(prof_name, ref_name)
 
     def output_intro(self):
         """Output introductory section"""
@@ -106,12 +110,12 @@ class AlgSupportContrast(ContrastModule):
             "results for either card."
         )
         tags.p(
-            "There are " + str(len(self.suspicions)) +
+            "There are " + str(len(self.support_mismatch)) +
             " algorithms with different "
             "results for either card."
         )
 
-    def output_suspicions(self, prof_name, ref_name):
+    def output_support_mismatch(self, prof_name, ref_name):
         """Output suspicions section"""
 
         tags.h4("Differences in algorithm support:",
@@ -122,9 +126,9 @@ class AlgSupportContrast(ContrastModule):
                   prof_name + " (profiled)"]
 
         data = []
-        for key in self.suspicions.keys():
-            ref = self.suspicions[key][0]
-            prof = self.suspicions[key][1]
+        for key in self.support_mismatch.keys():
+            ref = self.support_mismatch[key][0]
+            prof = self.support_mismatch[key][1]
             data.append([key,
                          "Yes" if ref.support else "No",
                          "Yes" if prof.support else "No"])

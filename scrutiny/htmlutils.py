@@ -41,6 +41,12 @@ def table(
 
 
 def show_hide_div(divname: str, hide=False):
+    """
+    Creates a show/hide button and matching div block
+    :param divname: unique name of the div block
+    :param hide: the div block is hidden by default if True
+    :return: the div block
+    """
 
     tags.button("Show / Hide",
                 onclick="hideButton('" + divname + "')")

@@ -9,7 +9,7 @@ results/*
 output/*
 *.json
 *.html
-test.sh
+*.sh
 !data/script.js
 !data/style.css
 

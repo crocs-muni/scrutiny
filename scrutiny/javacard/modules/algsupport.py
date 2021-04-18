@@ -3,7 +3,7 @@ from typing import Optional, Dict, List
 from dominate import tags
 from overrides import overrides
 
-from scrutiny.htmlutils import table
+from scrutiny.htmlutils import table, show_hide_div
 from scrutiny.interfaces import ContrastModule, ContrastState
 from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule
 
@@ -45,7 +45,7 @@ class AlgSupport(JCAlgTestModule):
 
             if key not in other.support.keys():
                 differences[key] = [self.support[key], None]
-                break
+                continue
 
             ref: SupportResult = self.support[key]
             prof: SupportResult = other.support[key]
@@ -61,7 +61,7 @@ class AlgSupport(JCAlgTestModule):
 
         contrast = AlgSupportContrast()
         contrast.matching = matching
-        contrast.different = differences
+        contrast.missing = differences
         contrast.support_mismatch = support_mismatch
 
         return [contrast]
@@ -75,14 +75,14 @@ class AlgSupportContrast(ContrastModule):
     def __init__(self, module_name="Algorithm Support"):
         super().__init__(module_name)
         self.matching: Dict[str, List[SupportResult]] = {}
-        self.different: Dict[str, List[Optional[SupportResult]]] = {}
+        self.missing: Dict[str, List[Optional[SupportResult]]] = {}
         self.support_mismatch: Dict[str, List[SupportResult]] = {}
 
     @overrides
     def get_state(self):
         if self.support_mismatch:
             return ContrastState.SUSPICIOUS
-        if self.different:
+        if self.missing:
             return ContrastState.WARN
         return ContrastState.MATCH
 
@@ -93,6 +93,11 @@ class AlgSupportContrast(ContrastModule):
 
         if self.support_mismatch:
             self.output_support_mismatch(prof_name, ref_name)
+
+        if self.missing:
+            self.output_missing(prof_name, ref_name)
+
+        self.output_matching()
 
     def output_intro(self):
         """Output introductory section"""
@@ -105,7 +110,7 @@ class AlgSupportContrast(ContrastModule):
             "The cards match in " + str(len(self.matching)) + " algorithms."
         )
         tags.p(
-            "There are " + str(len(self.different)) +
+            "There are " + str(len(self.missing)) +
             " algorithms with missing "
             "results for either card."
         )
@@ -119,7 +124,7 @@ class AlgSupportContrast(ContrastModule):
         """Output suspicions section"""
 
         tags.h4("Differences in algorithm support:",
-                style="color:var(--red-color)")
+                style="color:var(--red-color);display:inline-block")
 
         header = ["Algorithm",
                   ref_name + " (reference)",
@@ -130,7 +135,58 @@ class AlgSupportContrast(ContrastModule):
             ref = self.support_mismatch[key][0]
             prof = self.support_mismatch[key][1]
             data.append([key,
-                         "Yes" if ref.support else "No",
-                         "Yes" if prof.support else "No"])
+                         "Supported" if ref.support else "Unsupported",
+                         "Supported" if prof.support else "Unsupported"])
 
-        table(data, header)
+        sm_div = show_hide_div("support_mismatch_div")
+
+        with sm_div:
+            table(data, header,
+                  green_value="Supported",
+                  red_value="Unsupported")
+
+    def output_missing(self, prof_name, ref_name):
+        """Output suspicions section"""
+
+        tags.h4("Missing measurements in algorithm support:",
+                style="color:var(--yellow-color);display:inline-block")
+
+        header = ["Algorithm",
+                  ref_name + " (reference)",
+                  prof_name + " (profiled)"]
+
+        data = []
+        for key in self.missing.keys():
+            ref = self.missing[key][0]
+            prof = self.missing[key][1]
+
+            if ref:
+                ref = "Supported" if ref.support else "Unsupported"
+            else:
+                ref = "Result missing"
+            if prof:
+                prof = "Supported" if prof.support else "Unsupported"
+            else:
+                prof = "Result missing"
+
+            data.append([key, ref, prof])
+
+        sm_div = show_hide_div("support_missing_div")
+
+        with sm_div:
+            table(data, header,
+                  green_value="Supported",
+                  red_value="Unsupported")
+
+    def output_matching(self):
+        """Output suspicions section"""
+
+        tags.h4("List of algorithms with matching results:",
+                style="color:var(--green-color);display:inline-block")
+
+        data = [[key] for key in self.matching.keys()]
+
+        sm_div = show_hide_div("support_matching_div", hide=True)
+
+        with sm_div:
+            table(data)

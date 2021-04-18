@@ -8,11 +8,18 @@ def note(text: str) -> None:
     tags.p(text)
 
 
-def table(data: List[List[str]], header: Optional[List[str]]) -> None:
+def table(
+        data: List[List[str]],
+        header: Optional[List[str]] = None,
+        green_value: Optional[str] = None,
+        red_value: Optional[str] = None
+) -> None:
     """
     Print table to HTML output
     :param data: List of lines, each containing list of cell data
     :param header: optional list of header cells, no header if None or empty
+    :param green_value: cell value content to highlight in green
+    :param red_value: cell value content to highlight in red
     """
 
     with tags.table():
@@ -25,4 +32,21 @@ def table(data: List[List[str]], header: Optional[List[str]]) -> None:
         for line in data:
             with tags.tr():
                 for cell in line:
-                    tags.td(cell)
+                    color = "var(--main-color)"
+                    if green_value and green_value in cell:
+                        color = "var(--green-color)"
+                    if red_value and red_value in cell:
+                        color = "var(--red-color)"
+                    tags.td(cell, style="color:" + color)
+
+
+def show_hide_div(divname: str, hide=False):
+
+    tags.button("Show / Hide",
+                onclick="hideButton('" + divname + "')")
+    tags.br()
+
+    if hide:
+        return tags.div(id=divname, style="display:none")
+
+    return tags.div(id=divname)

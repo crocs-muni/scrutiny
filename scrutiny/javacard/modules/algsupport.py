@@ -3,6 +3,7 @@ from typing import Optional, Dict, List
 from dominate import tags
 from overrides import overrides
 
+from scrutiny.htmlutils import table
 from scrutiny.interfaces import ContrastModule, ContrastState
 from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule
 
@@ -84,12 +85,18 @@ class AlgSupportContrast(ContrastModule):
     @overrides
     def project_html(self, ref_name, prof_name):
 
+        self.output_intro()
+
+        if self.suspicions:
+            self.output_suspicions(prof_name, ref_name)
+
+    def output_intro(self):
+        """Output introductory section"""
+
         tags.h3("Algorithm Support comparison results")
         tags.p("This module compares Java Card "
                "algorithm support between the cards.")
-
         tags.h4("Overview:")
-
         tags.p(
             "The cards match in " + str(len(self.matching)) + " algorithms."
         )
@@ -104,17 +111,22 @@ class AlgSupportContrast(ContrastModule):
             "results for either card."
         )
 
-        if self.suspicions:
-            tags.h4("Differences in algorithm support:",
-                    style="color:var(--red-color)")
-            with tags.table():
-                with tags.th("Algorithm"):
-                    tags.td("Reference card (" + ref_name + ")")
-                    tags.td("Profiled card (" + prof_name + ")")
-                for key in self.suspicions.keys():
-                    ref = self.suspicions[key][0]
-                    prof = self.suspicions[key][1]
-                    with tags.tr():
-                        tags.td(key)
-                        tags.td("Yes" if ref.support else "No")
-                        tags.td("Yes" if prof.support else "No")
+    def output_suspicions(self, prof_name, ref_name):
+        """Output suspicions section"""
+
+        tags.h4("Differences in algorithm support:",
+                style="color:var(--red-color)")
+
+        header = ["Algorithm",
+                  ref_name + " (reference)",
+                  prof_name + " (profiled)"]
+
+        data = []
+        for key in self.suspicions.keys():
+            ref = self.suspicions[key][0]
+            prof = self.suspicions[key][1]
+            data.append([key,
+                         "Yes" if ref.support else "No",
+                         "Yes" if prof.support else "No"])
+
+        table(data, header)

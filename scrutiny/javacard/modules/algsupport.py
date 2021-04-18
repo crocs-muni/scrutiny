@@ -86,7 +86,7 @@ class AlgSupportContrast(ContrastModule):
 
         tags.h3("Algorithm Support comparison results")
         tags.p("This module compares Java Card "
-               "1algorithm support between the cards.")
+               "algorithm support between the cards.")
 
         tags.h4("Overview:")
 

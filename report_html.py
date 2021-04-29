@@ -39,9 +39,14 @@ if __name__ == "__main__":
     with doc:
         intro_div = tags.div(id="intro")
         with intro_div:
+            tags.h1(
+                "Verification of " + contrast.prof_name +
+                " against " + contrast.ref_name
+            )
             tags.p("This is the introductory section")
             tags.p("Generated on: " +
                    datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+            tags.p("Generated from: " + args.contrast)
 
         with tags.div(id="modules"):
             module_count: int = 0
@@ -60,6 +65,7 @@ if __name__ == "__main__":
                 module_count += 1
 
         with intro_div:
+            tags.h3("Quick visibility settings")
             show_all_button()
             hide_all_button()
             default_button()

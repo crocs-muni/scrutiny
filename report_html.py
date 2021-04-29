@@ -3,13 +3,16 @@ from datetime import datetime
 from dominate import document, tags
 import jsonpickle
 
+from scrutiny.htmlutils import show_hide_div, show_all_button, hide_all_button
 from scrutiny.interfaces import ContrastState
+
 
 TOOLTIP_TEXT = {
     ContrastState.MATCH: "The cards seem to match",
     ContrastState.WARN: "There seem to be some differences worth checking",
     ContrastState.SUSPICIOUS: "The cards probably don't match"
 }
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -33,7 +36,8 @@ if __name__ == "__main__":
         tags.script(type="text/javascript", src="script.js")
 
     with doc:
-        with tags.div(id="intro"):
+        intro_div = tags.div(id="intro")
+        with intro_div:
             tags.p("This is the introductory section")
             tags.p("Generated on: " +
                    datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
@@ -48,12 +52,15 @@ if __name__ == "__main__":
                         TOOLTIP_TEXT[contrast_class],
                         cls="tooltiptext " + contrast_class.name.lower())
                 tags.h2("Module: " + str(m), style="display: inline-block;")
-                tags.button("Show / Hide",
-                            onclick="hideButton('" + divname + "')")
-                with tags.div(id=divname):
+                module_div = show_hide_div(divname)
+                with module_div:
                     m.project_html(contrast.ref_name, contrast.prof_name)
                 tags.br()
                 module_count += 1
+
+        with intro_div:
+            show_all_button()
+            hide_all_button()
 
     with open(args.output_file, "w") as f:
         f.write(str(doc))

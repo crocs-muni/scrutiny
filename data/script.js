@@ -10,3 +10,17 @@ function hideButton(id) {
     x.style.display = "none";
   }
 }
+
+function showAll(ids) {
+  ids.forEach(function(id) {
+    var x = document.getElementById(id);
+    x.style.display = "block";
+  });
+}
+
+function hideAll(ids) {
+  ids.forEach(function(id) {
+    var x = document.getElementById(id);
+    x.style.display = "none";
+  });
+}

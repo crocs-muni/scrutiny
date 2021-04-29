@@ -3,6 +3,9 @@ from typing import List, Optional
 from dominate import tags
 
 
+div_names = []
+
+
 def note(text: str) -> None:
     """Print note to HTML output"""
     tags.p(text)
@@ -48,6 +51,8 @@ def show_hide_div(divname: str, hide=False):
     :return: the div block
     """
 
+    div_names.append(divname)
+
     tags.button("Show / Hide",
                 onclick="hideButton('" + divname + "')")
     tags.br()
@@ -56,3 +61,21 @@ def show_hide_div(divname: str, hide=False):
         return tags.div(id=divname, style="display:none")
 
     return tags.div(id=divname)
+
+
+def show_all_button():
+    """Creates a Show All button for every show/hide div block created"""
+
+    array = "[" + ", ".join(["'" + entry + "'" for entry in div_names]) + "]"
+
+    tags.button("Show All",
+                onclick="showAll(" + array + ")")
+
+
+def hide_all_button():
+    """Creates a Hide All button for every show/hide div block created"""
+
+    array = "[" + ", ".join(["'" + entry + "'" for entry in div_names]) + "]"
+
+    tags.button("Hide All",
+                onclick="hideAll(" + array + ")")

@@ -12,6 +12,7 @@ output/*
 *.sh
 !data/script.js
 !data/style.css
+!*/.gitkeep
 
 # IntelliJ
 

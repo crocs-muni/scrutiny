@@ -13,14 +13,17 @@ function hideButton(id) {
 
 function showAll(ids) {
   ids.forEach(function(id) {
-    var x = document.getElementById(id);
-    x.style.display = "block";
+    document.getElementById(id).style.display = "block";
   });
 }
 
 function hideAll(ids) {
   ids.forEach(function(id) {
-    var x = document.getElementById(id);
-    x.style.display = "none";
+    document.getElementById(id).style.display = "none";
   });
+}
+
+function defaultAll(shown, hidden) {
+  showAll(shown);
+  hideAll(hidden);
 }

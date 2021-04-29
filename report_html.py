@@ -3,7 +3,8 @@ from datetime import datetime
 from dominate import document, tags
 import jsonpickle
 
-from scrutiny.htmlutils import show_hide_div, show_all_button, hide_all_button
+from scrutiny.htmlutils import show_hide_div, show_all_button,\
+    hide_all_button, default_button
 from scrutiny.interfaces import ContrastState
 
 
@@ -61,6 +62,7 @@ if __name__ == "__main__":
         with intro_div:
             show_all_button()
             hide_all_button()
+            default_button()
 
     with open(args.output_file, "w") as f:
         f.write(str(doc))

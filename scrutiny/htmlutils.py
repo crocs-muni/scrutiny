@@ -2,8 +2,8 @@ from typing import List, Optional
 
 from dominate import tags
 
-
-div_names = []
+shown = []
+hidden = []
 
 
 def note(text: str) -> None:
@@ -51,7 +51,10 @@ def show_hide_div(divname: str, hide=False):
     :return: the div block
     """
 
-    div_names.append(divname)
+    if hide:
+        hidden.append(divname)
+    else:
+        shown.append(divname)
 
     tags.button("Show / Hide",
                 onclick="hideButton('" + divname + "')")
@@ -66,16 +69,31 @@ def show_hide_div(divname: str, hide=False):
 def show_all_button():
     """Creates a Show All button for every show/hide div block created"""
 
-    array = "[" + ", ".join(["'" + entry + "'" for entry in div_names]) + "]"
-
     tags.button("Show All",
-                onclick="showAll(" + array + ")")
+                onclick="showAll(" + __get_js_array(__get_all_names()) + ")")
 
 
 def hide_all_button():
     """Creates a Hide All button for every show/hide div block created"""
 
-    array = "[" + ", ".join(["'" + entry + "'" for entry in div_names]) + "]"
-
     tags.button("Hide All",
-                onclick="hideAll(" + array + ")")
+                onclick="hideAll(" + __get_js_array(__get_all_names()) + ")")
+
+
+def default_button():
+    """Creates a Hide All button for every show/hide div block created"""
+
+    tags.button("Default",
+                onclick="defaultAll(" + __get_js_array(shown) + ", " +
+                        __get_js_array(hidden) + ")")
+
+
+def __get_js_array(names):
+    return "[" + ", ".join(["'" + entry + "'" for entry in names]) + "]"
+
+
+def __get_all_names():
+    div_names = []
+    div_names.extend(hidden)
+    div_names.extend(shown)
+    return div_names

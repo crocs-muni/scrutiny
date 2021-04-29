@@ -42,12 +42,12 @@ if __name__ == "__main__":
             module_count: int = 0
             for m in contrast.contrasts:
                 divname = m.module_name + str(module_count)
-                tags.h2("Module: " + str(m), style="display: inline-block;")
                 contrast_class = m.get_state()
                 with tags.span(cls="dot " + contrast_class.name.lower()):
                     tags.span(
                         TOOLTIP_TEXT[contrast_class],
                         cls="tooltiptext " + contrast_class.name.lower())
+                tags.h2("Module: " + str(m), style="display: inline-block;")
                 tags.button("Show / Hide",
                             onclick="hideButton('" + divname + "')")
                 with tags.div(id=divname):

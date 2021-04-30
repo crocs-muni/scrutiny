@@ -37,6 +37,8 @@ if __name__ == "__main__":
         tags.script(type="text/javascript", src="script.js")
 
     with doc:
+        tags.button("Back to Top", onclick="backToTop()",
+                    id="topButton", cls="floatingbutton")
         intro_div = tags.div(id="intro")
         with intro_div:
             tags.h1(

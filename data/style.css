@@ -1,6 +1,8 @@
 :root {
+  --main-color: #193441;
   --green-color:#4CAF50;
   --yellow-color:#d3d03e;
+  --orange-color:#d3923e;
   --red-color:#c04444;
 }
 
@@ -50,6 +52,15 @@ button:hover {
 
 button:focus {
   outline: none;
+}
+
+/* Based on https://www.w3schools.com/howto/howto_js_scroll_to_top.asp */
+.floatingbutton {
+  display: block; /* Displayed by default for browsers with iffy onscroll support */
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
 }
 
 h1 {

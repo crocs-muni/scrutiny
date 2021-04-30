@@ -3,13 +3,17 @@ from datetime import datetime
 from dominate import document, tags
 import jsonpickle
 
+from scrutiny.htmlutils import show_hide_div, show_all_button,\
+    hide_all_button, default_button
 from scrutiny.interfaces import ContrastState
+
 
 TOOLTIP_TEXT = {
     ContrastState.MATCH: "The cards seem to match",
     ContrastState.WARN: "There seem to be some differences worth checking",
     ContrastState.SUSPICIOUS: "The cards probably don't match"
 }
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -33,27 +37,40 @@ if __name__ == "__main__":
         tags.script(type="text/javascript", src="script.js")
 
     with doc:
-        with tags.div(id="intro"):
+        tags.button("Back to Top", onclick="backToTop()",
+                    id="topButton", cls="floatingbutton")
+        intro_div = tags.div(id="intro")
+        with intro_div:
+            tags.h1(
+                "Verification of " + contrast.prof_name +
+                " against " + contrast.ref_name
+            )
             tags.p("This is the introductory section")
             tags.p("Generated on: " +
                    datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+            tags.p("Generated from: " + args.contrast)
 
         with tags.div(id="modules"):
             module_count: int = 0
             for m in contrast.contrasts:
                 divname = m.module_name + str(module_count)
-                tags.h2("Module: " + str(m), style="display: inline-block;")
                 contrast_class = m.get_state()
                 with tags.span(cls="dot " + contrast_class.name.lower()):
                     tags.span(
                         TOOLTIP_TEXT[contrast_class],
                         cls="tooltiptext " + contrast_class.name.lower())
-                tags.button("Show / Hide",
-                            onclick="hideButton('" + divname + "')")
-                with tags.div(id=divname):
+                tags.h2("Module: " + str(m), style="display: inline-block;")
+                module_div = show_hide_div(divname)
+                with module_div:
                     m.project_html(contrast.ref_name, contrast.prof_name)
                 tags.br()
                 module_count += 1
+
+        with intro_div:
+            tags.h3("Quick visibility settings")
+            show_all_button()
+            hide_all_button()
+            default_button()
 
     with open(args.output_file, "w") as f:
         f.write(str(doc))

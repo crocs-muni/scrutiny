@@ -23,7 +23,7 @@ SCRUTINY will run set of open-source tools to gather information about your smar
 
 ### 4. Run SCRUTINY Java Card analysis
 
-`$ python -u jcscrutinize.py Supposedly_NXP_P60`
+`$ python -u measure_javacard.py Supposedly_NXP_P60`
 
 ### 5. Compare the profile with reference
 
@@ -31,7 +31,7 @@ SCRUTINY will run set of open-source tools to gather information about your smar
 
 ### 6. Produce HTML report
 
-`$ python -u projectHTML.py -c NXP_P60_Verifycation.json -o NXP_P60_Verifycation_Report.html`
+`$ python -u report_html.py -c NXP_P60_Verifycation.json -o NXP_P60_Verifycation_Report.html`
 
 ### 7. Read the report using any decent web browser and learn about your Java Card
 

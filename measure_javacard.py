@@ -4,38 +4,16 @@ import sys
 
 import jsonpickle
 
+from scrutiny import config
 from scrutiny.device import Device, DeviceType
 from scrutiny.javacard.toolwrappers.gppro import GPProInfo, GPProList
 from scrutiny.javacard.toolwrappers.jcalgtest import JCAlgTestSupport, \
     JCAlgTestPerformance, JCAlgTestVariable
 from scrutiny.utils import isdir, errmsg
 
-CFG_FILE = "config/measure_javacard/configurations.json"
-
-SPEED = {
-    "instant":
-        "    You can blink once in the meantime\n",
-    "fast":
-        "    Few minutes to fef hours.\n"
-        "    You can go make a coffee.\n",
-    "medium":
-        "    Up to a few hours.\n"
-        "    You can compile Firefox in the meantime.\n",
-    "slow":
-        "    Up to tens of hours.\n"
-        "    You can compile Gentoo in the meantime.\n"
-}
-
-RISK = {
-    "low":
-        "    The test uses standard JCAPI calls\n",
-    "medium":
-        "    The tests cause lot of API calls or allocations.\n"
-        "    The tests may damage the card.\n",
-    "high":
-        "    The tests try to cause undefined behavior.\n"
-        "    There is a high possibility of bricking the card.\n"
-}
+CFG_FILE = config.MeasureJavaCard.CFG_FILE
+SPEED = config.MeasureJavaCard.SPEED
+RISK = config.MeasureJavaCard.RISK
 
 KNOWN_SUBTESTS = [
     "gppro_info",
@@ -82,31 +60,31 @@ def prepare_results(card_name):
         return errmsg(dirname, "creating", ex)
 
 
-def get_subtests(config, configuration):
+def get_subtests(config_dict, configuration):
     """Returns subtests of specific configuration"""
     subtests = []
-    for param in config[configuration]:
-        if config[configuration][param].lower() == "yes" and \
+    for param in config_dict[configuration]:
+        if config_dict[configuration][param].lower() == "yes" and \
                 param in KNOWN_SUBTESTS:
             subtests.append(param)
     return subtests
 
 
-def help_string(config, config_section):
+def help_string(config_dict, config_section):
     """Generate help string for specific configuration"""
 
     result = "Configuration: " + config_section + "\n"
 
-    if "speed" in config[config_section]:
-        result += "Speed: " + config[config_section]["speed"] + "\n" + \
-                  SPEED.get(config[config_section]["speed"], "")
+    if "speed" in config_dict[config_section]:
+        result += "Speed: " + config_dict[config_section]["speed"] + "\n" + \
+                  SPEED.get(config_dict[config_section]["speed"], "")
 
-    if "risk" in config[config_section]:
-        result += "Risk: " + config[config_section]["risk"] + "\n" + \
-                  RISK.get(config[config_section]["risk"], "")
+    if "risk" in config_dict[config_section]:
+        result += "Risk: " + config_dict[config_section]["risk"] + "\n" + \
+                  RISK.get(config_dict[config_section]["risk"], "")
 
     result += "Subtests:\n    " +\
-              "\n    ".join(get_subtests(config, config_section))
+              "\n    ".join(get_subtests(config_dict, config_section))
 
     return result
 

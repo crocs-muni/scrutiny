@@ -27,3 +27,36 @@ class Paths:
     JCALGTEST_CAPS = [JCALGTEST_305, JCALGTEST_304, JCALGTEST_222]
 
     SMARTCARD_LIST = "data/smartcard_list.txt"
+
+
+class MeasureJavaCard:
+    """
+    Measure Java Card script config strings
+    """
+
+    CFG_FILE = "config/measure_javacard/configurations.json"
+
+    SPEED = {
+        "instant":
+            "    You can blink once in the meantime\n",
+        "fast":
+            "    Few minutes to fef hours.\n"
+            "    You can go make a coffee.\n",
+        "medium":
+            "    Up to a few hours.\n"
+            "    You can compile Firefox in the meantime.\n",
+        "slow":
+            "    Up to tens of hours.\n"
+            "    You can compile Gentoo in the meantime.\n"
+    }
+
+    RISK = {
+        "low":
+            "    The test uses standard JCAPI calls\n",
+        "medium":
+            "    The tests cause lot of API calls or allocations.\n"
+            "    The tests may damage the card.\n",
+        "high":
+            "    The tests try to cause undefined behavior.\n"
+            "    There is a high possibility of bricking the card.\n"
+    }

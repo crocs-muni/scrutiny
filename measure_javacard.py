@@ -1,7 +1,8 @@
 import argparse
-import configparser
 import os
 import sys
+
+import jsonpickle
 
 from scrutiny.device import Device, DeviceType
 from scrutiny.javacard.toolwrappers.gppro import GPProInfo, GPProList
@@ -9,15 +10,7 @@ from scrutiny.javacard.toolwrappers.jcalgtest import JCAlgTestSupport, \
     JCAlgTestPerformance, JCAlgTestVariable
 from scrutiny.utils import isdir, errmsg
 
-CFG_FILE = "config/measure_javacard.ini"
-
-KNOWN_SUBTESTS = [
-    "gppro_info",
-    "gppro_list",
-    "jcalgtest_support",
-    "jcalgtest_performance",
-    "jcalgtest_variable"
-]
+CFG_FILE = "config/measure_javacard/configurations.json"
 
 SPEED = {
     "instant":
@@ -43,6 +36,14 @@ RISK = {
         "    The tests try to cause undefined behavior.\n"
         "    There is a high possibility of bricking the card.\n"
 }
+
+KNOWN_SUBTESTS = [
+    "gppro_info",
+    "gppro_list",
+    "jcalgtest_support",
+    "jcalgtest_performance",
+    "jcalgtest_variable"
+]
 
 
 def get_wrapper(test, card_name):
@@ -71,20 +72,21 @@ def prepare_results(card_name):
     if isdir(dirname):
         print(dirname, "already exists, skipping the creation.")
         return True
+
     try:
         print("Creating", dirname + ".")
         os.mkdir(dirname)
-
         return True
+
     except FileExistsError as ex:
         return errmsg(dirname, "creating", ex)
 
 
-def get_subtests(config, config_section):
+def get_subtests(config, configuration):
     """Returns subtests of specific configuration"""
     subtests = []
-    for param in config[config_section]:
-        if config[config_section][param].lower() == "yes" and \
+    for param in config[configuration]:
+        if config[configuration][param].lower() == "yes" and \
                 param in KNOWN_SUBTESTS:
             subtests.append(param)
     return subtests
@@ -111,13 +113,12 @@ def help_string(config, config_section):
 
 if __name__ == "__main__":
 
-    cf = configparser.ConfigParser()
-    cf.read(CFG_FILE)
+    with open(CFG_FILE, "r") as f:
+        cf = jsonpickle.decode(f.read())
 
     configurations = []
     for section in cf:
-        if section != "DEFAULT":
-            configurations.append(section)
+        configurations.append(section)
 
     parser = argparse.ArgumentParser()
     parser.add_argument("device_name",

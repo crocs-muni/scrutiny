@@ -7,7 +7,6 @@
 data/*
 results/* 
 output/*
-*.json
 *.html
 *.sh
 !data/script.js

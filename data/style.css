@@ -56,7 +56,7 @@ button:focus {
 
 /* Based on https://www.w3schools.com/howto/howto_js_scroll_to_top.asp */
 .floatingbutton {
-  display: block; /* Displayed by default for browsers with iffy onscroll support */
+  display: none; /* Displayed by default for browsers with iffy onscroll support */
   position: fixed;
   bottom: 20px;
   right: 30px;

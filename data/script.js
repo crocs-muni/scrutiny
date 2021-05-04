@@ -40,10 +40,10 @@ function defaultAll(shown, hidden) {
 }
 
 // Floating button based on https://www.w3schools.com/howto/howto_js_scroll_to_top.asp
-var topButton = document.getElementById("topButton");
-window.onscroll = function() {showHideScrollButton()};
+window.onscroll = showHideScrollButton;
 
 function showHideScrollButton() {
+  var topButton = document.getElementById("topButton");
   if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
     topButton.style.display = "block";
   } else {

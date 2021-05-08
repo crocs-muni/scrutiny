@@ -264,6 +264,7 @@ class JCAlgTestSupport(JCAlgTest):
             result.support = False
         else:
             result.error = data[1]
+            result.support = False
 
         if len(data) >= 3 and data[2] != "":
             if "sec" in data[2]:

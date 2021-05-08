@@ -98,7 +98,7 @@ class AlgPerformanceContrast(ContrastModule):
         if self.missing:
             self.output_missing(ref_name, prof_name)
 
-        self.output_matching()
+        self.output_matching(ref_name, prof_name)
 
     def output_intro(self):
         """Output introductory section"""
@@ -169,13 +169,31 @@ class AlgPerformanceContrast(ContrastModule):
                   green_value="ms",
                   red_value="Failed")
 
-    def output_matching(self):
+    def output_matching(self, ref_name, prof_name):
         """Output matching section"""
 
         tags.h4("List of algorithms with matching results:",
                 style="color:var(--green-color);display:inline-block")
 
-        data = [[key] for key in self.matching]
+        header = ["Algorithm",
+                  ref_name + " (reference)",
+                  prof_name + " (profiled)"]
+
+        data = []
+        for key in self.matching:
+            ref = self.matching[key][0]
+            prof = self.matching[key][1]
+
+            reftext = "Failed"
+            proftext = "Failed"
+
+            if not ref.error:
+                reftext = "{:.2f}".format(ref.operation_avg()) + " ms"
+
+            if not prof.error:
+                proftext = "{:.2f}".format(prof.operation_avg()) + " ms"
+
+            data.append([key, reftext, proftext])
 
         sm_div = show_hide_div("performance_matching_div", hide=True)
 
@@ -184,4 +202,6 @@ class AlgPerformanceContrast(ContrastModule):
                 "These are the algorithms in which the cards performed "
                 "similarly, or on which they failed with the same error."
             )
-            table(data)
+            table(data, header,
+                  green_value="ms",
+                  red_value="Failed")

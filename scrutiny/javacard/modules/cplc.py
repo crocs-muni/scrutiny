@@ -1,5 +1,6 @@
 from overrides import overrides
 
+from scrutiny.htmlutils import table
 from scrutiny.interfaces import Module, ContrastModule, ContrastState
 
 
@@ -7,6 +8,7 @@ class Cplc(Module):
     """
     SCRUTINY CPLC module
     """
+
     def __init__(self, module_name="CPLC"):
         super().__init__(module_name)
         self.cplc = {}
@@ -51,4 +53,25 @@ class CplcContrast(ContrastModule):
 
     @overrides
     def project_html(self, ref_name: str, prof_name: str) -> None:
-        pass
+        self.output_table(ref_name, prof_name)
+
+    def output_table(self, ref_name: str, prof_name: str):
+        """Output CPLC comparison table"""
+
+        header = ["CPLC Field",
+                  ref_name + " (reference)",
+                  prof_name + " (profiled)"]
+
+        data = []
+        keys = set()
+        keys.update(self.reference.keys())
+        keys.update(self.profiled.keys())
+
+        for key in keys:
+            ref = self.reference[key] if key in self.reference else "Missing"
+            prof = self.profiled[key] if key in self.profiled else "Missing"
+            data.append([key, ref, prof])
+
+        table(data, header,
+              red_predicate=lambda line:
+              line[1].split(" ")[0] != line[2].split(" ")[0])

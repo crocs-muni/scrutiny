@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Callable
 
 from dominate import tags
 
@@ -15,7 +15,8 @@ def table(
         data: List[List[str]],
         header: Optional[List[str]] = None,
         green_value: Optional[str] = None,
-        red_value: Optional[str] = None
+        red_value: Optional[str] = None,
+        red_predicate: Optional[Callable] = None
 ) -> None:
     """
     Print table to HTML output
@@ -23,6 +24,7 @@ def table(
     :param header: optional list of header cells, no header if None or empty
     :param green_value: cell value content to highlight in green
     :param red_value: cell value content to highlight in red
+    :param red_predicate: predicate on line to highlight in red
     """
 
     with tags.table():
@@ -39,6 +41,8 @@ def table(
                     if green_value and green_value in cell:
                         color = "var(--green-color)"
                     if red_value and red_value in cell:
+                        color = "var(--red-color)"
+                    if red_predicate and red_predicate(line):
                         color = "var(--red-color)"
                     tags.td(cell, style="color:" + color)
 

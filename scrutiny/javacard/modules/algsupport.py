@@ -5,20 +5,7 @@ from overrides import overrides
 
 from scrutiny.htmlutils import table, show_hide_div
 from scrutiny.interfaces import ContrastModule, ContrastState
-from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule
-
-
-class SupportResult:
-    """
-    Class to store results of algorithm support testing
-    """
-
-    def __init__(self) -> None:
-        self.support: Optional[bool] = None
-        self.time_elapsed: Optional[float] = None
-        self.persistent_memory: Optional[int] = None
-        self.ram_deselect: Optional[int] = None
-        self.ram_reset: Optional[int] = None
+from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule, SupportResult
 
 
 class AlgSupport(JCAlgTestModule):

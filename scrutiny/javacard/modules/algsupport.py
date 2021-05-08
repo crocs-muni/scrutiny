@@ -50,15 +50,18 @@ class AlgSupport(JCAlgTestModule):
             matches = True
             mdt = self.MEMORY_DIFFERENCE_THRESHOLD
 
-            if abs(ref.persistent_memory - prof.persistent_memory) > mdt:
+            if ref.persistent_memory and prof.persistent_memory and \
+                    abs(ref.persistent_memory - prof.persistent_memory) > mdt:
                 memory_mismatch[key] = [ref, prof]
                 matches = False
 
-            if abs(ref.ram_reset - prof.ram_reset) > mdt:
+            if ref.ram_reset and prof.ram_reset and \
+                    abs(ref.ram_reset - prof.ram_reset) > mdt:
                 reset_mismatch[key] = [ref, prof]
                 matches = False
 
-            if abs(ref.ram_deselect - prof.ram_deselect) > mdt:
+            if ref.ram_deselect and prof.ram_deselect and \
+                    abs(ref.ram_deselect - prof.ram_deselect) > mdt:
                 deselect_mismatch[key] = [ref, prof]
                 matches = False
 

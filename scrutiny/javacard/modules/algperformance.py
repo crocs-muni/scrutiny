@@ -43,14 +43,17 @@ class AlgPerformance(JCAlgTestModule):
                 matching[key] = [ref, prof]
                 continue
 
-            if ref.operation_avg() <= 10:
+            if ref.operation_avg() <= 2 and prof.operation_avg() <= 2:
                 skipped[key] = [ref, prof]
                 continue
 
             avg_diff = abs(ref.operation_avg() - prof.operation_avg())
             if avg_diff > ref.operation_max() - ref.operation_min() \
                     and avg_diff > 0.2 * ref.operation_avg():
-                mismatch[key] = [ref, prof]
+                if ref.operation_avg() <= 10 and prof.operation_avg() <= 10:
+                    skipped[key] = [ref, prof]
+                else:
+                    mismatch[key] = [ref, prof]
                 continue
 
             matching[key] = [ref, prof]
@@ -105,7 +108,11 @@ class AlgPerformanceContrast(ContrastModule):
         if self.missing:
             self.output_missing(ref_name, prof_name)
 
-        self.output_matching(ref_name, prof_name)
+        if self.matching:
+            self.output_matching(ref_name, prof_name)
+
+        if self.skipped:
+            self.output_skipped(ref_name, prof_name)
 
     def output_intro(self):
         """Output introductory section"""
@@ -280,3 +287,42 @@ class AlgPerformanceContrast(ContrastModule):
                 "algorithms manually to ascertain that the card is not broken."
             )
             table(data, header)
+
+    def output_skipped(self, ref_name, prof_name):
+        """Output skipped section"""
+
+        tags.h4("List of algorithms not used for verification:",
+                style="display:inline-block")
+
+        header = ["Algorithm",
+                  ref_name + " (reference)",
+                  prof_name + " (profiled)"]
+
+        data = []
+        for key in self.skipped:
+            ref = self.skipped[key][0]
+            prof = self.skipped[key][1]
+
+            reftext = "Failed"
+            proftext = "Failed"
+
+            if not ref.error:
+                reftext = "{:.2f}".format(ref.operation_avg()) + " ms"
+
+            if not prof.error:
+                proftext = "{:.2f}".format(prof.operation_avg()) + " ms"
+
+            data.append([key, reftext, proftext])
+
+        sm_div = show_hide_div("performance_skipped_div", hide=True)
+
+        with sm_div:
+            tags.p(
+                "These are the algorithms that run fast overall. Differences "
+                "of few milliseconds can happen due to measurement errors. "
+                "These measurements have information value, but are omitted "
+                "in automated mismatch detection."
+            )
+            table(data, header,
+                  green_value="ms",
+                  red_value="Failed")

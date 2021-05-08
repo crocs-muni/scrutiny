@@ -5,7 +5,7 @@ from overrides import overrides
 
 from scrutiny.htmlutils import show_hide_div, table
 from scrutiny.interfaces import ContrastModule, ContrastState
-from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule,\
+from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule, \
     PerformanceResult
 
 
@@ -94,6 +94,12 @@ class AlgPerformanceContrast(ContrastModule):
     @overrides
     def project_html(self, ref_name: str, prof_name: str) -> None:
         self.output_intro()
+
+        if self.mismatch:
+            self.output_mismatch(ref_name, prof_name)
+
+        if self.erroneous:
+            self.output_erroneous(ref_name, prof_name)
 
         if self.missing:
             self.output_missing(ref_name, prof_name)
@@ -205,3 +211,68 @@ class AlgPerformanceContrast(ContrastModule):
             table(data, header,
                   green_value="ms",
                   red_value="Failed")
+
+    def output_mismatch(self, ref_name, prof_name):
+        """Output mismatch section"""
+
+        tags.h4("List of algorithms with different results:",
+                style="color:var(--red-color);display:inline-block")
+
+        header = ["Algorithm",
+                  ref_name + " (reference)",
+                  prof_name + " (profiled)"]
+
+        data = []
+        for key in self.mismatch:
+            ref = self.mismatch[key][0]
+            prof = self.mismatch[key][1]
+
+            reftext = "{:.2f}".format(ref.operation_avg()) + " ms"
+            proftext = "{:.2f}".format(prof.operation_avg()) + " ms"
+
+            data.append([key, reftext, proftext])
+
+        sm_div = show_hide_div("performance_mismatch_div", hide=False)
+
+        with sm_div:
+            tags.p(
+                "These are the algorithms in which the cards performed "
+                "with different results."
+            )
+            table(data, header,
+                  red_value="ms")
+
+    def output_erroneous(self, ref_name, prof_name):
+        """Output erroneous section"""
+
+        tags.h4("List of algorithms with mismatch in error:",
+                style="color:var(--red-color);display:inline-block")
+
+        header = ["Algorithm",
+                  ref_name + " (reference)",
+                  prof_name + " (profiled)"]
+
+        data = []
+        for key in self.erroneous:
+            ref = self.erroneous[key][0]
+            prof = self.erroneous[key][1]
+
+            reftext = ref.error
+            proftext = prof.error
+
+            if not ref.error:
+                reftext = "{:.2f}".format(ref.operation_avg()) + " ms"
+
+            if not prof.error:
+                proftext = "{:.2f}".format(prof.operation_avg()) + " ms"
+
+            data.append([key, reftext, proftext])
+
+        sm_div = show_hide_div("performance_erroneous_div", hide=False)
+
+        with sm_div:
+            tags.p(
+                "These are the algorithms in which the cards failed with "
+                "different error."
+            )
+            table(data, header)

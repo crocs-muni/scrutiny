@@ -1,3 +1,4 @@
+from dominate import tags
 from overrides import overrides
 
 from scrutiny.htmlutils import table
@@ -53,6 +54,24 @@ class CplcContrast(ContrastModule):
 
     @overrides
     def project_html(self, ref_name: str, prof_name: str) -> None:
+        tags.h3("CPLC comparison results")
+        tags.p("This module compares CPLC of smart cards. "
+               "Bear in mind that the CPLC data is static and could be faked. "
+               "Therefore, matching result does not guarantee match. "
+               "However, mismatch in CPLC data is highly suspicious.")
+
+        tags.h4("CPLC:")
+
+        if self.get_state() == ContrastState.MATCH:
+            tags.p("CPLC data seems to match between cards.")
+        elif self.get_state() == ContrastState.WARN:
+            tags.p("There are missing CPLC fields in results for one of the "
+                   "cards. This could be due to error in measurement, but "
+                   "it could suggest suspicious difference.")
+        else:
+            tags.p("There are differences in CPLC fields. The cards probably "
+                   "don't match, or differ in hardware or software revision.")
+
         self.output_table(ref_name, prof_name)
 
     def output_table(self, ref_name: str, prof_name: str):

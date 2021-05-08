@@ -92,6 +92,10 @@ class ContrastModule(ABC, EnforceOverrides):
 
     @final
     def update_result(self):
+        """
+        Sets current ContrastState to result
+        :return: current ContrastState
+        """
         self.result = str(self.get_state())
         return self.get_state()
 

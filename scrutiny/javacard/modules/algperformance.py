@@ -43,12 +43,13 @@ class AlgPerformance(JCAlgTestModule):
                 matching[key] = [ref, prof]
                 continue
 
-            # if ref.operation_avg() <= 2 * ref.baseline_avg():
-            #     skipped[key] = [ref, prof]
-            #     continue
+            if ref.operation_avg() <= 10:
+                skipped[key] = [ref, prof]
+                continue
 
             avg_diff = abs(ref.operation_avg() - prof.operation_avg())
-            if avg_diff > ref.operation_max() - ref.operation_min():
+            if avg_diff > ref.operation_max() - ref.operation_min() \
+                    and avg_diff > 0.2 * ref.operation_avg():
                 mismatch[key] = [ref, prof]
                 continue
 
@@ -85,9 +86,9 @@ class AlgPerformanceContrast(ContrastModule):
 
     @overrides
     def get_state(self):
-        if self.mismatch or self.erroneous:
+        if self.mismatch:
             return ContrastState.SUSPICIOUS
-        if self.missing:
+        if self.missing or self.erroneous:
             return ContrastState.WARN
         return ContrastState.MATCH
 
@@ -246,7 +247,7 @@ class AlgPerformanceContrast(ContrastModule):
         """Output erroneous section"""
 
         tags.h4("List of algorithms with mismatch in error:",
-                style="color:var(--red-color);display:inline-block")
+                style="color:var(--orange-color);display:inline-block")
 
         header = ["Algorithm",
                   ref_name + " (reference)",
@@ -273,6 +274,9 @@ class AlgPerformanceContrast(ContrastModule):
         with sm_div:
             tags.p(
                 "These are the algorithms in which the cards failed with "
-                "different error."
+                "different error. You should manually check this table."
+                "The errors were probably caused by random exceptions during "
+                "performance testing. It is recommended to rerun these "
+                "algorithms manually to ascertain that the card is not broken."
             )
             table(data, header)

@@ -30,5 +30,12 @@ if __name__ == "__main__":
             contrast.add_contrasts(
                 module.contrast(profile.modules[module.module_name]))
 
+    for module in contrast.contrasts:
+        state = module.update_result()
+        if state.value > contrast.result.value:
+            contrast.result = state
+
+    contrast.result = str(contrast.result)
+
     with open(args.output_file, "w") as f:
         f.write(jsonpickle.encode(contrast, indent=4))

@@ -2,7 +2,6 @@ from dominate import tags
 from overrides import overrides
 
 from scrutiny import config
-from scrutiny.htmlutils import note
 from scrutiny.interfaces import Module, ContrastModule, ContrastState
 from scrutiny.javacard.utils import find_atr_in_database
 
@@ -80,7 +79,9 @@ class AtrContrast(ContrastModule):
 
         tags.p("This information was taken from database of known "
                "smart cards, distributed under GNU GPLv2.")
-        note("For complete list, check: " + config.URL.SMARTCARD_LIST)
+        tags.p("For complete list, check:")
+        tags.a(config.URL.SMARTCARD_LIST,
+               href=config.URL.SMARTCARD_LIST)
 
         if self.ref_info:
             tags.p("The reference card (" + ref_name +

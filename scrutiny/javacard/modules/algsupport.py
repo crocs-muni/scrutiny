@@ -131,6 +131,9 @@ class AlgSupportContrast(ContrastModule):
         tags.h3("Algorithm Support comparison results")
         tags.p("This module compares Java Card "
                "algorithm support between the cards.")
+        tags.p("To learn more about testing methodology, visit:")
+        tags.a("https://www.fi.muni.cz/~xsvenda/jcalgtest/table.html",
+               href="https://www.fi.muni.cz/~xsvenda/jcalgtest/table.html")
         tags.h4("Overview:")
         tags.p(
             "The cards match in " + str(len(self.matching)) + " algorithms."

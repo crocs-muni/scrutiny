@@ -120,6 +120,11 @@ class AlgPerformanceContrast(ContrastModule):
         tags.h3("Algorithm Performance comparison results")
         tags.p("This module compares Java Card "
                "algorithm performance between the cards.")
+        tags.p("To learn more about testing methodology, visit")
+        tags.a(
+            "https://www.fi.muni.cz/~xsvenda/jcalgtest/knowledgebase.html",
+            href="https://www.fi.muni.cz/~xsvenda/jcalgtest/knowledgebase.html"
+        )
         tags.h4("Overview:")
         tags.p(
             "The cards' performance match in " +

@@ -100,4 +100,4 @@ class AtrContrast(ContrastModule):
                     tags.p(i)
         else:
             tags.p("The profiled card (" + prof_name +
-                   " was not found in the database.")
+                   ") was not found in the database.")

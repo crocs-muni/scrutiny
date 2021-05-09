@@ -50,6 +50,11 @@ class CplcContrast(ContrastModule):
                 if ref != prof:
                     retval = ContrastState.SUSPICIOUS
 
+        for field in self.profiled:
+
+            if field not in self.reference and retval == ContrastState.MATCH:
+                retval = ContrastState.WARN
+
         return retval
 
     @overrides

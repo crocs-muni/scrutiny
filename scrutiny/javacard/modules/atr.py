@@ -46,11 +46,9 @@ class AtrContrast(ContrastModule):
         self.ref_info = None
         self.prof_info = None
 
-        self.match = self.ref_atr == self.prof_atr
-
     @overrides
     def get_state(self):
-        if self.match:
+        if self.ref_atr == self.prof_atr:
             return ContrastState.MATCH
         return ContrastState.SUSPICIOUS
 
@@ -71,7 +69,7 @@ class AtrContrast(ContrastModule):
                 tags.td("Profile ATR (" + prof_name + ")")
                 tags.td(self.prof_atr)
 
-        if self.match:
+        if self.ref_atr == self.prof_atr:
             tags.p("The ATR of tested card matches the reference. "
                    "This would suggest the same smart card model.")
         else:

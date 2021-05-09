@@ -164,9 +164,16 @@ class AlgSupportContrast(ContrastModule):
         for key in self.support_mismatch:
             ref = self.support_mismatch[key][0]
             prof = self.support_mismatch[key][1]
-            data.append([key,
-                         "Supported" if ref.support else "Unsupported",
-                         "Supported" if prof.support else "Unsupported"])
+
+            reftext = "Supported" if ref.support else "Unsupported"
+            if ref.error:
+                reftext = ref.error
+
+            proftext = "Supported" if prof.support else "Unsupported"
+            if prof.error:
+                proftext = prof.error
+
+            data.append([key, reftext, proftext])
 
         sm_div = show_hide_div("support_mismatch_div")
 
@@ -286,9 +293,16 @@ class AlgSupportContrast(ContrastModule):
         for key in self.matching:
             ref = self.matching[key][0]
             prof = self.matching[key][1]
-            data.append([key,
-                         "Supported" if ref.support else "Unsupported",
-                         "Supported" if prof.support else "Unsupported"])
+
+            reftext = "Supported" if ref.support else "Unsupported"
+            if ref.error:
+                reftext = ref.error
+
+            proftext = "Supported" if prof.support else "Unsupported"
+            if prof.error:
+                proftext = prof.error
+
+            data.append([key, reftext, proftext])
 
         sm_div = show_hide_div("support_matching_div", hide=True)
 

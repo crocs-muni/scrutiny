@@ -157,8 +157,8 @@ class AlgPerformanceContrast(ContrastModule):
             ref = self.missing[key][0]
             prof = self.missing[key][1]
 
-            reftext = "Failed"
-            proftext = "Failed"
+            reftext = "Failed: " + str(ref.error)
+            proftext = "Failed: " + str(prof.error)
 
             if not ref:
                 reftext = "Result missing"
@@ -198,8 +198,8 @@ class AlgPerformanceContrast(ContrastModule):
             ref = self.matching[key][0]
             prof = self.matching[key][1]
 
-            reftext = "Failed"
-            proftext = "Failed"
+            reftext = "Failed: " + str(ref.error)
+            proftext = "Failed: " + str(prof.error)
 
             if not ref.error:
                 reftext = "{:.2f}".format(ref.operation_avg()) + " ms"
@@ -265,8 +265,8 @@ class AlgPerformanceContrast(ContrastModule):
             ref = self.erroneous[key][0]
             prof = self.erroneous[key][1]
 
-            reftext = ref.error
-            proftext = prof.error
+            reftext = "Failed: " + str(ref.error)
+            proftext = "Failed: " + str(prof.error)
 
             if not ref.error:
                 reftext = "{:.2f}".format(ref.operation_avg()) + " ms"
@@ -286,7 +286,9 @@ class AlgPerformanceContrast(ContrastModule):
                 "performance testing. It is recommended to rerun these "
                 "algorithms manually to ascertain that the card is not broken."
             )
-            table(data, header)
+            table(data, header,
+                  green_value="ms",
+                  red_value="Failed")
 
     def output_skipped(self, ref_name, prof_name):
         """Output skipped section"""
@@ -303,8 +305,8 @@ class AlgPerformanceContrast(ContrastModule):
             ref = self.skipped[key][0]
             prof = self.skipped[key][1]
 
-            reftext = "Failed"
-            proftext = "Failed"
+            reftext = "Failed: " + str(ref.error)
+            proftext = "Failed: " + str(prof.error)
 
             if not ref.error:
                 reftext = "{:.2f}".format(ref.operation_avg()) + " ms"

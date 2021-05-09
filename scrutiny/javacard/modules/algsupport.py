@@ -192,7 +192,7 @@ class AlgSupportContrast(ContrastModule):
         tags.h4("Differences in memory allocation during tests:",
                 style="color:var(--orange-color);display:inline-block")
 
-        sm_div = show_hide_div("support_memory_mismatch_div", hide=True)
+        sm_div = show_hide_div("support_memory_mismatch_div", hide=False)
 
         with sm_div:
             tags.p("Differences in bytes of allocated memory above "

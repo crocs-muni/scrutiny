@@ -52,6 +52,8 @@ class AlgPerformance(JCAlgTestModule):
                     and avg_diff > 0.2 * ref.operation_avg():
                 if ref.operation_avg() <= 10 and prof.operation_avg() <= 10:
                     skipped[key] = [ref, prof]
+                elif "clearKey()" in key:
+                    skipped[key] = [ref, prof]
                 else:
                     mismatch[key] = [ref, prof]
                 continue

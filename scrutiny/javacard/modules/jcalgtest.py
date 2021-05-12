@@ -64,7 +64,7 @@ class PerformanceResult:
                 "Total iterations count is not "
                 "multiple of operation data length"
             )
-        return int(self.iterations / len(self.operation))
+        return max(1, int(self.iterations / len(self.operation)))
 
     def operation_avg(self) -> float:
         """Average single algorithm execution time"""
@@ -77,3 +77,17 @@ class PerformanceResult:
     def operation_max(self) -> float:
         """Maximal single algorithm execution time"""
         return max(self.operation) / self.ipm()
+
+
+class SupportResult:
+    """
+    Class to store results of algorithm support testing
+    """
+
+    def __init__(self) -> None:
+        self.support: Optional[bool] = None
+        self.time_elapsed: Optional[float] = None
+        self.persistent_memory: Optional[int] = None
+        self.ram_deselect: Optional[int] = None
+        self.ram_reset: Optional[int] = None
+        self.error: Optional[str] = None

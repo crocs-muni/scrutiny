@@ -5,20 +5,7 @@ from overrides import overrides
 
 from scrutiny.htmlutils import table, show_hide_div
 from scrutiny.interfaces import ContrastModule, ContrastState
-from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule
-
-
-class SupportResult:
-    """
-    Class to store results of algorithm support testing
-    """
-
-    def __init__(self) -> None:
-        self.support: Optional[bool] = None
-        self.time_elapsed: Optional[float] = None
-        self.persistent_memory: Optional[int] = None
-        self.ram_deselect: Optional[int] = None
-        self.ram_reset: Optional[int] = None
+from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule, SupportResult
 
 
 class AlgSupport(JCAlgTestModule):
@@ -60,23 +47,21 @@ class AlgSupport(JCAlgTestModule):
                 support_mismatch[key] = [ref, prof]
                 continue
 
-            matches = True
             mdt = self.MEMORY_DIFFERENCE_THRESHOLD
 
-            if abs(ref.persistent_memory - prof.persistent_memory) > mdt:
+            if ref.persistent_memory and prof.persistent_memory and \
+                    abs(ref.persistent_memory - prof.persistent_memory) > mdt:
                 memory_mismatch[key] = [ref, prof]
-                matches = False
 
-            if abs(ref.ram_reset - prof.ram_reset) > mdt:
+            if ref.ram_reset and prof.ram_reset and \
+                    abs(ref.ram_reset - prof.ram_reset) > mdt:
                 reset_mismatch[key] = [ref, prof]
-                matches = False
 
-            if abs(ref.ram_deselect - prof.ram_deselect) > mdt:
+            if ref.ram_deselect and prof.ram_deselect and \
+                    abs(ref.ram_deselect - prof.ram_deselect) > mdt:
                 deselect_mismatch[key] = [ref, prof]
-                matches = False
 
-            if matches:
-                matching[key] = [ref, prof]
+            matching[key] = [ref, prof]
 
         for key in other.support.keys():
             if key not in self.support.keys():
@@ -133,7 +118,7 @@ class AlgSupportContrast(ContrastModule):
         if self.missing:
             self.output_missing(ref_name, prof_name)
 
-        self.output_matching()
+        self.output_matching(ref_name, prof_name)
 
     def output_intro(self):
         """Output introductory section"""
@@ -141,6 +126,9 @@ class AlgSupportContrast(ContrastModule):
         tags.h3("Algorithm Support comparison results")
         tags.p("This module compares Java Card "
                "algorithm support between the cards.")
+        tags.p("To learn more about testing methodology, visit:")
+        tags.a("https://www.fi.muni.cz/~xsvenda/jcalgtest/table.html",
+               href="https://www.fi.muni.cz/~xsvenda/jcalgtest/table.html")
         tags.h4("Overview:")
         tags.p(
             "The cards match in " + str(len(self.matching)) + " algorithms."
@@ -174,9 +162,16 @@ class AlgSupportContrast(ContrastModule):
         for key in self.support_mismatch:
             ref = self.support_mismatch[key][0]
             prof = self.support_mismatch[key][1]
-            data.append([key,
-                         "Supported" if ref.support else "Unsupported",
-                         "Supported" if prof.support else "Unsupported"])
+
+            reftext = "Supported" if ref.support else "Unsupported"
+            if ref.error:
+                reftext = ref.error
+
+            proftext = "Supported" if prof.support else "Unsupported"
+            if prof.error:
+                proftext = prof.error
+
+            data.append([key, reftext, proftext])
 
         sm_div = show_hide_div("support_mismatch_div")
 
@@ -195,7 +190,7 @@ class AlgSupportContrast(ContrastModule):
         tags.h4("Differences in memory allocation during tests:",
                 style="color:var(--orange-color);display:inline-block")
 
-        sm_div = show_hide_div("support_memory_mismatch_div", hide=True)
+        sm_div = show_hide_div("support_memory_mismatch_div", hide=False)
 
         with sm_div:
             tags.p("Differences in bytes of allocated memory above "
@@ -282,13 +277,30 @@ class AlgSupportContrast(ContrastModule):
                   green_value="Supported",
                   red_value="Unsupported")
 
-    def output_matching(self):
+    def output_matching(self, ref_name, prof_name):
         """Output matching section"""
 
         tags.h4("List of algorithms with matching results:",
                 style="color:var(--green-color);display:inline-block")
 
-        data = [[key] for key in self.matching]
+        header = ["Algorithm",
+                  ref_name + " (reference)",
+                  prof_name + " (profiled)"]
+
+        data = []
+        for key in self.matching:
+            ref = self.matching[key][0]
+            prof = self.matching[key][1]
+
+            reftext = "Supported" if ref.support else "Unsupported"
+            if ref.error:
+                reftext = ref.error
+
+            proftext = "Supported" if prof.support else "Unsupported"
+            if prof.error:
+                proftext = prof.error
+
+            data.append([key, reftext, proftext])
 
         sm_div = show_hide_div("support_matching_div", hide=True)
 
@@ -298,4 +310,6 @@ class AlgSupportContrast(ContrastModule):
                 "between cards with no significant differences in the memory "
                 "allocation."
             )
-            table(data)
+            table(data, header,
+                  green_value="Supported",
+                  red_value="Unsupported")

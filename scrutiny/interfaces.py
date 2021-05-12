@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
+from typing import final
 
 from overrides import EnforceOverrides
 
@@ -65,6 +66,7 @@ class Contrast(ABC, EnforceOverrides):
     def __init__(self, ref_name, prof_name):
         self.ref_name = ref_name
         self.prof_name = prof_name
+        self.result = ContrastState.MATCH
         self.contrasts = []
 
     def add_contrasts(self, contrasts):
@@ -83,9 +85,19 @@ class ContrastModule(ABC, EnforceOverrides):
 
     def __init__(self, module_name):
         self.module_name = module_name
+        self.result = None
 
     def __str__(self):
         return self.module_name
+
+    @final
+    def update_result(self):
+        """
+        Sets current ContrastState to result
+        :return: current ContrastState
+        """
+        self.result = str(self.get_state())
+        return self.get_state()
 
     @abstractmethod
     def get_state(self):

@@ -8,10 +8,10 @@ from scrutiny.config import Paths
 from scrutiny.interfaces import ToolWrapper
 from scrutiny.javacard.modules.algperformance import AlgPerformance
 from scrutiny.javacard.modules.algvariable import AlgVariable
-from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule,\
-    PerformanceResult
+from scrutiny.javacard.modules.jcalgtest import JCAlgTestModule, \
+    PerformanceResult, SupportResult
 from scrutiny.utils import execute_cmd
-from scrutiny.javacard.modules.algsupport import AlgSupport, SupportResult
+from scrutiny.javacard.modules.algsupport import AlgSupport
 
 SUPPORT_STRING = "ALGSUPPORT"
 PERFORMANCE_STRING = "DATAFIXED"
@@ -193,7 +193,7 @@ class JCAlgTest(ToolWrapper, ABC, EnforceOverrides):
 
         retcode = execute_cmd(cmd_line)
 
-        for file in os.listdir("./"):
+        for file in os.listdir("./results/" + self.device_name + "/"):
             if search_string in file and self.device_name in file:
                 dest = self.get_outpath(file)
                 os.replace(file, dest)
@@ -263,18 +263,20 @@ class JCAlgTestSupport(JCAlgTest):
         elif data[1] == "no":
             result.support = False
         else:
-            raise Exception("Invalid format in line: " + line)
+            result.error = data[1]
+            result.support = False
 
         if len(data) >= 3 and data[2] != "":
             if "sec" in data[2]:
                 data[2] = data[2].split(" ")[0]
-            result.time_elapsed = float(data[2])
+            result.time_elapsed = float(data[2].replace(",", "."))
         if len(data) >= 6:
             result.persistent_memory = int(data[3])
             result.ram_deselect = int(data[4])
             result.ram_reset = int(data[5])
 
-        module.support[data[0]] = result
+        if data[0] not in module.support:
+            module.support[data[0]] = result
 
 
 class JCAlgTestPerformance(JCAlgTest):

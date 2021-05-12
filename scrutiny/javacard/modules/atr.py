@@ -2,7 +2,6 @@ from dominate import tags
 from overrides import overrides
 
 from scrutiny import config
-from scrutiny.htmlutils import note
 from scrutiny.interfaces import Module, ContrastModule, ContrastState
 from scrutiny.javacard.utils import find_atr_in_database
 
@@ -46,11 +45,9 @@ class AtrContrast(ContrastModule):
         self.ref_info = None
         self.prof_info = None
 
-        self.match = self.ref_atr == self.prof_atr
-
     @overrides
     def get_state(self):
-        if self.match:
+        if self.ref_atr == self.prof_atr:
             return ContrastState.MATCH
         return ContrastState.SUSPICIOUS
 
@@ -71,7 +68,7 @@ class AtrContrast(ContrastModule):
                 tags.td("Profile ATR (" + prof_name + ")")
                 tags.td(self.prof_atr)
 
-        if self.match:
+        if self.ref_atr == self.prof_atr:
             tags.p("The ATR of tested card matches the reference. "
                    "This would suggest the same smart card model.")
         else:
@@ -82,7 +79,9 @@ class AtrContrast(ContrastModule):
 
         tags.p("This information was taken from database of known "
                "smart cards, distributed under GNU GPLv2.")
-        note("For complete list, check: " + config.URL.SMARTCARD_LIST)
+        tags.p("For complete list, check:")
+        tags.a(config.URL.SMARTCARD_LIST,
+               href=config.URL.SMARTCARD_LIST)
 
         if self.ref_info:
             tags.p("The reference card (" + ref_name +
@@ -101,4 +100,4 @@ class AtrContrast(ContrastModule):
                     tags.p(i)
         else:
             tags.p("The profiled card (" + prof_name +
-                   " was not found in the database.")
+                   ") was not found in the database.")

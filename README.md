@@ -27,11 +27,11 @@ SCRUTINY will run set of open-source tools to gather information about your smar
 
 ### 5. Compare the profile with reference
 
-`$ python -u verify.py --profile results/Supposedly_NXP_P60.json --reference database/NXP_P60.json -o NXP_P60_Verifycation.json`
+`$ python -u verify.py --profile results/Supposedly_NXP_P60.json --reference database/NXP_P60.json -o NXP_P60_Verification.json`
 
 ### 6. Produce HTML report
 
-`$ python -u report_html.py -c NXP_P60_Verifycation.json -o NXP_P60_Verifycation_Report.html`
+`$ python -u report_html.py -v NXP_P60_Verification.json -o NXP_P60_Verification_Report.html`
 
 ### 7. Read the report using any decent web browser and learn about your Java Card
 
@@ -47,4 +47,4 @@ Python 3.8 with PIP, Java Runtime Environment.
 
 ## Limitations
 
-SCRUTINY is limited by the tools it depends on. Selection from multiple connected smart cards is not supported. Please, have at most one card connected to the PC while performing SCRUTINY.
+SCRUTINY is limited by the tools it depends on. Selection from multiple connected smart cards in the measurement script is not supported. Please, have at most one card connected to the PC while performing SCRUTINY Measure for Java Cards.

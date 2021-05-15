@@ -2,6 +2,7 @@ from dominate import tags
 from overrides import overrides
 
 from scrutiny import config
+from scrutiny.htmlutils import table
 from scrutiny.interfaces import Module, ContrastModule, ContrastState
 from scrutiny.javacard.utils import find_atr_in_database
 
@@ -60,13 +61,9 @@ class AtrContrast(ContrastModule):
                "for additional information.")
 
         tags.h4("ATR:")
-        with tags.table():
-            with tags.tr():
-                tags.td("Reference ATR (" + ref_name + ")")
-                tags.td(self.ref_atr)
-            with tags.tr():
-                tags.td("Profile ATR (" + prof_name + ")")
-                tags.td(self.prof_atr)
+        table([[ref_name + " (reference)", self.ref_atr],
+               [prof_name + " (profiled)", self.prof_atr]],
+              header=["Card", "ATR"])
 
         if self.ref_atr == self.prof_atr:
             tags.p("The ATR of tested card matches the reference. "

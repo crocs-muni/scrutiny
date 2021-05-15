@@ -8,7 +8,6 @@ from scrutiny.htmlutils import show_hide_div, show_all_button, \
     hide_all_button, default_button
 from scrutiny.interfaces import ContrastState
 
-
 TOOLTIP_TEXT = {
     ContrastState.MATCH: "Devices seem to match",
     ContrastState.WARN: "There seem to be some differences worth checking",
@@ -16,17 +15,16 @@ TOOLTIP_TEXT = {
 }
 
 RESULT_TEXT = {
-    ContrastState.MATCH: "None of the modules raised suspicion during the "
-                         "verification process",
-    ContrastState.WARN: "There seem to be some differences worth checking. "
-                        "Some of the modules report inconsistencies.",
-    ContrastState.SUSPICIOUS: "Some of the modules report suspicious "
-                              "differences between profiled and reference "
-                              "devices. There is a probability that the "
-                              "verification was unsuccessful. Please, check "
-                              "these errors."
+    ContrastState.MATCH: lambda x:
+    "None of the modules raised suspicion during the verification process.",
+    ContrastState.WARN: lambda x:
+    "There seem to be some differences worth checking. " + str(x) +
+    " module(s) report inconsistencies.",
+    ContrastState.SUSPICIOUS: lambda x:
+    str(x) + " module(s) report suspicious differences between profiled and "
+    "reference devices. The verification process may have  been unsuccessful "
+    "and compared devices are different."
 }
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -79,6 +77,7 @@ if __name__ == "__main__":
             tags.h4("Ordered results from tested modules:")
 
         worst_contrast_state = ContrastState.MATCH
+        suspicions = 0
 
         with tags.div(id="modules"):
             module_count: int = 0
@@ -89,6 +88,9 @@ if __name__ == "__main__":
                 contrast_class = m.get_state()
                 if contrast_class.value > worst_contrast_state.value:
                     worst_contrast_state = contrast_class
+
+                if contrast_class.value >= ContrastState.WARN.value:
+                    suspicions += 1
 
                 with tags.span(cls="dot " + contrast_class.name.lower()):
                     tags.span(
@@ -101,7 +103,7 @@ if __name__ == "__main__":
                             cls="tooltiptext " + contrast_class.name.lower())
 
                 tags.h2("Module: " + str(m), style="display: inline-block;")
-                module_div = show_hide_div(divname)
+                module_div = show_hide_div(divname, hide=True)
                 with module_div:
                     m.project_html(contrast.ref_name, contrast.prof_name)
 
@@ -110,7 +112,7 @@ if __name__ == "__main__":
 
         with intro_div:
             tags.br()
-            tags.p(RESULT_TEXT[worst_contrast_state])
+            tags.p(RESULT_TEXT[worst_contrast_state](suspicions))
 
             tags.h3("Quick visibility settings")
             show_all_button()

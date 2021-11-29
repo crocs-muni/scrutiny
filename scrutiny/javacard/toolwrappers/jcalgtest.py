@@ -1,4 +1,5 @@
 import os
+import pathlib
 from abc import ABC, abstractmethod
 from typing import List, final
 
@@ -193,10 +194,11 @@ class JCAlgTest(ToolWrapper, ABC, EnforceOverrides):
 
         retcode = execute_cmd(cmd_line)
 
+        # if existing measurement is already present in results folder, replace it with newer one
         for file in os.listdir("./results/" + self.device_name + "/"):
             if search_string in file and self.device_name in file:
                 dest = self.get_outpath(file)
-                os.replace(file, dest)
+                #os.replace(file, dest)
                 self.outfile = file
                 break
 
@@ -234,14 +236,14 @@ class JCAlgTest(ToolWrapper, ABC, EnforceOverrides):
 
 class JCAlgTestSupport(JCAlgTest):
     """JCAlgTest support ToolWrapper"""
-
     @overrides
     def get_outfile(self):
         return self.find_outfile(SUPPORT_STRING)
 
     @overrides
     def run(self):
-        return self.run_jcalgtest([], SUPPORT_STRING)
+        return self.run_jcalgtest(['-fresh', '-op', 'ALG_SUPPORT_BASIC', '-cardname', self.device_name,
+                                   '-outpath', './results/' + self.device_name + '/'], SUPPORT_STRING)
 
     @overrides
     def parse(self):
@@ -277,6 +279,29 @@ class JCAlgTestSupport(JCAlgTest):
 
         if data[0] not in module.support:
             module.support[data[0]] = result
+
+
+class JCAlgTestSupportExtended(JCAlgTest):
+    """JCAlgTest extended support ToolWrapper"""
+
+    @overrides
+    def get_outfile(self):
+        return self.find_outfile(SUPPORT_STRING)
+
+    @overrides
+    def run(self):
+        return self.run_jcalgtest(['-fresh', '-op', 'ALG_SUPPORT_EXTENDED', '-cardname', self.device_name,
+                                   '-outpath', './results/' + self.device_name + '/'], SUPPORT_STRING)
+
+    @overrides
+    def parse(self):
+        return JCAlgTestSupport.parse(self)
+
+    @classmethod
+    @overrides
+    def parse_specific_lines(cls, line: str, module: AlgSupport,
+                             lines: List[str], position: int) -> None:
+        return JCAlgTestSupport.parse_specific_lines(line, module, lines, position)
 
 
 class JCAlgTestPerformance(JCAlgTest):

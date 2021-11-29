@@ -8,7 +8,7 @@ from scrutiny import config
 from scrutiny.device import Device, DeviceType
 from scrutiny.javacard.toolwrappers.gppro import GPProInfo, GPProList
 from scrutiny.javacard.toolwrappers.jcalgtest import JCAlgTestSupport, \
-    JCAlgTestPerformance, JCAlgTestVariable
+    JCAlgTestPerformance, JCAlgTestVariable, JCAlgTestSupportExtended
 from scrutiny.utils import isdir, errmsg
 
 CFG_FILE = config.MeasureJavaCard.CFG_FILE
@@ -19,6 +19,7 @@ KNOWN_SUBTESTS = [
     "gppro_info",
     "gppro_list",
     "jcalgtest_support",
+    "jcalgtest_support_extended",
     "jcalgtest_performance",
     "jcalgtest_variable"
 ]
@@ -33,6 +34,8 @@ def get_wrapper(test, card_name):
         return GPProList(card_name)
     if test == "jcalgtest_support":
         return JCAlgTestSupport(card_name)
+    if test == "jcalgtest_support_extended":
+        return JCAlgTestSupportExtended(card_name)
     if test == "jcalgtest_performance":
         return JCAlgTestPerformance(card_name)
     if test == "jcalgtest_variable":

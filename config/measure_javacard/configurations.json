@@ -5,7 +5,8 @@
         "gppro_info": "yes",
         "gppro_list": "yes",
         "jcalgtest_support": "yes",
-        "jcalgtest_performance": "yes",
+        "jcalgtest_support_extended": "no",
+        "jcalgtest_performance": "no",
         "jcalgtest_variable": "no"
     },
     "essential": {
@@ -14,6 +15,7 @@
         "gppro_info": "yes",
         "gppro_list": "yes",
         "jcalgtest_support": "no",
+        "jcalgtest_support_extended": "no",
         "jcalgtest_performance": "no",
         "jcalgtest_variable": "no"
     },
@@ -23,6 +25,7 @@
         "gppro_info": "yes",
         "gppro_list": "yes",
         "jcalgtest_support": "yes",
+        "jcalgtest_support_extended": "yes",
         "jcalgtest_performance": "no",
         "jcalgtest_variable": "no"
     },
@@ -32,6 +35,7 @@
         "gppro_info": "yes",
         "gppro_list": "yes",
         "jcalgtest_support": "yes",
+        "jcalgtest_support_extended": "yes",
         "jcalgtest_performance": "yes",
         "jcalgtest_variable": "yes"
     }

@@ -7,7 +7,7 @@ class URL:
             "download/v20.01.23/gp.jar"
 
     JCALGTEST = "https://github.com/crocs-muni/JCAlgTest/releases/" \
-                "download/v1.8.0/AlgTest_dist_1.8.0.zip"
+                "download/v1.8.1/AlgTest_dist_1.8.1.zip"
 
     SMARTCARD_LIST = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/" \
                      "smartcard_list.txt"

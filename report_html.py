@@ -4,8 +4,7 @@ from dominate import document, tags
 from dominate.util import raw
 import jsonpickle
 
-from scrutiny.htmlutils import show_hide_div, show_all_button, \
-    hide_all_button, default_button
+from scrutiny.htmlutils import show_hide_div, show_all_button, hide_all_button, default_button
 from scrutiny.interfaces import ContrastState
 
 TOOLTIP_TEXT = {
@@ -92,15 +91,16 @@ if __name__ == "__main__":
                 if contrast_class.value >= ContrastState.WARN.value:
                     suspicions += 1
 
-                with tags.span(cls="dot " + contrast_class.name.lower()):
-                    tags.span(
-                        TOOLTIP_TEXT[contrast_class],
-                        cls="tooltiptext " + contrast_class.name.lower())
                 with intro_div:
                     with tags.span(cls="dot " + contrast_class.name.lower()):
                         tags.span(
                             TOOLTIP_TEXT[contrast_class],
                             cls="tooltiptext " + contrast_class.name.lower())
+
+                with tags.span(cls="dot " + contrast_class.name.lower()):
+                    tags.span(
+                        TOOLTIP_TEXT[contrast_class],
+                        cls="tooltiptext " + contrast_class.name.lower())
 
                 tags.h2("Module: " + str(m), style="display: inline-block;")
                 module_div = show_hide_div(divname, hide=True)

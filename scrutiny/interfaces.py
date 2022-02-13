@@ -116,7 +116,6 @@ class ContrastModule(ABC, EnforceOverrides):
         :param prof_name: Profile device name
         """
 
-
 class ContrastState(Enum):
     """
     Contrast State representation

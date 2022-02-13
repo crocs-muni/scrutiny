@@ -36,7 +36,7 @@ th, td {
 button {
   background-color: #4CAF50; /* Green */
   border: none;
-  border-radius: 5px;
+  border-radius: 50px;
   color: white;
   padding: 10px 15px;
   text-align: center;
@@ -64,6 +64,11 @@ button:focus {
 }
 
 h1 {
+  display: inline-block;
+}
+
+h2 {
+  vertical-align: middle;
   display: inline-block;
 }
 
@@ -100,3 +105,70 @@ h1 {
 .suspicious {
   background-color: var(--red-color);
 }
+
+/* Gallery */
+
+/* The grid: Four equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 25%;
+  padding: 10px;
+}
+
+/* Style the images inside the grid */
+.column img {
+  opacity: 0.8; 
+  cursor: pointer; 
+}
+
+.column img:hover {
+  opacity: 1;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* The expanding image container */
+.container {
+  margin-top: 0px;
+  border: 0px #ffffff;
+  border-style: solid solid solid solid;
+  padding: 5px 5px;
+  background-color: #eff3f591;
+  position: relative;
+  display: none;
+}
+
+.container-common {
+  margin-top: 0px;
+  border: 0px #ffffff;
+  border-style: solid solid solid solid;
+  padding: 5px 5px;
+  background-color: #eff3f591;
+  position: relative;
+}
+
+/* Expanding image text */
+#imgtext {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  color: white;
+  font-size: 20px;
+}
+
+/* Closable button inside the expanded image */
+.closebtn {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  color: black;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+/* Gallery end */

@@ -2,6 +2,8 @@ from typing import List, Optional, Callable, Tuple
 import uuid
 from dominate import tags
 
+from scrutiny.interfaces import ContrastState
+
 shown = []
 hidden = []
 
@@ -68,7 +70,7 @@ def generate_piechart(percentages : List[float], rgb_colors : List[Tuple[int, in
             colors += ", " + rgb_format.format(r = rgb_colors[i][0], g = rgb_colors[i][1], b = rgb_colors[i][2], percentage = last_value)
     return pie_chart_format.format(color_percentages = colors)
 
-def generate_gallery(image_paths : List[str]):
+def generate_gallery(comparisons : List[Tuple[str, str]]):
     uid = str(uuid.uuid4())
     unique_id = "imageContainer-" + uid
     image_id = "imageText-" + uid
@@ -76,13 +78,13 @@ def generate_gallery(image_paths : List[str]):
     with div_wrapper:
         row = tags.div(cls="row container-common")
         with row:
-            for image_path in image_paths:
-                column = tags.div(cls="column container-common")
+            for comp in comparisons:
+                column = tags.div(cls="column container-common", style="background-color: {color}".format(color = getStateStyle(comp[1])))
                 with column:
                     tags.img(
-                        src=image_path,
-                        alt=image_path,
-                        style="width: 100%",
+                        src=comp[0],
+                        alt=comp[0],
+                        style="width: 100%; background-color: {color}".format(color = getStateStyle(comp[1])),
                         onclick="displayImage(this, '{img_id}', '{text_id}');".format(img_id=unique_id, text_id=image_id))
         div_container = tags.div(cls="container")
         with div_container:
@@ -90,6 +92,14 @@ def generate_gallery(image_paths : List[str]):
             tags.img(id=unique_id, style="width: 100%")
             tags.div(id=image_id, cls="container-common")
     return div_container
+
+def getStateStyle(state : str) -> str:
+    if (state == str(ContrastState.MATCH)):
+        return "rgb(76,175,80,0.25)"
+    elif (state == str(ContrastState.WARN)):
+        return "rgb(211,208,62,0.25)"
+    else:
+        return "rgb(192,68,68,0.25)"
 
 def show_hide_div(divname: str, hide=False):
     """

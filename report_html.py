@@ -97,12 +97,7 @@ if __name__ == "__main__":
                             TOOLTIP_TEXT[contrast_class],
                             cls="tooltiptext " + contrast_class.name.lower())
 
-                with tags.span(cls="dot " + contrast_class.name.lower()):
-                    tags.span(
-                        TOOLTIP_TEXT[contrast_class],
-                        cls="tooltiptext " + contrast_class.name.lower())
-
-                tags.h2("Module: " + str(m), style="display: inline-block;")
+                m.project_html_intro()
                 module_div = show_hide_div(divname, hide=True)
                 with module_div:
                     m.project_html(contrast.ref_name, contrast.prof_name)

@@ -43,6 +43,12 @@ class TracesComparerOutput:
 
 # SCRUTINY contrast related
 
+class SimilarityPercentages:
+    def __init__(self) -> None:
+        self.suspicious : float = 0
+        self.warn : float = 0
+        self.match : float = 0
+
 class OperationComparisonResult:
     def __init__(self) -> None:
         self.distance_value : str = None
@@ -58,6 +64,23 @@ class PipelineResult:
         self.comparison_state : str = None
         self.comparison_results : List[OperationComparisonResult] = []
 
+    def getSimilarityPercentages(self) -> SimilarityPercentages:
+        sp : SimilarityPercentages = SimilarityPercentages()
+        matches : float = 0
+        warns : float = 0
+        suspicious : float = 0
+        for cr in self.comparison_results:
+            if (cr.comparison_state == str(ContrastState.MATCH)):
+                matches += 1
+            elif (cr.comparison_state == str(ContrastState.WARN)):
+                warns += 1
+            else:
+                suspicious += 1
+        sp.match = matches / len(self.comparison_results) * 100
+        sp.warn = warns / len(self.comparison_results) * 100
+        sp.suspicious = suspicious / len(self.comparison_results) * 100
+        return sp
+
 class OperationResult:
     def __init__(self) -> None:
         self.operation_code : str = None
@@ -70,6 +93,25 @@ class OperationResult:
         self.exec_times : List[TCOOperationExecTime] = []
         self.exec_time_state : ContrastState = None
         self.comparison_state : str = None
+
+    def getSimilarityPercentages(self) -> SimilarityPercentages:
+        sp : SimilarityPercentages = SimilarityPercentages()
+        matches : float = 0
+        warns : float = 0
+        suspicious : float = 0
+        for cr in self.comparison_results:
+            crs : SimilarityPercentages = cr.getSimilarityPercentages()
+            matches += crs.match
+            warns += crs.warn
+            suspicious += crs.suspicious
+        sp.match = matches / len(self.comparison_results)
+        sp.warn = warns / len(self.comparison_results)
+        sp.suspicious = suspicious / len(self.comparison_results)
+        return sp
+
+    def getSimilarityPercentagesArray(self) -> List[float]:
+        sp = self.getSimilarityPercentages()
+        return [sp.match, sp.warn, sp.suspicious]
 
 # Device, module and contrast
 
@@ -245,82 +287,85 @@ class TracesComparerContrast(ContrastModule):
         return ContrastState.MATCH
 
     @overrides
+    def project_html_intro(self):
+        comparison_percentages = self.getSimilarityPercentagesArray()
+        pie_chart_style = generate_piechart(comparison_percentages, TracesComparerContrast.COLORS)
+        tags.figure("", style = pie_chart_style)
+        tags.h2("Module: " + str(self), style="display: inline-block;")
+    
+
+    @overrides
     def project_html(self, ref_name, prof_name):        
         self.output_intro()
+        self.results.sort(key=lambda r : (r.getSimilarityPercentages().suspicious, r.getSimilarityPercentages().warn), reverse=True)
         for operationResult in self.results:
             operation_divname = operationResult.operation_code
             if (not operationResult.operation_present):
                 self.output_not_supported(operation_divname, operationResult)
                 continue
-            matches = 0
-            warns = 0
-            suspicious = 0
-            for pipelineResult in operationResult.comparison_results:
-                matches += len([cr for cr in pipelineResult.comparison_results if cr.comparison_state == str(ContrastState.MATCH)])
-                warns += len([cr for cr in pipelineResult.comparison_results if cr.comparison_state == str(ContrastState.WARN)])
-                suspicious += len([cr for cr in pipelineResult.comparison_results if cr.comparison_state == str(ContrastState.SUSPICIOUS)])
-            comparisons_count = matches + warns + suspicious
-            comparison_percentages = [matches*100/(comparisons_count), warns*100/comparisons_count, suspicious*100/comparisons_count]
+            
+            comparison_percentages = operationResult.getSimilarityPercentagesArray()
             pie_chart_style = generate_piechart(comparison_percentages, TracesComparerContrast.COLORS)
             tags.figure("", style = pie_chart_style)
             tags.h2("Operation: " + operationResult.operation_code, style="display: inline-block;")
             operation_div = show_hide_div_right(operation_divname, hide=True)
             with operation_div:
+                operationResult.comparison_results.sort(key=lambda r : (r.getSimilarityPercentages().suspicious, r.getSimilarityPercentages().warn), reverse=True)
                 for pipelineResult in operationResult.comparison_results:
-                    matches = len([cr for cr in pipelineResult.comparison_results if cr.comparison_state == str(ContrastState.MATCH)])
-                    warns = len([cr for cr in pipelineResult.comparison_results if cr.comparison_state == str(ContrastState.WARN)])
-                    suspicious = len([cr for cr in pipelineResult.comparison_results if cr.comparison_state == str(ContrastState.SUSPICIOUS)])
-                    comparisons_count = len(pipelineResult.comparison_results)
-                    comparison_percentages = [matches*100/comparisons_count, warns*100/comparisons_count, suspicious*100/comparisons_count]
-                    pie_chart_style = generate_piechart(comparison_percentages, TracesComparerContrast.COLORS)
-                    tags.figure("", style = pie_chart_style)
-                    tags.h2("Pipeline: " + pipelineResult.pipeline_code, style="display: inline-block;")
-                    image_paths = [ip.image_path for ip in pipelineResult.comparison_results]
-                    generate_gallery(image_paths)
+                    pipelineResult.comparison_results.sort(key=lambda r : r.distance_value, reverse=pipelineResult.metric_type == "distance")
+                    comparisons : Tuple[str, str] = [(ip.image_path, ip.comparison_state) for ip in pipelineResult.comparison_results]
+                    generate_gallery(comparisons)
+
+                tags.h2("Comparisons' details", style="display: inline-block;")
+                details_div = show_hide_div_right(operation_divname+"-details", hide=True)
+                with details_div:
+                    for pipelineResult in operationResult.comparison_results:
+                        with tags.table():
+                            with tags.tr():
+                                tags.th("Comparison")
+                                tags.th("Pipeline code")
+                                tags.th("Metric type")
+                                tags.th("Match bound")
+                                tags.th("Warn bound")
+                                tags.th("Comparison value")
+                                tags.th("State")
+                            for comparison_result in pipelineResult.comparison_results:
+                                with tags.tr():
+                                    tags.td(comparison_result.image_path)
+                                    tags.td(pipelineResult.pipeline_code)
+                                    tags.td(pipelineResult.metric_type)
+                                    tags.td(round(pipelineResult.match_bound, 4))
+                                    tags.td(round(pipelineResult.warn_bound, 4))
+                                    tags.td(round(comparison_result.distance_value, 4))
+                                    tags.td(self.getState(comparison_result.comparison_state), style=self.getStateStyle(comparison_result.comparison_state))
+                        tags.br()
+
+                    tags.h3("Execution times section")
                     with tags.table():
                         with tags.tr():
-                            tags.th("Comparison")
-                            tags.th("Metric type")
-                            tags.th("Match bound")
-                            tags.th("Warn bound")
-                            tags.th("Comparison value")
+                            tags.th("Measurement")
+                            tags.th("Match bounds")
+                            tags.th("Warn bounds")
+                            tags.th("Execution time value")
                             tags.th("State")
-                        for comparison_result in pipelineResult.comparison_results:
+                        et_count = 1
+                        for et in operationResult.exec_times:
+                            etmlb = operationResult.exec_time_match_lower_bound
+                            etmub = operationResult.exec_time_match_upper_bound
+                            etwlb = operationResult.exec_time_warn_lower_bound
+                            etwub = operationResult.exec_time_warn_upper_bound
+                            state = str(self.getStateExecTime(etmlb, etmub, etwlb, etwub, et.time))
                             with tags.tr():
-                                tags.td(comparison_result.image_path)
-                                tags.td(pipelineResult.metric_type)
-                                tags.td(round(pipelineResult.match_bound, 4))
-                                tags.td(round(pipelineResult.warn_bound, 4))
-                                tags.td(round(comparison_result.distance_value, 4))
-                                tags.td(self.getState(comparison_result.comparison_state), style=self.getStateStyle(comparison_result.comparison_state))
-                
-                tags.br()
-                tags.h3("Execution times section")
-                with tags.table():
-                    with tags.tr():
-                        tags.th("Measurement")
-                        tags.th("Match bounds")
-                        tags.th("Warn bounds")
-                        tags.th("Execution time value")
-                        tags.th("State")
-                    et_count = 1
-                    for et in operationResult.exec_times:
-                        etmlb = operationResult.exec_time_match_lower_bound
-                        etmub = operationResult.exec_time_match_upper_bound
-                        etwlb = operationResult.exec_time_warn_lower_bound
-                        etwub = operationResult.exec_time_warn_upper_bound
-                        state = str(self.getStateExecTime(etmlb, etmub, etwlb, etwub, et.time))
-                        with tags.tr():
-                            tags.td("Execution time " + str(et_count))
-                            tags.td("({lb}, {ub})".format(
-                                lb = round(etmlb, 4),
-                                ub = round(etmub, 4)))
-                            tags.td("({lb}, {ub})".format(
-                                lb = round(etwlb, 4),
-                                ub = round(etwub, 4)))
-                            tags.td(round(et.time, 4))
-                            tags.td(self.getState(state), style = self.getStateStyle(state))
-                        et_count += 1
+                                tags.td("Execution time " + str(et_count))
+                                tags.td("({lb}, {ub})".format(
+                                    lb = round(etmlb, 4),
+                                    ub = round(etmub, 4)))
+                                tags.td("({lb}, {ub})".format(
+                                    lb = round(etwlb, 4),
+                                    ub = round(etwub, 4)))
+                                tags.td(round(et.time, 4))
+                                tags.td(self.getState(state), style = self.getStateStyle(state))
+                            et_count += 1
 
 
     def output_intro(self) -> None:
@@ -370,3 +415,22 @@ class TracesComparerContrast(ContrastModule):
             return ContrastState.WARN
         else:
             return ContrastState.SUSPICIOUS
+
+    def getSimilarityPercentages(self) -> SimilarityPercentages:
+        sp : SimilarityPercentages = SimilarityPercentages()
+        matches : float = 0
+        warns : float = 0
+        suspicious : float = 0
+        for cr in self.results:
+            crs : SimilarityPercentages = cr.getSimilarityPercentages()
+            matches += crs.match
+            warns += crs.warn
+            suspicious += crs.suspicious
+        sp.match = matches / len(self.results)
+        sp.warn = warns / len(self.results)
+        sp.suspicious = suspicious / len(self.results)
+        return sp
+
+    def getSimilarityPercentagesArray(self) -> SimilarityPercentages:
+        sp : SimilarityPercentages = self.getSimilarityPercentages();
+        return [sp.match, sp.warn, sp.suspicious]

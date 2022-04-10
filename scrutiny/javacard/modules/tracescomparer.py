@@ -8,7 +8,7 @@ from scrutiny.interfaces import ContrastModule, ContrastState, Module
 
 from statistics import mean, variance
 from math import sqrt
-from scipy.stats import norm
+from scipy.stats import t
 
 class TCOComparison:
     def __init__(self)  -> None:
@@ -99,6 +99,8 @@ class OperationResult:
         matches : float = 0
         warns : float = 0
         suspicious : float = 0
+        if (len(self.comparison_results) == 0):
+            return sp
         for cr in self.comparison_results:
             crs : SimilarityPercentages = cr.getSimilarityPercentages()
             matches += crs.match
@@ -237,35 +239,52 @@ class TracesComparerModule(Module):
         ref_measurement_distances = [comparison.distance for comparison in refPipeline.comparisons]
         n : int = len(ref_measurement_distances)
         m : float = mean(ref_measurement_distances)
-        sigma = sqrt(variance(ref_measurement_distances))   
-        qnorm99 : float = norm.ppf(0.99)
-        warnBound : float = float(m+((sigma/sqrt(n))*qnorm99)) if refPipeline.metric_type == "distance" else float(m-((sigma/sqrt(n))*qnorm99))
+        sigma = self.getSigma(ref_measurement_distances)
+        qt99 : float = t.ppf(0.99, n-1)
+        warnBound : float = float(m+((sigma/sqrt(n))*qt99)) if refPipeline.metric_type == "distance" else float(m-((sigma/sqrt(n))*qt99))
         return warnBound
 
     def getMetricMatchBound(self, refPipeline : TCOOperationPipelineComparisons):
         ref_measurement_distances = [comparison.distance for comparison in refPipeline.comparisons]
         n : int = len(ref_measurement_distances)
         m : float = mean(ref_measurement_distances)
-        sigma = sqrt(variance(ref_measurement_distances))
-        qnorm95 : float = norm.ppf(0.95)
-        matchBound : float = float(m+((sigma/sqrt(n))*qnorm95)) if refPipeline.metric_type == "distance" else float(m-((sigma/sqrt(n))*qnorm95))
+        sigma = self.getSigma(ref_measurement_distances)
+        qt95 : float = t.ppf(0.95, n-1)
+        matchBound : float = float(m+((sigma/sqrt(n))*qt95)) if refPipeline.metric_type == "distance" else float(m-((sigma/sqrt(n))*qt95))
         return matchBound
 
     def getExecTimeWarnBound(self, refOperation : TCOOperation) -> Tuple[float, float]:
         ref_exec_times = [et.time for et in refOperation.execution_times]
         n : int = len(ref_exec_times)
         m : float = mean(ref_exec_times)
-        sigma = sqrt(variance(ref_exec_times))
-        qnorm99 : float = norm.ppf(1-(0.01/2))
-        return (float(m-((sigma/sqrt(n))*qnorm99)), float(m+((sigma/sqrt(n))*qnorm99)))
+        sigma = self.getSigma(ref_exec_times)
+        qt99 : float = t.ppf(1-(0.01/2), n-1)
+        return (float(m-((sigma/sqrt(n))*qt99)), float(m+((sigma/sqrt(n))*qt99)))
 
     def getExecTimeMatchBound(self, refOperation : TCOOperation) -> Tuple[float, float]:
         ref_exec_times = [et.time for et in refOperation.execution_times]
         n : int = len(ref_exec_times)
         m : float = mean(ref_exec_times)
-        sigma = sqrt(variance(ref_exec_times))
-        qnorm95 : float = norm.ppf(1-(0.05/2))
-        return (float(m-((sigma/sqrt(n))*qnorm95)), float(m+((sigma/sqrt(n))*qnorm95)))
+        sigma = self.getSigma(ref_exec_times)
+        qt95 : float = t.ppf(1-(0.05/2), n-1)
+        return (float(m-((sigma/sqrt(n))*qt95)), float(m+((sigma/sqrt(n))*qt95)))
+
+    def getSigma(self, data : List[float]):
+        n = len(data)
+        if (n > 10):
+            return sqrt(variance(data))
+        coeff = 1
+        if (n == 2): coeff = 0.8862 # Dean-Dixon coefficients
+        if (n == 3): coeff = 0.5908
+        if (n == 4): coeff = 0.4857
+        if (n == 5): coeff = 0.4299
+        if (n == 6): coeff = 0.3946
+        if (n == 7): coeff = 0.3698
+        if (n == 8): coeff = 0.3512
+        if (n == 9): coeff = 0.3367
+        if (n == 10): coeff = 0.3249
+        return (max(data)-min(data))*coeff
+
 
 class TracesComparerContrast(ContrastModule):
     """
@@ -324,7 +343,7 @@ class TracesComparerContrast(ContrastModule):
                             with tags.tr():
                                 tags.th("Comparison")
                                 tags.th("Pipeline code")
-                                tags.th("Metric type")
+                                tags.th("Comparison type")
                                 tags.th("Match bound")
                                 tags.th("Warn bound")
                                 tags.th("Comparison value")
@@ -381,7 +400,7 @@ class TracesComparerContrast(ContrastModule):
 
     def output_not_supported(self, operation_divname : str, operationResult : OperationResult) -> None:
         tags.span(cls="dot suspicious")
-        tags.h2("Operation: " + operationResult, style="display: inline-block;")
+        tags.h2("Operation: " + str(operationResult.comparison_state), style="display: inline-block;")
         operation_div = show_hide_div_right(operation_divname, hide=True)
         with operation_div:
             tags.p("This operation was not present in the new measured profile, however in the reference it was.")
@@ -422,6 +441,8 @@ class TracesComparerContrast(ContrastModule):
         warns : float = 0
         suspicious : float = 0
         for cr in self.results:
+            if (not cr.operation_present):
+                continue
             crs : SimilarityPercentages = cr.getSimilarityPercentages()
             matches += crs.match
             warns += crs.warn

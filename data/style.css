@@ -115,6 +115,21 @@ h2 {
   padding: 10px;
 }
 
+.circle {
+  width: 35px;
+  height: 35px;
+  display: inline-block;
+  border-radius: 50%;
+  background: black;
+  color: #f6f8f9;
+  line-height: 35px;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 1em;
+  margin: 0px;
+  padding: 0px;
+}
+
 /* Style the images inside the grid */
 .column img {
   opacity: 0.8; 

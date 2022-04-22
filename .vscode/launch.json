@@ -33,6 +33,21 @@
             ////"args" : ["-v", "D:\\Temp\\TestData\\TraceClassifier\\SmartCafe\\traceclassifier_contrast.json", "-o", "D:\\Temp\\TestData\\TraceClassifier\\SmartCafe\\report.html"]
             //// NXP trace classify
             "args" : ["-v", "D:\\Temp\\TestData\\TraceClassifier\\NXP\\traceclassifier_contrast.json", "-o", "D:\\Temp\\TestData\\TraceClassifier\\NXP\\report.html"]
+ 
+            //// "args" : [
+            ////             "-p",
+            ////                 // "D:\\Temp\\TestData\\Sources\\Feitian_JavaCOS_A40\\comparison_result.json",
+            ////                 // "D:\\Temp\\TestData\\Sources\\NXP_J3A081\\comparison_result.json",
+            ////                 // "D:\\Temp\\TestData\\Sources\\SmartCafe_6.0\\comparison_result.json",
+            ////                 // "D:\\Temp\\TestData\\Sources\\Feitian_JavaCOS_JCAPI_3.0.4\\comparison_result.json",
+            ////                 // "D:\\Temp\\TestData\\Sources\\NXP_JCOP_31_v2.4.1\\comparison_result.json",
+            ////                 "D:\\Temp\\TestData\\Sources\\SmartCafe_3.2\\comparison_result.json",
+            ////             "-r",
+            ////                 // "D:\\Temp\\TestData\\ReferenceProfiles\\Feitian_JavaCOS_A40\\reference.json",
+            ////                 // "D:\\Temp\\TestData\\ReferenceProfiles\\NXP_J3A081\\reference.json",
+            ////                 "D:\\Temp\\TestData\\ReferenceProfiles\\SmartCafe_6.0\\reference.json"
+            ////         ]
+            
         }
     ]
 }

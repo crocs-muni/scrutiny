@@ -64,7 +64,7 @@ class TraceClassifierContrast(ContrastModule):
         for result in self.results:
             card_divname = result.card_code
             tags.figure(result.get_found_count(), cls="circle")
-            tags.h2("Operation: " + result.card_code, style="display: inline-block;")
+            tags.h2("Card: " + result.card_code, style="display: inline-block;")
             card_div = show_hide_div_right(card_divname, hide=True)
             with card_div:
                 if (result.is_card_unclassified()):

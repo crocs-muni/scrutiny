@@ -29,7 +29,7 @@ class TCOOperationPipelineComparisons:
 class TCOOperation:
     def __init__(self) -> None:
         self.operation_code : str = None
-        self.comparisons : List[TCOOperationPipelineComparisons] = []
+        self.pipeline_comparisons : List[TCOOperationPipelineComparisons] = []
         self.execution_times : List[TCOOperationExecTime] = []
         self.operation_present : bool = False
 
@@ -48,6 +48,9 @@ class SimilarityPercentages:
         self.suspicious : float = 0
         self.warn : float = 0
         self.match : float = 0
+
+    def generate_report(self):
+        return "Match:{:.2f}%; Warning:{:.2f}%; Suspicious:{:.2f}%".format(self.match, self.warn, self.suspicious);
 
 class OperationComparisonResult:
     def __init__(self) -> None:
@@ -112,7 +115,7 @@ class OperationResult:
         return sp
 
     def getSimilarityPercentagesArray(self) -> List[float]:
-        sp = self.getSimilarityPercentages()
+        sp : SimilarityPercentages = self.getSimilarityPercentages();
         return [sp.match, sp.warn, sp.suspicious]
 
 # Device, module and contrast
@@ -190,11 +193,11 @@ class TracesComparerModule(Module):
                 continue
 
             pipelineResults : List[PipelineResult] = []
-            for refPipeline in refOperation.comparisons:
+            for refPipeline in refOperation.pipeline_comparisons:
                 matchBound = self.getMetricMatchBound(refPipeline)
                 warnBound = self.getMetricWarnBound(refPipeline)
 
-                newPipeline = next((p for p in newOperation.comparisons if p.pipeline == refPipeline.pipeline), None)
+                newPipeline = next((p for p in newOperation.pipeline_comparisons if p.pipeline == refPipeline.pipeline), None)
                 if (newPipeline == None):
                     continue
                 operationComparisonResults : List[OperationComparisonResult] = []
@@ -307,9 +310,12 @@ class TracesComparerContrast(ContrastModule):
 
     @overrides
     def project_html_intro(self):
-        comparison_percentages = self.getSimilarityPercentagesArray()
-        pie_chart_style = generate_piechart(comparison_percentages, TracesComparerContrast.COLORS)
-        tags.figure("", style = pie_chart_style)
+        comparison_percentages_array = self.getSimilarityPercentagesArray()
+        comparison_percentages = self.getSimilarityPercentages()
+        pie_chart_style = generate_piechart(comparison_percentages_array, TracesComparerContrast.COLORS)
+        fig = tags.figure("", cls="piechart", style = pie_chart_style)
+        with fig:
+            tags.span(comparison_percentages.generate_report(), cls="pietooltiptext")
         tags.h2("Module: " + str(self), style="display: inline-block;")
     
 
@@ -323,9 +329,12 @@ class TracesComparerContrast(ContrastModule):
                 self.output_not_supported(operation_divname, operationResult)
                 continue
             
-            comparison_percentages = operationResult.getSimilarityPercentagesArray()
-            pie_chart_style = generate_piechart(comparison_percentages, TracesComparerContrast.COLORS)
-            tags.figure("", style = pie_chart_style)
+            comparison_percentages_array = operationResult.getSimilarityPercentagesArray()
+            comparison_percentages = operationResult.getSimilarityPercentages()
+            pie_chart_style = generate_piechart(comparison_percentages_array, TracesComparerContrast.COLORS)
+            fig = tags.figure("", cls="piechart", style = pie_chart_style)
+            with fig:
+                tags.span(comparison_percentages.generate_report(), cls="pietooltiptext")
             tags.h2("Operation: " + operationResult.operation_code, style="display: inline-block;")
             operation_div = show_hide_div_right(operation_divname, hide=True)
             with operation_div:
@@ -335,7 +344,7 @@ class TracesComparerContrast(ContrastModule):
                     comparisons : Tuple[str, str] = [(ip.image_path, ip.comparison_state) for ip in pipelineResult.comparison_results]
                     generate_gallery(comparisons)
 
-                tags.h2("Comparisons' details", style="display: inline-block;")
+                tags.h2("Comparison details", style="display: inline-block;")
                 details_div = show_hide_div_right(operation_divname+"-details", hide=True)
                 with details_div:
                     for pipelineResult in operationResult.comparison_results:

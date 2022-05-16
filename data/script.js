@@ -56,3 +56,15 @@ function backToTop() {
   document.body.scrollTop = 0; // For Safari
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
+
+/* Gallery */
+
+function displayImage(imgs, expandedImageID, imageTextID) {
+  var expandImg = document.getElementById(expandedImageID);
+  var imgText = document.getElementById(imageTextID);
+  expandImg.src = imgs.src;
+  imgText.innerHTML = imgs.alt;
+  expandImg.parentElement.style.display = "block";
+}
+
+/* Gallery end */

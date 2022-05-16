@@ -4,6 +4,7 @@ from typing import final
 
 from overrides import EnforceOverrides
 
+from dominate import tags
 
 class ToolWrapper(ABC, EnforceOverrides):
     """
@@ -57,7 +58,6 @@ class Module(ABC, EnforceOverrides):
                             " with " + other.module_name + ".")
         return []
 
-
 class Contrast(ABC, EnforceOverrides):
     """
     Contrast in-memory representation
@@ -106,6 +106,10 @@ class ContrastModule(ABC, EnforceOverrides):
         :return:
         """
 
+    def project_html_intro(self):
+        tags.span(cls="dot " + self.get_state().name.lower())
+        tags.h2("Module: " + str(self), style="display: inline-block;")
+
     @abstractmethod
     def project_html(self, ref_name: str, prof_name: str) -> None:
         """
@@ -115,7 +119,6 @@ class ContrastModule(ABC, EnforceOverrides):
         :param ref_name: Reference device name
         :param prof_name: Profile device name
         """
-
 
 class ContrastState(Enum):
     """

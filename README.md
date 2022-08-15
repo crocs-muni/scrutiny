@@ -1,7 +1,7 @@
 # SCRUTINY
 
-[![Pylint](https://github.com/NimRo97/scrutiny/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/NimRo97/scrutiny/actions/workflows/pylint.yml)
-[![Flake8](https://github.com/NimRo97/scrutiny/actions/workflows/flake8.yml/badge.svg?branch=main)](https://github.com/NimRo97/scrutiny/actions/workflows/flake8.yml)
+[![Pylint](https://github.com/crocs-muni/scrutiny/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/crocs-muni/scrutiny/actions/workflows/pylint.yml)
+[![Flake8](https://github.com/crocs-muni/scrutiny/actions/workflows/flake8.yml/badge.svg?branch=main)](https://github.com/crocs-muni/scrutiny/actions/workflows/flake8.yml)
 
 An automated toolkit to analyze secure hardware, and build user-verifiable hardware profiles. SCRUTINY provides high-level frameworks to verify profiles against reference and produce detailed HTML reports. For now, SCRUTINY is capable of Java Card analysis and verification.
 
@@ -13,7 +13,7 @@ SCRUTINY will run set of open-source tools to gather information about your smar
 
 ### 1. Download the repository
 
-`$ git clone https://github.com/NimRo97/scrunity.git`
+`$ git clone https://github.com/crocs-muni/scrunity.git`
 
 ### 2. Run the set-up script
 

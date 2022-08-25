@@ -13,7 +13,7 @@ SCRUTINY will run set of open-source tools to gather information about your smar
 
 ### 1. Download the repository
 
-`$ git clone https://github.com/crocs-muni/scrunity.git`
+`$ git clone https://github.com/crocs-muni/scrutiny.git`
 
 ### 2. Run the set-up script
 

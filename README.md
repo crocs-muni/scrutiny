@@ -5,7 +5,7 @@
 
 An automated toolkit to analyze secure hardware, and build user-verifiable hardware profiles. SCRUTINY provides high-level frameworks to verify profiles against reference and produce detailed HTML reports. For now, SCRUTINY is capable of JavaCard smartcards, Trusted Platform Modules (TPM), self-encrypted disks (SED) and cryptographic libraries analysis and verification using domain-specific tools listed below (tools marked with * are developed primarily by a third party):
 
-| Tool | Repo stats | Domain | Info | Notes |
+| Tool | Repo stats | Target domain | Info | Notes |
 |----------|----------|----------|----------|----------|
 | [JCAlgTest](https://github.com/crocs-muni/JCAlgTest)   | ![stars](https://img.shields.io/github/stars/crocs-muni/JCAlgTest.svg?style=social) ![numcontributors](https://img.shields.io/github/contributors-anon/crocs-muni/JCAlgTest.svg) ![lastcommit](https://img.shields.io/github/last-commit/crocs-muni/JCAlgTest.svg) | ![][javacard] ![][rsa] ![][ecc] | Automated testing tool for algorithms from JavaCard API supported by particular smart card. Performance testing of almost all available methods. The results for more than 100+ cards available at https://jcalgtest.org.    | |
 |  [jcAIDScan](https://github.com/petrs/jcAIDScan)     |  ![stars](https://img.shields.io/github/stars/petrs/jcAIDScan.svg?style=social) ![numcontributors](https://img.shields.io/github/contributors-anon/petrs/jcAIDScan.svg) ![lastcommit](https://img.shields.io/github/last-commit/petrs/jcAIDScan.svg)  | ![][javacard]   | An automated scanner for JavaCard packages installed and supported by target card. Evaluates all packages from JavaCard API specification up to JC API 3.0.5.  |    |
@@ -22,7 +22,7 @@ An automated toolkit to analyze secure hardware, and build user-verifiable hardw
 | [opal-toolset](https://github.com/crocs-muni/opal-toolset)  | ![stars](https://img.shields.io/github/stars/crocs-muni/opal-toolset.svg?style=social)  ![numcontributors](https://img.shields.io/github/contributors-anon/crocs-muni/opal-toolset.svg) ![lastcommit](https://img.shields.io/github/last-commit/crocs-muni/opal-toolset.svg)   | ![][sed] ![][rng] | A set of tools for managing and analysing self-encrypting devices with Opal standard. |    |
 | [booltest](https://github.com/ph4r05/booltest)   |  ![stars](https://img.shields.io/github/stars/ph4r05/booltest.svg?style=social)  ![numcontributors](https://img.shields.io/github/contributors-anon/ph4r05/booltest.svg) ![lastcommit](https://img.shields.io/github/last-commit/ph4r05/booltest.svg) | ![][rng] | Statical randomness testing tool for TRNG and PRNG generators based on boolean polynomials. |    |
 | [cooltest](https://github.com/jirigav/cooltest/)  | ![stars](https://img.shields.io/github/stars/jirigav/cooltest.svg?style=social)  ![numcontributors](https://img.shields.io/github/contributors-anon/jirigav/cooltest.svg) ![lastcommit](https://img.shields.io/github/last-commit/jirigav/cooltest.svg)   | ![][rng] | Statical randomness testing tool for TRNG and PRNG generators based on a histogram construction.   |    |
-| [sec-certs](https://github.com/crocs-muni/sec-certs) | ![stars](https://img.shields.io/github/stars/crocs-muni/sec-certs.svg?style=social)  ![numcontributors](https://img.shields.io/github/contributors-anon/crocs-muni/sec-certs.svg) ![lastcommit](https://img.shields.io/github/last-commit/crocs-muni/sec-certs.svg) | algs   | A tool for data scraping, analysis and adavnaced searching of security certificates from Common Criteria and FIPS 140-2/3 schemes.  |    |
+| [sec-certs](https://github.com/crocs-muni/sec-certs) | ![stars](https://img.shields.io/github/stars/crocs-muni/sec-certs.svg?style=social)  ![numcontributors](https://img.shields.io/github/contributors-anon/crocs-muni/sec-certs.svg) ![lastcommit](https://img.shields.io/github/last-commit/crocs-muni/sec-certs.svg) | - | A tool for data scraping, analysis and adavnaced searching of security certificates from Common Criteria and FIPS 140-2/3 schemes.  |    |
 
 
 ## How does it work?
@@ -31,7 +31,7 @@ SCRUTINY will run set of open-source tools (see above) to gather information abo
 
 Depending on a target you analyze (smartcard, TPM, disk, library...), the exact usage steps differ. The example below applies for smartcards with JavaCard platform. 
 
-## Set-up
+## Example usage
 
 ### 1. Download the repository
 
@@ -41,25 +41,23 @@ Depending on a target you analyze (smartcard, TPM, disk, library...), the exact 
 
 `$ python -u setup_script.py`
 
-## Analysis of smartcad with JavaCard platform
+### 3. Analysis of smartcad with JavaCard platform
 
-### 3. Connect your Java Card
+  3.1 Connect your Java Card
 
-### 4. Run SCRUTINY Java Card analysis
+  3.2 Run SCRUTINY Java Card analysis
 
 `$ python -u measure_javacard.py Supposedly_NXP_P60`
 
-### 5. Compare the profile with reference
+  3.3 Compare the profile with reference
 
 `$ python -u verify.py --profile results/Supposedly_NXP_P60.json --reference database/NXP_P60.json -o NXP_P60_Verification.json`
 
-### 6. Produce HTML report
+  3.4 Produce HTML report
 
 `$ python -u report_html.py -v NXP_P60_Verification.json -o NXP_P60_Verification_Report.html`
 
-### 7. Read the report using any decent web browser and learn about your Java Card
-
-### 8. Profit?
+  3.5 Read the report (NXP_P60_Verification_Report.html) using web browser and learn about your JavaCard
 
 ## Detailed usage
 

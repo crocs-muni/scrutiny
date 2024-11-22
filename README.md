@@ -44,6 +44,8 @@ Depending on a target you analyze (smartcard, TPM, disk, library...), the exact 
 
 ### 3. Analysis of smartcad with JavaCard platform
 
+![image](https://github.com/user-attachments/assets/b4e2e7cb-42f1-4ae2-ae47-2cd6012a8523)
+
   3.1 Connect your Java Card
 
   3.2 Run SCRUTINY Java Card analysis
@@ -58,7 +60,11 @@ Depending on a target you analyze (smartcard, TPM, disk, library...), the exact 
 
 `$ python -u report_html.py -v NXP_P60_Verification.json -o NXP_P60_Verification_Report.html`
 
-  3.5 Read the report (NXP_P60_Verification_Report.html) using web browser and learn about your JavaCard
+  3.5 Read the report (```NXP_P60_Verification_Report.html```) using web browser and learn about your JavaCard
+
+![image](https://github.com/user-attachments/assets/76083d78-c81d-4a4f-9514-d8889c9a7caa)
+
+
 
 ## Detailed usage
 

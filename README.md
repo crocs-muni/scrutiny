@@ -49,7 +49,7 @@ Depending on a target you analyze (smartcard, TPM, disk, library...), the exact 
 
 ### 3. Analysis of smartcard with JavaCard platform
 
-![image](https://github.com/user-attachments/assets/b4e2e7cb-42f1-4ae2-ae47-2cd6012a8523)
+<img src="./docs/SCRUTINYModulePipeline.png" alt="Alt text" width="600">
 
   3.1 Connect your Java Card
 

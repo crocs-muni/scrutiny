@@ -4,7 +4,8 @@ from dominate import document, tags
 from dominate.util import raw
 import jsonpickle
 
-from scrutiny.htmlutils import show_hide_div, show_all_button, hide_all_button, default_button
+from scrutiny.htmlutils import show_hide_div, show_all_button
+from scrutiny.htmlutils import hide_all_button, default_button
 from scrutiny.interfaces import ContrastState
 
 TOOLTIP_TEXT = {

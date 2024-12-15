@@ -3,7 +3,10 @@
 [![Pylint](https://github.com/crocs-muni/scrutiny/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/crocs-muni/scrutiny/actions/workflows/pylint.yml)
 [![Flake8](https://github.com/crocs-muni/scrutiny/actions/workflows/flake8.yml/badge.svg?branch=main)](https://github.com/crocs-muni/scrutiny/actions/workflows/flake8.yml)
 
-An automated toolkit to analyze secure hardware, and build user-verifiable hardware profiles. SCRUTINY provides high-level frameworks to verify profiles against reference and produce detailed HTML reports. For now, SCRUTINY is capable of JavaCard smartcards, Trusted Platform Modules (TPM), self-encrypted disks (SED) and cryptographic libraries analysis and verification using domain-specific tools listed below:
+An automated toolkit to analyze secure hardware, and build user-verifiable hardware profiles. SCRUTINY provides high-level frameworks to verify profiles against reference and produce detailed HTML reports. For now, SCRUTINY is capable of JavaCard smartcards, Trusted Platform Modules (TPM), self-encrypted disks (SED) and cryptographic libraries analysis and verification using domain-specific tools listed below.
+<p align="center">
+  <img src="./docs/SCRUTINYWholeProcess.png" alt="Alt text" width="600">
+</p>
 
 | Tool | Repo stats | Target domain | Info | Notes |
 |----------|----------|----------|----------|----------|
@@ -44,7 +47,7 @@ Depending on a target you analyze (smartcard, TPM, disk, library...), the exact 
 
 `$ python -u setup_script.py`
 
-### 3. Analysis of smartcad with JavaCard platform
+### 3. Analysis of smartcard with JavaCard platform
 
 ![image](https://github.com/user-attachments/assets/b4e2e7cb-42f1-4ae2-ae47-2cd6012a8523)
 

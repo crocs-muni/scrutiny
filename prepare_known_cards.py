@@ -5,6 +5,7 @@ import shutil
 
 ATR_NAMES_FILES = 'atr_cardname.csv'
 
+
 def search_files(folder):
     for root, dirs, files in os.walk(folder):
         yield from [os.path.join(root, x) for x in files]
@@ -50,15 +51,18 @@ def prepare_card_profiles(input_base_dir: str, out_target_dir: str):
                 os.mkdir(target_dir)
             for file_name in algsupport_files:
                 if os.path.basename(file_name).startswith(cardname_under):
-                    shutil.copy(file_name, target_dir)  # copy ALGSUPPORT_DIR/file_name to results/cardname/file_name
+                    # copy ALGSUPPORT_DIR/file_name to results/cardname/file_name
+                    shutil.copy(file_name, target_dir)
                     transformed_files[cardname_under].append(file_name)
             for file_name in perffixed_files:
                 if os.path.basename(file_name).startswith(cardname_under):
-                    shutil.copy(file_name, target_dir)  # copy ALGSUPPORT_DIR/file_name to results/cardname/file_name
+                    # copy ALGSUPPORT_DIR/file_name to results/cardname/file_name
+                    shutil.copy(file_name, target_dir)
                     transformed_files[cardname_under].append(file_name)
             for file_name in perfvariable_files:
                 if os.path.basename(file_name).startswith(cardname_under):
-                    shutil.copy(file_name, target_dir)  # copy ALGSUPPORT_DIR/file_name to results/cardname/file_name
+                    # copy ALGSUPPORT_DIR/file_name to results/cardname/file_name
+                    shutil.copy(file_name, target_dir)
                     transformed_files[cardname_under].append(file_name)
 
     for cardname in transformed_files.keys():

@@ -83,6 +83,12 @@ At least Python 3.8 with PIP, Java Runtime Environment.
 
 SCRUTINY is limited by the tools it depends on. Selection from multiple connected smart cards in the measurement script is not supported. Please, have at most one card connected to the PC while performing SCRUTINY Measure for JavaCards.
 
+## Integration
+
+SCRUTINY results with metadata can be bind to original products and the integrated into wider knowledge base.
+
+![image](https://github.com/user-attachments/assets/2c0441c9-4a56-4acb-9280-2081df76c688)
+
 
 [javacard]: https://img.shields.io/badge/platform-javacard-green
 [tpm]: https://img.shields.io/badge/platform-tpm-blue

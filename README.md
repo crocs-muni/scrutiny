@@ -6,6 +6,7 @@ An automated toolkit to analyze secure hardware, and build user-verifiable hardw
   <img src="./docs/SCRUTINYWholeProcess.png" alt="Alt text" width="600">
 </p>
 
+## Analysis and data collection
 | Tool | Repo stats | Target domain | Info | Notes |
 |----------|----------|----------|----------|----------|
 | [JCAlgTest](https://github.com/crocs-muni/JCAlgTest)   | ![stars](https://img.shields.io/github/stars/crocs-muni/JCAlgTest.svg?style=social) ![numcontributors](https://img.shields.io/github/contributors-anon/crocs-muni/JCAlgTest.svg) ![lastcommit](https://img.shields.io/github/last-commit/crocs-muni/JCAlgTest.svg) | ![][javacard] ![][rsa] ![][ecc] | Automated testing tool for algorithms from JavaCard API supported by particular smart card. Performance testing of almost all available methods. The results for more than 100+ cards available at https://jcalgtest.org.    | |
@@ -27,6 +28,13 @@ An automated toolkit to analyze secure hardware, and build user-verifiable hardw
 | [booltest](https://github.com/ph4r05/booltest)   |  ![stars](https://img.shields.io/github/stars/ph4r05/booltest.svg?style=social)  ![numcontributors](https://img.shields.io/github/contributors-anon/ph4r05/booltest.svg) ![lastcommit](https://img.shields.io/github/last-commit/ph4r05/booltest.svg) | ![][rng] | Statical randomness testing tool for TRNG and PRNG generators based on boolean polynomials. |    |
 | [cooltest](https://github.com/jirigav/cooltest/)  | ![stars](https://img.shields.io/github/stars/jirigav/cooltest.svg?style=social)  ![numcontributors](https://img.shields.io/github/contributors-anon/jirigav/cooltest.svg) ![lastcommit](https://img.shields.io/github/last-commit/jirigav/cooltest.svg)   | ![][rng] | Statical randomness testing tool for TRNG and PRNG generators based on a histogram construction.   |    |
 | [sec-certs](https://github.com/crocs-muni/sec-certs) | ![stars](https://img.shields.io/github/stars/crocs-muni/sec-certs.svg?style=social)  ![numcontributors](https://img.shields.io/github/contributors-anon/crocs-muni/sec-certs.svg) ![lastcommit](https://img.shields.io/github/last-commit/crocs-muni/sec-certs.svg) | - | A tool for data scraping, analysis and adavnaced searching of security certificates from Common Criteria and FIPS 140-2/3 schemes.  |    |
+| [pressto](https://github.com/crocs-muni/pressto) | ![stars](https://img.shields.io/github/stars/crocs-muni/pressto.svg?style=social)  ![numcontributors](https://img.shields.io/github/contributors-anon/crocs-muni/pressto.svg) ![lastcommit](https://img.shields.io/github/last-commit/crocs-muni/pressto.svg) | - | Physical Response Emulation System for Secure Testing Operations is a low-cost and fully automated hardware analysis platform for precise and repeatable testing of devices by simulating human interaction including  button presses and screen reading. |    |
+
+## Processing, visualization and management tools
+| Tool | Repo stats | Target domain | Info | Notes |
+|----------|----------|----------|----------|----------|
+| [scrutiny-core](https://github.com/crocs-muni/scrutiny)   | ![stars](https://img.shields.io/github/stars/crocs-muni/scrutiny.svg?style=social) ![numcontributors](https://img.shields.io/github/contributors-anon/crocs-muni/scrutiny.svg) ![lastcommit](https://img.shields.io/github/last-commit/crocs-muni/scrutiny.svg) |  | Processing of metadata collected by dedicated tools, creation of verification profiles, detection of changes and generation of summary reports.  | |
+| [scrutiny-fabric](https://github.com/crocs-muni/scrutiny-fabric)   | ![stars](https://img.shields.io/github/stars/crocs-muni/scrutiny-fabric.svg?style=social) ![numcontributors](https://img.shields.io/github/contributors-anon/crocs-muni/scrutiny-fabric.svg) ![lastcommit](https://img.shields.io/github/last-commit/crocs-muni/scrutiny-fabric.svg) |  | Open database of security metadata with permissionless submission, search, and annotation for transparent security analysis.  | |
 
 
 ## How does it work?

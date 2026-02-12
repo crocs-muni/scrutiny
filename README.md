@@ -4,7 +4,7 @@
 An automated toolkit to analyze secure hardware, and build user-verifiable hardware profiles. SCRUTINY provides high-level frameworks to verify profiles against reference and produce detailed HTML reports. For now, SCRUTINY is capable of JavaCard smartcards, Trusted Platform Modules (TPM), self-encrypted disks (SED) and cryptographic libraries analysis and verification using domain-specific tools listed below.
 
 <p align="center">
-  <img src="./docs/scrutiny_cloud_overview.png" alt="Alt text" width="600">
+  <img src="./docs/scrutiny_cloud_overview.png" alt="Alt text" width="900">
 </p>
 
 

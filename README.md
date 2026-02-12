@@ -2,9 +2,12 @@
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
 An automated toolkit to analyze secure hardware, and build user-verifiable hardware profiles. SCRUTINY provides high-level frameworks to verify profiles against reference and produce detailed HTML reports. For now, SCRUTINY is capable of JavaCard smartcards, Trusted Platform Modules (TPM), self-encrypted disks (SED) and cryptographic libraries analysis and verification using domain-specific tools listed below.
+
 <p align="center">
-  <img src="./docs/SCRUTINYWholeProcess.png" alt="Alt text" width="600">
+  <img src="./docs/scrutiny_cloud_overview.png" alt="Alt text" width="600">
 </p>
+
+
 
 ## Analysis and data collection
 | Tool | Repo stats | Target domain | Info | Notes |
@@ -38,6 +41,11 @@ An automated toolkit to analyze secure hardware, and build user-verifiable hardw
 | [scrutiny catalog](https://github.com/crocs-muni/scrutiny)   | ![stars](https://img.shields.io/github/stars/crocs-muni/scrutiny.svg?style=social) ![numcontributors](https://img.shields.io/github/contributors-anon/crocs-muni/scrutiny.svg) ![lastcommit](https://img.shields.io/github/last-commit/crocs-muni/scrutiny.svg) |  | Catalog of all SCRUTINY tools (this page) | |
 
 ## How does it work?
+
+<p align="center">
+  <img src="./docs/SCRUTINYWholeProcess.png" alt="Alt text" width="600">
+</p>
+
 
 SCRUTINY will run set of open-source tools (see above) to gather information about your smart card, TPM, disk or cryptographic library. The information will be parsed and united into JSON profile. Such profile can be compared to reference, producing verification JSON profile, which can be transformed to HTML report, easily readable by a human.
 
